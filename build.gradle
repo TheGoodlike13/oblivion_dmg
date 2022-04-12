@@ -1,0 +1,110 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
+plugins {
+    id 'java'
+    id 'idea'
+
+    id 'com.github.ben-manes.versions' version '0.42.0'
+}
+
+dependencies {
+    implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+    implementation group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+    implementation group: 'org.apache.commons', name: 'commons-text', version: '1.9'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.8.2'
+
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.4.0'
+
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.22.0'
+    testImplementation group: 'org.assertj', name: 'assertj-guava', version: '3.4.0'
+}
+
+project.buildDir = '.build'
+def projectPath = project.rootDir.toPath()
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+        resources {
+            srcDirs = ['config']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['test']
+        }
+        resources {
+            srcDirs = []
+        }
+    }
+}
+
+idea {
+    module {
+        excludeDirs += file('.build')
+        excludeDirs += file('.gradle')
+        excludeDirs += file('.idea')
+        excludeDirs += file('.wrapper')
+
+        inheritOutputDirs = true
+
+        iml {
+            generateTo = file('.idea')
+        }
+    }
+
+    project {
+        outputFile = new File('.idea', outputFile.getName())
+    }
+}
+
+tasks.idea {
+    doLast {
+        def iwsFile = projectPath.resolve(rootProject.name + '.iws')
+        if (Files.exists(iwsFile)) {
+            Files.move(iwsFile, iwsFile.getParent().resolve('.idea').resolve(iwsFile.getFileName()),
+                    StandardCopyOption.REPLACE_EXISTING)
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.dependencyUpdates {
+    outputDir = '/.build/dependencyUpdates'
+
+    def isStable = { String version ->
+        def hasStableKeyword = ['RELEASE', 'FINAL', 'GA'].any { key -> version.toUpperCase().contains(key) }
+        def matchesGenericStableVersion = /^[0-9,.v-]+(-r)?$/
+        return hasStableKeyword || version ==~ matchesGenericStableVersion
+    }
+
+    rejectVersionIf {
+        isStable(it.currentVersion) && !isStable(it.candidate.version)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = '7.4.2'
+    jarFile = projectPath.resolve('.wrapper').resolve('gradle-wrapper.jar').toFile()
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+    options.encoding = 'UTF-8'
+}

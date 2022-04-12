@@ -1,0 +1,8 @@
+.build/
+.gradle/
+.idea/
+
+# for projects that use different settings
+build/
+classes/
+out/
