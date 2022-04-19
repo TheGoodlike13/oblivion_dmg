@@ -6,6 +6,8 @@ import com.google.common.collect.ImmutableSet;
  * Effects as their appear in in-game menus.
  * The magnitudes of these effects can be affected by the resistance of the target or in-game difficulty
  * when actually applied.
+ * The duration of these effects is 1s by default.
+ * Use {@link #forSecs(double)} to add custom duration.
  * <p/>
  * Not to be confused with {@link Effect}, which describes active effects which have already taken all
  * the multipliers into account.
