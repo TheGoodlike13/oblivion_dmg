@@ -2,12 +2,28 @@ package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ImmutableSet;
 
+/**
+ * Effects as their appear in in-game menus.
+ * The magnitudes of these effects can be affected by the resistance of the target or in-game difficulty
+ * when actually applied.
+ * <p/>
+ * Not to be confused with {@link Effect}, which describes active effects which have already taken all
+ * the multipliers into account.
+ */
 public final class EffectText {
 
+  /**
+   * @return copy of this effect, but with given duration instead
+   */
   public EffectText forSecs(double duration) {
     return new EffectText(factor, type, magnitude, duration);
   }
 
+  /**
+   * @param method the way this effect is applied ({@link Factor#MAGIC} or {@link Factor#POISON})
+   * @param target the affected unit; used to determine resistance to the effect
+   * @return active effect with all magnitude multipliers taken into account
+   */
   public Effect activate(Method method, Target target) {
     double magnitudeSnapshot = magnitude;
     for (Factor f : ImmutableSet.of(method, factor)) {
@@ -19,6 +35,9 @@ public final class EffectText {
     return type.activate(magnitudeSnapshot, duration);
   }
 
+  /**
+   * @return type of this effect
+   */
   public Effect.Type getType() {
     return type;
   }
