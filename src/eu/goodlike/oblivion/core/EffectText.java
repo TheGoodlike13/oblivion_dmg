@@ -8,7 +8,7 @@ public final class EffectText {
     return new EffectText(factor, type, magnitude, duration);
   }
 
-  public Effect activate(Method method, Actor target) {
+  public Effect activate(Method method, Target target) {
     double magnitudeSnapshot = magnitude;
     for (Factor f : ImmutableSet.of(method, factor)) {
       magnitudeSnapshot *= target.getMultiplier(f);

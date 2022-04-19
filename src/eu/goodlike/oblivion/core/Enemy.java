@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
 import static eu.goodlike.oblivion.global.Settings.TICK;
 
-public final class Enemy implements Actor, Target {
+public final class Enemy implements Target {
 
   public double healthRemaining() {
     return isAlive() ? health : 0;
@@ -139,7 +139,7 @@ public final class Enemy implements Actor, Target {
 
   private static final double NO_WEAKNESS = 100;
 
-  private static final class Dummy implements Actor, Target {
+  private static final class Dummy implements Target {
     @Override
     public void modifyResist(Factor factor, double magnitude) {
       allMods.put(factor, magnitude);
