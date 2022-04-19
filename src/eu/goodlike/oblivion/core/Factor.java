@@ -17,14 +17,14 @@ public interface Factor {
   Element LIGHTNING = new Element();
 
   /**
-   * @return effect which applies a weakness to this factor with given magnitude
+   * @return magical effect which applies a weakness to this factor with given magnitude
    */
   default EffectText weakness(int magnitude) {
     return resist(-magnitude);
   }
 
   /**
-   * @return effect which applies a resistance to this factor with given magnitude
+   * @return magical effect which applies a resistance to this factor with given magnitude
    */
   EffectText resist(int magnitude);
 
