@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static eu.goodlike.oblivion.core.Factor.FIRE;
+import static eu.goodlike.oblivion.core.Factor.FROST;
 import static eu.goodlike.oblivion.core.Factor.LIGHTNING;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
 import static eu.goodlike.oblivion.core.Factor.POISON;
@@ -387,9 +388,9 @@ class EnemyTest {
 
   @Test
   void poisonStacks() {
-    target.hit(POISON.hit("Poison #1", MAGIC.damage(10), FIRE.damage(10), LIGHTNING.damage(10)));
-    target.hit(POISON.hit("Poison #1", MAGIC.damage(10), FIRE.damage(10), LIGHTNING.damage(10)));
-    target.hit(POISON.hit("Poison #1", MAGIC.damage(10), FIRE.damage(10), LIGHTNING.damage(10)));
+    target.hit(POISON.hit("Poison #1", MAGIC.damage(10), FROST.damage(10), LIGHTNING.damage(10)));
+    target.hit(POISON.hit("Poison #1", MAGIC.damage(10), FROST.damage(10), LIGHTNING.damage(10)));
+    target.hit(POISON.hit("Poison #1", MAGIC.damage(10), FROST.damage(10), LIGHTNING.damage(10)));
 
     assertDamageTaken(90);
   }
