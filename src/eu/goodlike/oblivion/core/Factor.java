@@ -14,7 +14,7 @@ public interface Factor {
   Magic MAGIC = new Magic();
   Element FIRE = new Element();
   Element FROST = new Element();
-  Element LIGHTNING = new Element();
+  Element SHOCK = new Element();
 
   /**
    * @return magical effect which applies a weakness to this factor with given magnitude

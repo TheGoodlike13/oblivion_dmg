@@ -5,7 +5,7 @@ import eu.goodlike.oblivion.core.effect.Resist;
 
 /**
  * Describes types of damage.
- * There are 4 relevant element types: {@link #MAGIC}, {@link #FIRE}, {@link #FROST} and {@link #LIGHTNING}.
+ * There are 4 relevant element types: {@link #MAGIC}, {@link #FIRE}, {@link #FROST} and {@link #SHOCK}.
  */
 public class Element implements Factor {
 
