@@ -1,6 +1,6 @@
 package eu.goodlike.oblivion.global;
 
-import eu.goodlike.oblivion.core.method.Magic;
+import eu.goodlike.oblivion.core.Method;
 
 /**
  * Configurable values for the application.
@@ -16,7 +16,7 @@ public final class Settings {
    * Defaults to 50, which implies normal difficulty.
    * Lower values increase the damage multiplier, up to 6x at 0.
    * Higher values reduce the damage multiplier, down to (1/6)x at 100.
-   * See {@link Magic#damageMultiplier()} for formula.
+   * See {@link Method#damageMultiplier()} for formula.
    */
   public static double DIFFICULTY = 50;
 

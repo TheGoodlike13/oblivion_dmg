@@ -9,17 +9,7 @@ import eu.goodlike.oblivion.core.effect.Drain;
 
 import java.util.Objects;
 
-import static eu.goodlike.oblivion.global.Settings.DIFFICULTY;
-
 public final class Magic extends Element implements Method {
-
-  @Override
-  public double damageMultiplier() {
-    double delta = DIFFICULTY / 10 - 5;
-    double timesEasier = Math.max(1, 1 - delta);
-    double timesHarder = Math.max(1, 1 + delta);
-    return timesEasier / timesHarder;
-  }
 
   @Override
   public Effect.Id toId(Hit monoHit, Effect.Type type) {

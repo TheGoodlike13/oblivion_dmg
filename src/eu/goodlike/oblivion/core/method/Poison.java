@@ -9,6 +9,11 @@ import eu.goodlike.oblivion.core.effect.Resist;
 public final class Poison implements Method {
 
   @Override
+  public double damageMultiplier() {
+    return 1;
+  }
+
+  @Override
   public EffectText resist(int magnitude) {
     return new EffectText(MAGIC, resistPoison, magnitude);
   }
