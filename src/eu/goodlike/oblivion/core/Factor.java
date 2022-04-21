@@ -1,7 +1,7 @@
 package eu.goodlike.oblivion.core;
 
-import eu.goodlike.oblivion.core.method.Magic;
-import eu.goodlike.oblivion.core.method.Poison;
+import eu.goodlike.oblivion.core.source.Magic;
+import eu.goodlike.oblivion.core.source.Poison;
 
 /**
  * Innate property of effects which can be resisted.
@@ -10,8 +10,8 @@ import eu.goodlike.oblivion.core.method.Poison;
  */
 public interface Factor {
 
-  Method POISON = new Poison();
-  Magic MAGIC = new Magic();
+  Poison POISON = Poison.getInstance();
+  Magic MAGIC = Magic.getInstance();
   Element FIRE = new Element();
   Element FROST = new Element();
   Element SHOCK = new Element();

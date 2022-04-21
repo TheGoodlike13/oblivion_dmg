@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
+import static eu.goodlike.oblivion.core.Source.SPELL;
 import static eu.goodlike.oblivion.global.Settings.TICK;
 
 public final class Enemy implements Target {
@@ -29,32 +30,38 @@ public final class Enemy implements Target {
     return !activeEffects.isEmpty();
   }
 
-  public void hit(EffectText... effect) {
-    hit(MAGIC, effect);
+  public void hit(EffectText... effects) {
+    hit(SPELL, effects);
   }
 
   public void hit(String name, EffectText... effects) {
-    hit(MAGIC.hit(name, effects));
+    hit(SPELL.create(name, effects));
   }
 
-  public void hit(Method method, EffectText... effects) {
+  public void hit(Source source, EffectText... effects) {
     String generatedName = "GENERATED_#" + GENERIC_NAME.incrementAndGet();
-    hit(method.hit(generatedName, effects));
+    hit(source.create(generatedName, effects));
+  }
+
+  public void hit(Carrier hit) {
+    hit(new Hit(hit));
   }
 
   public void hit(Hit hit) {
     Dummy dummy = new Dummy();
 
-    for (EffectText e : hit) {
-      Effect.Id id = hit.getId(e);
-      Effect effect = e.activate(hit.getMethod(e), this);
+    for (Carrier carrier : hit) {
+      for (EffectText e : carrier) {
+        Effect.Id id = carrier.toId(e);
+        Effect effect = e.activate(carrier.getMethod(), this);
 
-      Effect original = activeEffects.put(id, effect);
-      if (original != null) {
-        original.onRemove(this);
+        Effect original = activeEffects.put(id, effect);
+        if (original != null) {
+          original.onRemove(this);
+        }
+
+        effect.onApply(dummy);
       }
-
-      effect.onApply(dummy);
     }
 
     dummy.applyTo(this);

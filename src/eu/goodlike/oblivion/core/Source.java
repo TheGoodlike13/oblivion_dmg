@@ -1,0 +1,42 @@
+package eu.goodlike.oblivion.core;
+
+import com.google.common.collect.ImmutableList;
+import eu.goodlike.oblivion.core.source.Equipment;
+import eu.goodlike.oblivion.core.source.Magic;
+import eu.goodlike.oblivion.core.source.Poison;
+
+import java.util.List;
+
+public interface Source extends Comparable<Source> {
+
+  Equipment MELEE = new Equipment("MELEE");
+  Equipment BOW = new Equipment("BOW");
+  Equipment ARROW = new Equipment("ARROW");
+  Poison POISON = Poison.getInstance();
+  Magic SPELL = Magic.getInstance();
+
+  List<Source> ORDER = ImmutableList.of(MELEE, BOW, ARROW, POISON, SPELL);
+
+  Carrier create(String name, EffectText... effects);
+
+  Effect.Id toId(String carrierName, Effect.Type type);
+
+  @Override
+  default int compareTo(Source o) {
+    return ORDER.indexOf(this) - ORDER.indexOf(o);
+  }
+
+  default boolean matches(Carrier carrier) {
+    return carrier.getSource() == this;
+  }
+
+  default boolean any(Iterable<? extends Carrier> carriers) {
+    for (Carrier carrier : carriers) {
+      if (matches(carrier)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+}

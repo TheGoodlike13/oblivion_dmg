@@ -1,6 +1,5 @@
 package eu.goodlike.oblivion.core;
 
-import eu.goodlike.oblivion.core.hit.ComboHit;
 import eu.goodlike.oblivion.global.Settings;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +10,8 @@ import static eu.goodlike.oblivion.core.Factor.FROST;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
 import static eu.goodlike.oblivion.core.Factor.POISON;
 import static eu.goodlike.oblivion.core.Factor.SHOCK;
+import static eu.goodlike.oblivion.core.Source.MELEE;
+import static eu.goodlike.oblivion.core.Source.SPELL;
 import static eu.goodlike.oblivion.global.Settings.DIFFICULTY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
@@ -96,7 +97,7 @@ class EnemyTest {
   void damageAmplifiedTwice() {
     target.hit(MAGIC.weakness(100), FIRE.weakness(100));
 
-    target.hit(MAGIC, FIRE.damage(10));
+    target.hit(SPELL, FIRE.damage(10));
 
     assertDamageTaken(40);
   }
@@ -370,9 +371,9 @@ class EnemyTest {
 
   @Test
   void dontEnchantWeaponsWithPoisonWeakness() {
-    Hit combo = new ComboHit(
-      MAGIC.hit("Weapon", POISON.weakness(100).forSecs(5), MAGIC.weakness(100).forSecs(5)),
-      POISON.hit("Poison", MAGIC.damage(10))
+    Hit combo = new Hit(
+      MELEE.create("Weapon", POISON.weakness(100).forSecs(5), MAGIC.weakness(100).forSecs(5)),
+      POISON.create("Poison", MAGIC.damage(10))
     );
 
     target.hit(combo);
@@ -388,9 +389,9 @@ class EnemyTest {
 
   @Test
   void poisonStacks() {
-    target.hit(POISON.hit("Poison #1", MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10)));
-    target.hit(POISON.hit("Poison #1", MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10)));
-    target.hit(POISON.hit("Poison #1", MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10)));
+    target.hit(POISON.create("Poison #1", MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10)));
+    target.hit(POISON.create("Poison #1", MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10)));
+    target.hit(POISON.create("Poison #1", MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10)));
 
     assertDamageTaken(90);
   }
