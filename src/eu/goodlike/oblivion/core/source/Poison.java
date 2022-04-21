@@ -13,15 +13,6 @@ import java.util.Iterator;
 
 public final class Poison implements Method, Source {
 
-  public static Poison INSTANCE;
-
-  public static Poison getInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new Poison();
-    }
-    return INSTANCE;
-  }
-
   @Override
   public EffectText resist(int magnitude) {
     return new EffectText(MAGIC, resistPoison, magnitude);
@@ -68,6 +59,15 @@ public final class Poison implements Method, Source {
   public String toString() {
     return "POISON";
   }
+
+  public static Poison getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new Poison();
+    }
+    return INSTANCE;
+  }
+
+  private static Poison INSTANCE;
 
   private static final class HitId implements Effect.Id {
   }
