@@ -22,7 +22,7 @@ class EnemyTest {
 
   @BeforeEach
   void setup() {
-    target = new Enemy(1000);
+    resurrect("Standard enemy");
   }
 
   @AfterEach
@@ -320,7 +320,7 @@ class EnemyTest {
 
     assertDamageTaken(106.67);
 
-    target = new Enemy(1000);
+    resurrect("Standard enemy");
 
     target.hit("#1", FIRE.weakness(100), MAGIC.weakness(100));
     target.hit("#2", FIRE.weakness(100), MAGIC.weakness(100));
@@ -329,7 +329,7 @@ class EnemyTest {
 
     assertDamageTaken(186.67);  // ~13 * 14
 
-    target = new Enemy(1000, MAGIC.resist(50));  // breton
+    resurrect("Breton", MAGIC.resist(50));
 
     target.hit("#1", FIRE.weakness(100), MAGIC.weakness(100));
     target.hit("#2", FIRE.weakness(100), MAGIC.weakness(100));
@@ -350,7 +350,7 @@ class EnemyTest {
 
     assertDamageTaken(960);  // 64 * 15
 
-    target = new Enemy(1000, POISON.resist(100));  // argonian
+    resurrect("Argonian", POISON.resist(100));
 
     target.hit("#1", POISON.weakness(100), MAGIC.weakness(100));
     target.hit("#2", POISON.weakness(100), MAGIC.weakness(100));
@@ -359,7 +359,7 @@ class EnemyTest {
 
     assertDamageTaken(720);  // 48 * 15
 
-    target = new Enemy(1000, MAGIC.resist(50));  // breton
+    resurrect("Breton", MAGIC.resist(50));
 
     target.hit("#1", POISON.weakness(100), MAGIC.weakness(100));
     target.hit("#2", POISON.weakness(100), MAGIC.weakness(100));
@@ -394,6 +394,10 @@ class EnemyTest {
     target.hit(POISON.create("Poison #1", MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10)));
 
     assertDamageTaken(90);
+  }
+
+  private void resurrect(String description, EffectText... baseEffects) {
+    target = new Enemy(1000, baseEffects);
   }
 
   private void assertDamageTaken(double expected) {
