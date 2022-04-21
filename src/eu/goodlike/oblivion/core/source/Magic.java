@@ -14,14 +14,7 @@ import java.util.Objects;
 
 public final class Magic extends Element implements Method, Source {
 
-  private static Magic INSTANCE;
-
-  public static Magic getInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new Magic();
-    }
-    return INSTANCE;
-  }
+  public static final Magic INSTANCE = new Magic();
 
   public EffectText drain(double hp) {
     return new EffectText(this, Drain.TYPE, hp);

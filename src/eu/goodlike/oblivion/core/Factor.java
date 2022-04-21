@@ -11,7 +11,7 @@ import eu.goodlike.oblivion.core.source.Poison;
 public interface Factor {
 
   Poison POISON = Poison.getInstance();
-  Magic MAGIC = Magic.getInstance();
+  Magic MAGIC = Magic.INSTANCE;
   Element FIRE = new Element();
   Element FROST = new Element();
   Element SHOCK = new Element();

@@ -13,7 +13,7 @@ public interface Source extends Comparable<Source> {
   Equipment BOW = new Equipment("BOW");
   Equipment ARROW = new Equipment("ARROW");
   Poison POISON = Poison.getInstance();
-  Magic SPELL = Magic.getInstance();
+  Magic SPELL = Magic.INSTANCE;
   Equipment STAFF = new Equipment("STAFF");
 
   List<Source> ORDER = ImmutableList.of(MELEE, BOW, ARROW, POISON, SPELL, STAFF);
