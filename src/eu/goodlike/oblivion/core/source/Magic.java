@@ -62,8 +62,6 @@ public final class Magic extends Element implements Method, Source {
     return "SPELL";
   }
 
-  private final Carrier noEffect = create("EMPTY_SPELL");
-
   public static final class HitId implements Effect.Id {
     public HitId(String hitName, Effect.Type type) {
       this.hitName = hitName;

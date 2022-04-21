@@ -63,7 +63,7 @@ public final class Hit implements Iterable<Carrier> {
 
   private void ensure(Equipment equipment, List<Carrier> carriers) {
     if (!equipment.any(carriers)) {
-      carriers.add(equipment.withNoEnchant());
+      carriers.add(equipment.withNoEffect());
     }
   }
 

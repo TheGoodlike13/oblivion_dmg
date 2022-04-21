@@ -27,10 +27,6 @@ public final class Poison implements Method, Source {
     return new EffectText(MAGIC, resistPoison, magnitude);
   }
 
-  public Carrier empty() {
-    return empty;
-  }
-
   @Override
   public Carrier create(String name, EffectText... effects) {
     return new Carrier() {
@@ -67,7 +63,6 @@ public final class Poison implements Method, Source {
   }
 
   private final Resist.Type resistPoison = new Resist.OfFactor(this);
-  private final Carrier empty = create("EMPTY_POTION");
 
   @Override
   public String toString() {

@@ -13,10 +13,6 @@ import static eu.goodlike.oblivion.core.Factor.MAGIC;
 
 public final class Equipment implements Source {
 
-  public Carrier withNoEnchant() {
-    return noEnchant;
-  }
-
   @Override
   public Carrier create(String name, EffectText... effects) {
     return new Carrier() {
@@ -49,11 +45,9 @@ public final class Equipment implements Source {
 
   public Equipment(String sourceName) {
     this.sourceName = sourceName;
-    this.noEnchant = create("EMPTY_" + sourceName);
   }
 
   private final String sourceName;
-  private final Carrier noEnchant;
 
   @Override
   public String toString() {
