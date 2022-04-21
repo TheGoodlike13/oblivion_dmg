@@ -80,6 +80,7 @@ public final class Hit implements Iterable<Carrier> {
 
   private static final Set<String> VALID_HITS = ImmutableSet.of(
     "SPELL",
+    "STAFF",
     "MELEE",
     "MELEE + POISON",
     "BOW + ARROW",

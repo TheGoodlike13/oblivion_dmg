@@ -54,7 +54,7 @@ public final class Equipment implements Source {
 
   public Equipment(String sourceName) {
     this.sourceName = sourceName;
-    this.noEnchant = create("EMPTY");
+    this.noEnchant = create("EMPTY_" + sourceName);
   }
 
   private final String sourceName;

@@ -14,12 +14,20 @@ public interface Source extends Comparable<Source> {
   Equipment ARROW = new Equipment("ARROW");
   Poison POISON = Poison.getInstance();
   Magic SPELL = Magic.getInstance();
+  Equipment STAFF = new Equipment("STAFF");
 
-  List<Source> ORDER = ImmutableList.of(MELEE, BOW, ARROW, POISON, SPELL);
+  List<Source> ORDER = ImmutableList.of(MELEE, BOW, ARROW, POISON, SPELL, STAFF);
+
+  default Carrier withNoEffect() {
+    return create("EMPTY_" + toString());
+  }
 
   Carrier create(String name, EffectText... effects);
 
   Effect.Id toId(String carrierName, Effect.Type type);
+
+  @Override
+  String toString();
 
   @Override
   default int compareTo(Source o) {
