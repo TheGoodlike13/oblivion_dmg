@@ -12,8 +12,8 @@ public interface Carrier extends Iterable<EffectText>, Comparable<Carrier> {
   Effect.Id toId(EffectText effect);
 
   @Override
-  default int compareTo(Carrier o) {
-    return ORDER.compare(this, o);
+  default int compareTo(Carrier other) {
+    return ORDER.compare(this, other);
   }
 
   interface Factory {

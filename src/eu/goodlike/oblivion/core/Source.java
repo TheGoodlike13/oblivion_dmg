@@ -28,8 +28,8 @@ public interface Source extends Comparable<Source> {
   String toString();
 
   @Override
-  default int compareTo(Source o) {
-    return ORDER.indexOf(this) - ORDER.indexOf(o);
+  default int compareTo(Source other) {
+    return ORDER.indexOf(this) - ORDER.indexOf(other);
   }
 
   default boolean matches(Carrier carrier) {
