@@ -16,9 +16,4 @@ public interface Carrier extends Iterable<EffectText>, Comparable<Carrier> {
     return ORDER.compare(this, other);
   }
 
-  interface Factory {
-    Carrier create(String name, EffectText... effects);
-    Effect.Id toId(String carrierName, Effect.Type type);
-  }
-
 }
