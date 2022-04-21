@@ -47,7 +47,7 @@ public final class Magic extends Element implements Method, Source {
 
       @Override
       public Effect.Id toId(EffectText effect) {
-        return SPELL.toId(getName(), effect.getType());
+        return new Magic.HitId(getName(), effect.getType());
       }
 
       @Override
@@ -55,11 +55,6 @@ public final class Magic extends Element implements Method, Source {
         return Arrays.asList(effects).iterator();
       }
     };
-  }
-
-  @Override
-  public Effect.Id toId(String carrierName, Effect.Type type) {
-    return new Magic.HitId(carrierName, type);
   }
 
   @Override

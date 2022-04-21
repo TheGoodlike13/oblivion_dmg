@@ -24,8 +24,6 @@ public interface Source extends Comparable<Source> {
 
   Carrier create(String name, EffectText... effects);
 
-  Effect.Id toId(String carrierName, Effect.Type type);
-
   @Override
   String toString();
 

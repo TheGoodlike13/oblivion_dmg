@@ -47,11 +47,6 @@ public final class Equipment implements Source {
     };
   }
 
-  @Override
-  public Effect.Id toId(String carrierName, Effect.Type type) {
-    return new Magic.HitId(carrierName, type);
-  }
-
   public Equipment(String sourceName) {
     this.sourceName = sourceName;
     this.noEnchant = create("EMPTY_" + sourceName);

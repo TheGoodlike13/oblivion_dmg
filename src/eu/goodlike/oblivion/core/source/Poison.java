@@ -62,11 +62,6 @@ public final class Poison implements Method, Source {
   }
 
   @Override
-  public Effect.Id toId(String carrierName, Effect.Type type) {
-    return new HitId();
-  }
-
-  @Override
   public double damageMultiplier() {
     return 1;
   }
