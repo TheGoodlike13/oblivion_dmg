@@ -14,8 +14,6 @@ import java.util.Objects;
 
 public final class Magic extends Element implements Method, Source {
 
-  public static final Magic INSTANCE = new Magic();
-
   public EffectText drain(double hp) {
     return new EffectText(this, Drain.TYPE, hp);
   }
@@ -54,6 +52,8 @@ public final class Magic extends Element implements Method, Source {
   public String toString() {
     return "SPELL";
   }
+
+  public static final Magic INSTANCE = new Magic();
 
   public static final class HitId implements Effect.Id {
     public HitId(String hitName, Effect.Type type) {
