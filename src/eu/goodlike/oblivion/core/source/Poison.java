@@ -8,8 +8,7 @@ import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.effect.Resist;
 
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.List;
 
 public final class Poison implements Method, Source {
 
@@ -19,33 +18,8 @@ public final class Poison implements Method, Source {
   }
 
   @Override
-  public Carrier create(String name, EffectText... effects) {
-    return new Carrier() {
-      @Override
-      public Source getSource() {
-        return Poison.this;
-      }
-
-      @Override
-      public String getName() {
-        return name;
-      }
-
-      @Override
-      public Method getMethod() {
-        return Factor.POISON;
-      }
-
-      @Override
-      public Effect.Id toId(EffectText effect) {
-        return new HitId();
-      }
-
-      @Override
-      public Iterator<EffectText> iterator() {
-        return Arrays.asList(effects).iterator();
-      }
-    };
+  public Carrier create(String name, List<EffectText> effects) {
+    return new Carrier(this, name, Factor.POISON, HitId::new, effects);
   }
 
   @Override
@@ -70,6 +44,8 @@ public final class Poison implements Method, Source {
   private static Poison INSTANCE;
 
   private static final class HitId implements Effect.Id {
+    public HitId(String any, Effect.Type anyType) {
+    }
   }
 
 }

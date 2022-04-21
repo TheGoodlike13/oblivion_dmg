@@ -8,8 +8,7 @@ import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.effect.Drain;
 
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 public final class Magic extends Element implements Method, Source {
@@ -19,33 +18,8 @@ public final class Magic extends Element implements Method, Source {
   }
 
   @Override
-  public Carrier create(String name, EffectText... effects) {
-    return new Carrier() {
-      @Override
-      public Source getSource() {
-        return Magic.this;
-      }
-
-      @Override
-      public String getName() {
-        return name;
-      }
-
-      @Override
-      public Method getMethod() {
-        return MAGIC;
-      }
-
-      @Override
-      public Effect.Id toId(EffectText effect) {
-        return new Magic.HitId(getName(), effect.getType());
-      }
-
-      @Override
-      public Iterator<EffectText> iterator() {
-        return Arrays.asList(effects).iterator();
-      }
-    };
+  public Carrier create(String name, List<EffectText> effects) {
+    return new Carrier(this, name, MAGIC, Magic.HitId::new, effects);
   }
 
   @Override

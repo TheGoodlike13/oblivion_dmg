@@ -5,6 +5,7 @@ import eu.goodlike.oblivion.core.source.Equipment;
 import eu.goodlike.oblivion.core.source.Magic;
 import eu.goodlike.oblivion.core.source.Poison;
 
+import java.util.Arrays;
 import java.util.List;
 
 public interface Source extends Comparable<Source> {
@@ -22,7 +23,11 @@ public interface Source extends Comparable<Source> {
     return create("EMPTY_" + toString());
   }
 
-  Carrier create(String name, EffectText... effects);
+  default Carrier create(String name, EffectText... effects) {
+    return create(name, Arrays.asList(effects));
+  }
+
+  Carrier create(String name, List<EffectText> effects);
 
   @Override
   String toString();

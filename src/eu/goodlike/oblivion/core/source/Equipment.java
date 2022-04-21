@@ -1,46 +1,18 @@
 package eu.goodlike.oblivion.core.source;
 
 import eu.goodlike.oblivion.core.Carrier;
-import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.EffectText;
-import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.Source;
 
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.List;
 
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
 
 public final class Equipment implements Source {
 
   @Override
-  public Carrier create(String name, EffectText... effects) {
-    return new Carrier() {
-      @Override
-      public Source getSource() {
-        return Equipment.this;
-      }
-
-      @Override
-      public String getName() {
-        return name;
-      }
-
-      @Override
-      public Method getMethod() {
-        return MAGIC;
-      }
-
-      @Override
-      public Effect.Id toId(EffectText effect) {
-        return new Magic.HitId(name, effect.getType());
-      }
-
-      @Override
-      public Iterator<EffectText> iterator() {
-        return Arrays.asList(effects).iterator();
-      }
-    };
+  public Carrier create(String name, List<EffectText> effects) {
+    return new Carrier(this, name, MAGIC, Magic.HitId::new, effects);
   }
 
   public Equipment(String sourceName) {
