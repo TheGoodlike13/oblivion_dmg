@@ -37,13 +37,9 @@ public interface Source extends Comparable<Source> {
     return ORDER.indexOf(this) - ORDER.indexOf(other);
   }
 
-  default boolean matches(Carrier carrier) {
-    return carrier.getSource() == this;
-  }
-
   default boolean any(Iterable<? extends Carrier> carriers) {
     for (Carrier carrier : carriers) {
-      if (matches(carrier)) {
+      if (this == carrier.getSource()) {
         return true;
       }
     }
