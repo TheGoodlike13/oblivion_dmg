@@ -14,6 +14,14 @@ import static eu.goodlike.oblivion.core.Source.MELEE;
 import static eu.goodlike.oblivion.core.Source.POISON;
 import static java.util.stream.Collectors.joining;
 
+/**
+ * Combination of carriers which apply their effects at once upon a hit.
+ * For example: enchanted bow which fires an enchanted arrow with poison.
+ * All of them apply their effects at once (i.e. cannot influence each other for this hit).
+ * This class ensures the combination of carriers is faithful to the game.
+ * <p/>
+ * The order of carriers in this hit is consistent with their natural ordering.
+ */
 public final class Hit implements Iterable<Carrier> {
 
   @Override
@@ -25,6 +33,17 @@ public final class Hit implements Iterable<Carrier> {
     this(Arrays.asList(carriers));
   }
 
+  /**
+   * Creates a new hit from given carriers.
+   * They are sorted according to their natural ordering.
+   * <p/>
+   * In some cases, the carriers will be supplemented with implicit equipment with no enchants.
+   * For example: if there is an arrow, a bow will be added if missing.
+   * This removes the need to specify them explicitly.
+   * Poison prefers a melee weapon if it cannot be decided otherwise.
+   *
+   * @throws StructureException if the hit resulting from given carriers is completely invalid
+   */
   public Hit(List<Carrier> carriers) {
     this.carriers = ensureOrderAndEquipment(carriers);
 
