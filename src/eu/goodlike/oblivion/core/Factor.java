@@ -30,7 +30,4 @@ public interface Factor {
    */
   EffectText resist(int pc);
 
-  @Override
-  String toString();
-
 }
