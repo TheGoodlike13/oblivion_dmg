@@ -33,6 +33,8 @@ public interface Effect {
     Effect activate(double magnitude, double duration);
 
     /**
+     * This method is implemented as "true" by default for convenience.
+     *
      * @return true if this type of effect influences or damages hp, false otherwise
      */
     default boolean affectsHp() {
