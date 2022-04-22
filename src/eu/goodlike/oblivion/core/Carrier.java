@@ -28,6 +28,10 @@ public final class Carrier implements Iterable<EffectText>, Comparable<Carrier> 
     return strategy.toId(name, effect.getType());
   }
 
+  public Carrier copy(String copyName) {
+    return new Carrier(source, copyName, method, strategy, effects);
+  }
+
   @Override
   public Iterator<EffectText> iterator() {
     return effects.iterator();
