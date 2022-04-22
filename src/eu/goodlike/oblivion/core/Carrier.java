@@ -79,9 +79,13 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
   @Override
   public String toString() {
+    if (effects.isEmpty()) {
+      return source + " {NO EFFECTS}";
+    }
+
     return effects.stream()
       .map(EffectText::toString)
-      .collect(joining(" + "));
+      .collect(joining(" + ", source + " {", "}"));
   }
 
   private static final Comparator<Carrier> ORDER = Comparator.comparing(Carrier::getSource);
