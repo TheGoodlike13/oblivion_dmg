@@ -42,6 +42,34 @@ sourceSets {
     }
 }
 
+tasks.dependencyUpdates {
+    outputDir = '/.build/dependencyUpdates'
+
+    def isStable = { String version ->
+        def hasStableKeyword = ['RELEASE', 'FINAL', 'GA'].any { key -> version.toUpperCase().contains(key) }
+        def matchesGenericStableVersion = /^[0-9,.v-]+(-r)?$/
+        return hasStableKeyword || version ==~ matchesGenericStableVersion
+    }
+
+    rejectVersionIf {
+        isStable(it.currentVersion) && !isStable(it.candidate.version)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = '7.4.2'
+    jarFile = projectPath.resolve('.wrapper').resolve('gradle-wrapper.jar').toFile()
+}
+
 idea {
     module {
         excludeDirs += file('.build')
@@ -69,34 +97,6 @@ tasks.idea {
                     StandardCopyOption.REPLACE_EXISTING)
         }
     }
-}
-
-test {
-    useJUnitPlatform()
-}
-
-tasks.dependencyUpdates {
-    outputDir = '/.build/dependencyUpdates'
-
-    def isStable = { String version ->
-        def hasStableKeyword = ['RELEASE', 'FINAL', 'GA'].any { key -> version.toUpperCase().contains(key) }
-        def matchesGenericStableVersion = /^[0-9,.v-]+(-r)?$/
-        return hasStableKeyword || version ==~ matchesGenericStableVersion
-    }
-
-    rejectVersionIf {
-        isStable(it.currentVersion) && !isStable(it.candidate.version)
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-tasks.wrapper {
-    distributionType = Wrapper.DistributionType.ALL
-    gradleVersion = '7.4.2'
-    jarFile = projectPath.resolve('.wrapper').resolve('gradle-wrapper.jar').toFile()
 }
 
 tasks.withType(JavaCompile) {
