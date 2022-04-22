@@ -70,20 +70,27 @@ class EnemyTest {
   void damageResisted() {
     target.hit(FIRE.resist(50));
 
-    target.hit(MAGIC.damage(10));
     target.hit(FIRE.damage(10));
 
-    assertDamageTaken(15);
+    assertDamageTaken(5);
   }
 
   @Test
   void damageAmplified() {
     target.hit(FIRE.weakness(100));
 
-    target.hit(MAGIC.damage(10));
     target.hit(FIRE.damage(10));
 
-    assertDamageTaken(30);
+    assertDamageTaken(20);
+  }
+
+  @Test
+  void damageUnaffected() {
+    target.hit(FROST.resist(100));
+
+    target.hit(FIRE.damage(10));
+
+    assertDamageTaken(10);
   }
 
   @Test
