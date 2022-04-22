@@ -62,10 +62,6 @@ public final class Hit implements Iterable<Carrier> {
       .collect(joining(" + "));
   }
 
-  private Carrier baseCarrier() {
-    return carriers.get(0);
-  }
-
   @Override
   public String toString() {
     return carriers.stream()
