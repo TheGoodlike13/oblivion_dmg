@@ -5,6 +5,7 @@ plugins {
     id 'java'
     id 'idea'
 
+    // requires compatible gradle version
     id 'com.github.ben-manes.versions' version '0.42.0'
 }
 
