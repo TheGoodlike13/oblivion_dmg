@@ -17,15 +17,17 @@ public interface Factor {
   Element SHOCK = new Element();
 
   /**
-   * @return magical effect which applies a weakness to this factor with given magnitude
+   * @param pc percent of weakness
+   * @return magical effect which applies a weakness to this factor
    */
-  default EffectText weakness(int magnitude) {
-    return resist(-magnitude);
+  default EffectText weakness(int pc) {
+    return resist(-pc);
   }
 
   /**
-   * @return magical effect which applies a resistance to this factor with given magnitude
+   * @param pc percent of resistance
+   * @return magical effect which applies a resistance to this factor
    */
-  EffectText resist(int magnitude);
+  EffectText resist(int pc);
 
 }

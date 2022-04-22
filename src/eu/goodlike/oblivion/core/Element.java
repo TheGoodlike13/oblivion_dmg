@@ -10,8 +10,8 @@ import eu.goodlike.oblivion.core.effect.Resist;
 public class Element implements Factor {
 
   @Override
-  public EffectText resist(int magnitude) {
-    return new EffectText(MAGIC, resistElement, magnitude);
+  public EffectText resist(int pc) {
+    return new EffectText(MAGIC, resistElement, pc);
   }
 
   /**

@@ -13,8 +13,8 @@ import java.util.List;
 public final class Poison implements Method, Source {
 
   @Override
-  public EffectText resist(int magnitude) {
-    return new EffectText(MAGIC, resistPoison, magnitude);
+  public EffectText resist(int pc) {
+    return new EffectText(MAGIC, resistPoison, pc);
   }
 
   @Override
