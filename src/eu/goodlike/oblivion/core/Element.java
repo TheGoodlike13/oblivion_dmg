@@ -15,10 +15,10 @@ public class Element implements Factor {
   }
 
   /**
-   * @return effect which does given magnitude as amount of damage of this element per second
+   * @return effect which does given damage of this element per second
    */
-  public EffectText damage(int magnitude) {
-    return new EffectText(this, Damage.TYPE, magnitude);
+  public EffectText damage(int dmg) {
+    return new EffectText(this, Damage.TYPE, dmg);
   }
 
   private final Resist.Type resistElement = new Resist.OfFactor(this);
