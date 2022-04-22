@@ -14,7 +14,7 @@ public interface Effect {
 
   /**
    * Marker interface to uniquely identify the active effect.
-   * Ensures effects from the same source (e.g. spell) do not stack.
+   * Ensures effects from the same carrier (e.g. spell) do not stack.
    */
   interface Id {
   }
