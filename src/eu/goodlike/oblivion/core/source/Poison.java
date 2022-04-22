@@ -19,7 +19,7 @@ public final class Poison implements Method, Source {
 
   @Override
   public Carrier create(String name, List<EffectText> effects) {
-    return new Carrier(this, name, Factor.POISON, HitId::new, effects);
+    return new Carrier(this, name, Factor.POISON, AlwaysUnique::new, effects);
   }
 
   @Override
@@ -43,8 +43,9 @@ public final class Poison implements Method, Source {
 
   private static Poison INSTANCE;
 
-  private static final class HitId implements Effect.Id {
-    public HitId(String any, Effect.Type anyType) {
+  private static final class AlwaysUnique implements Effect.Id {
+    public AlwaysUnique(Carrier anyPoison, EffectText anyEffect) {
+      // required to make use of method reference (::)
     }
   }
 

@@ -9,7 +9,7 @@ import java.util.List;
 public final class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
   public interface IdStrategy {
-    Effect.Id toId(String carrierName, Effect.Type type);
+    Effect.Id toId(Carrier carrier, EffectText effect);
   }
 
   public Source getSource() {
@@ -25,7 +25,7 @@ public final class Carrier implements Iterable<EffectText>, Comparable<Carrier> 
   }
 
   public Effect.Id toId(EffectText effect) {
-    return strategy.toId(name, effect.getType());
+    return strategy.toId(this, effect);
   }
 
   public Carrier copy(String copyName) {

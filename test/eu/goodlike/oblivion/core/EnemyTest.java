@@ -470,6 +470,19 @@ class EnemyTest {
     assertDamageTaken(90);
   }
 
+  @Test
+  void spellStacking_withWeapons() {
+    Carrier weapon1 = MELEE.create("Dagger", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier weapon2 = weapon1.copy("Dagger");  // equipment names can be duplicate
+
+    target.hit(weapon1);
+    target.hit(weapon2);
+
+    target.hit(FIRE.damage(10));
+
+    assertDamageTaken(160);
+  }
+
   @SuppressWarnings("unused")
   private void resurrect(String description, EffectText... baseEffects) {
     target = new Enemy(1000, baseEffects);

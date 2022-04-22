@@ -19,7 +19,7 @@ public final class Magic extends Element implements Method, Source {
 
   @Override
   public Carrier create(String name, List<EffectText> effects) {
-    return new Carrier(this, name, MAGIC, Magic.HitId::new, effects);
+    return new Carrier(this, name, MAGIC, UniquePerSpellPerType::new, effects);
   }
 
   @Override
@@ -29,27 +29,27 @@ public final class Magic extends Element implements Method, Source {
 
   public static final Magic INSTANCE = new Magic();
 
-  public static final class HitId implements Effect.Id {
-    public HitId(String hitName, Effect.Type type) {
-      this.hitName = hitName;
-      this.type = type;
+  private static final class UniquePerSpellPerType implements Effect.Id {
+    private UniquePerSpellPerType(Carrier carrier, EffectText effect) {
+      this.spellName = carrier.getName();
+      this.effectType = effect.getType();
     }
 
-    private final String hitName;
-    private final Effect.Type type;
+    private final String spellName;
+    private final Effect.Type effectType;
 
     @Override
     public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
-      HitId effectId = (HitId)o;
-      return Objects.equals(hitName, effectId.hitName)
-        && Objects.equals(type, effectId.type);
+      UniquePerSpellPerType other = (UniquePerSpellPerType)o;
+      return Objects.equals(spellName, other.spellName)
+        && Objects.equals(effectType, other.effectType);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(hitName, type);
+      return Objects.hash(spellName, effectType);
     }
   }
 
