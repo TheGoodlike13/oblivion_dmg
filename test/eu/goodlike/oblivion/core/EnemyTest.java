@@ -160,8 +160,10 @@ class EnemyTest {
 
   @Test
   void sameSpellModifierAffectsItself() {
-    target.hit("#1", MAGIC.weakness(100));  // +100 (replaced)
-    target.hit("#1", MAGIC.weakness(100));  // +200
+    Carrier spell = SPELL.create("Weakness to magic 100%", MAGIC.weakness(100));
+
+    target.hit(spell);  // +100 (replaced)
+    target.hit(spell);  // +200
 
     target.hit(MAGIC.damage(10));
 
@@ -170,17 +172,21 @@ class EnemyTest {
 
   @Test
   void sameSpellDamageCompleteOverlap() {
-    target.hit("#1", MAGIC.damage(10));
-    target.hit("#1", MAGIC.damage(10));
+    Carrier spell = SPELL.create("Magic 10", MAGIC.damage(10));
+
+    target.hit(spell);
+    target.hit(spell);
 
     assertDamageTaken(10);
   }
 
   @Test
   void sameSpellDamagePartialOverlap() {
-    target.hit("#1", MAGIC.damage(10));
+    Carrier spell = SPELL.create("Magic 10", MAGIC.damage(10));
+
+    target.hit(spell);
     target.tick(0.5);
-    target.hit("#1", MAGIC.damage(10));
+    target.hit(spell);
 
     assertDamageTaken(15);
   }
@@ -194,8 +200,10 @@ class EnemyTest {
 
   @Test
   void wastedMagicWeaknessEffectDueToInefficientOrder() {
-    target.hit("#1", MAGIC.weakness(100), FIRE.weakness(100));  // +100, +100 (replaced)
-    target.hit("#1", MAGIC.weakness(100), FIRE.weakness(100));  // +200, +100
+    Carrier spell = SPELL.create("Bad order", MAGIC.weakness(100), FIRE.weakness(100));
+
+    target.hit(spell);  // +100, +100 (replaced)
+    target.hit(spell);  // +200, +100
 
     target.hit(FIRE.damage(10));
 
@@ -204,8 +212,10 @@ class EnemyTest {
 
   @Test
   void efficientOrder() {
-    target.hit("#1", FIRE.weakness(100), MAGIC.weakness(100));  // +100, +100 (replaced)
-    target.hit("#1", FIRE.weakness(100), MAGIC.weakness(100));  // +200, +200
+    Carrier spell = SPELL.create("Good order", FIRE.weakness(100), MAGIC.weakness(100));
+
+    target.hit(spell);  // +100, +100 (replaced)
+    target.hit(spell);  // +200, +200
 
     target.hit(FIRE.damage(10));
 
@@ -214,8 +224,11 @@ class EnemyTest {
 
   @Test
   void spellStacking_twice() {
-    target.hit("#1", FIRE.weakness(100), MAGIC.weakness(100));  // +100, +100
-    target.hit("#2", FIRE.weakness(100), MAGIC.weakness(100));  // +200, +200
+    Carrier spell1 = SPELL.create("Stack 1", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier spell2 = SPELL.create("Stack 2", FIRE.weakness(100), MAGIC.weakness(100));
+
+    target.hit(spell1);  // +100, +100
+    target.hit(spell2);  // +200, +200
 
     target.hit(FIRE.damage(10));
 
@@ -224,9 +237,12 @@ class EnemyTest {
 
   @Test
   void spellStacking_thrice() {
-    target.hit("#1", FIRE.weakness(100), MAGIC.weakness(100));  // +100, +100 (replaced)
-    target.hit("#2", FIRE.weakness(100), MAGIC.weakness(100));  // +200, +200
-    target.hit("#1", FIRE.weakness(100), MAGIC.weakness(100));  // +400, +400
+    Carrier spell1 = SPELL.create("Stack 1", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier spell2 = SPELL.create("Stack 2", FIRE.weakness(100), MAGIC.weakness(100));
+
+    target.hit(spell1);  // +100, +100 (replaced)
+    target.hit(spell2);  // +200, +200
+    target.hit(spell1);  // +400, +400
 
     target.hit(FIRE.damage(10));
 
@@ -235,10 +251,13 @@ class EnemyTest {
 
   @Test
   void spellStacking_fourTimes() {
-    target.hit("#1", FIRE.weakness(100), MAGIC.weakness(100));  // +100, +100 (replaced)
-    target.hit("#2", FIRE.weakness(100), MAGIC.weakness(100));  // +200, +200 (replaced)
-    target.hit("#1", FIRE.weakness(100), MAGIC.weakness(100));  // +400, +400
-    target.hit("#2", FIRE.weakness(100), MAGIC.weakness(100));  // +700, +700
+    Carrier spell1 = SPELL.create("Stack 1", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier spell2 = SPELL.create("Stack 2", FIRE.weakness(100), MAGIC.weakness(100));
+
+    target.hit(spell1);  // +100, +100 (replaced)
+    target.hit(spell2);  // +200, +200 (replaced)
+    target.hit(spell1);  // +400, +400
+    target.hit(spell2);  // +700, +700
 
     target.hit(FIRE.damage(10));
 
@@ -247,10 +266,13 @@ class EnemyTest {
 
   @Test
   void spellStacking_fourTimes_inefficient() {
-    target.hit("#1", MAGIC.weakness(100), FIRE.weakness(100));  // +100, +100 (replaced)
-    target.hit("#2", MAGIC.weakness(100), FIRE.weakness(100));  // +200, +200 (replaced)
-    target.hit("#1", MAGIC.weakness(100), FIRE.weakness(100));  // +400, +300
-    target.hit("#2", MAGIC.weakness(100), FIRE.weakness(100));  // +700, +500
+    Carrier spell1 = SPELL.create("Stack 1 (bad)", MAGIC.weakness(100), FIRE.weakness(100));
+    Carrier spell2 = SPELL.create("Stack 2 (bad)", MAGIC.weakness(100), FIRE.weakness(100));
+
+    target.hit(spell1);  // +100, +100 (replaced)
+    target.hit(spell2);  // +200, +200 (replaced)
+    target.hit(spell1);  // +400, +300
+    target.hit(spell2);  // +700, +500
 
     target.hit(FIRE.damage(10));
 
@@ -258,11 +280,23 @@ class EnemyTest {
   }
 
   @Test
-  void drain() {
+  void drainDamagesInstantly() {
     target.hit(MAGIC.drain(100));
 
     assertThat(target.damageTaken()).isEqualTo(100);
+  }
 
+  @Test
+  void multipleDrainsFromDifferentSources() {
+    target.hit(MAGIC.drain(100));
+    target.hit(MAGIC.drain(100));
+
+    assertThat(target.damageTaken()).isEqualTo(200);
+  }
+
+  @Test
+  void drainRestoresHealthOnSurvival() {
+    target.hit(MAGIC.drain(100));
     target.resolve();
 
     assertThat(target.damageTaken()).isEqualTo(0);
@@ -288,8 +322,10 @@ class EnemyTest {
 
   @Test
   void drainStacking() {
-    target.hit("#1", MAGIC.drain(100), MAGIC.weakness(100));
-    target.hit("#1", MAGIC.drain(100), MAGIC.weakness(100));
+    Carrier weapon = MELEE.create("Drainer", MAGIC.drain(100), MAGIC.weakness(100));
+
+    target.hit(weapon);
+    target.hit(weapon);
 
     assertThat(target.damageTaken()).isEqualTo(200);
   }
@@ -300,80 +336,116 @@ class EnemyTest {
 
     assertThat(target.damageTaken()).isEqualTo(10000);
     assertThat(target.isAlive()).isFalse();
+  }
 
+  @Test
+  void drainRestoresNoHealthOnDeath() {
+    target.hit(MAGIC.drain(10000));
     target.resolve();
 
     assertThat(target.damageTaken()).isEqualTo(10000);
   }
 
   @Test
-  void drainReplaceOnDeath() {
-    target.hit("#1", MAGIC.drain(10000), MAGIC.weakness(100));
-    target.hit("#1", MAGIC.drain(10000), MAGIC.weakness(100));
-
-    assertThat(target.damageTaken()).isEqualTo(10000);
-
-    target.resolve();
+  void drainDoesNotApplyOnDeadTargets() {
+    target.hit(MAGIC.drain(10000));
+    target.hit(MAGIC.drain(10000));
 
     assertThat(target.damageTaken()).isEqualTo(10000);
   }
 
   @Test
-  void enchantsSuck() {
+  void enchantsSuck_singleHit_grandSoul() {
     DIFFICULTY = 100;
 
-    target.hit("#1", FIRE.weakness(100), MAGIC.weakness(100));
-    target.hit("#2", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier spell1 = SPELL.create("Stack 1", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier spell2 = SPELL.create("Stack 2", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier weapon = MELEE.create("Grand soul", FIRE.damage(40));
 
-    target.hit(FIRE.damage(40));  // grand soul enchant (no extras, 1s)
+    target.hit(spell1);
+    target.hit(spell2);
+    target.hit(FIRE.damage(40));
 
     assertDamageTaken(106.67);
+  }
 
-    resurrect("Standard enemy");
+  @Test
+  void enchantsSuck_damageOverTime_grandSoul() {
+    DIFFICULTY = 100;
 
-    target.hit("#1", FIRE.weakness(100), MAGIC.weakness(100));
-    target.hit("#2", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier spell1 = SPELL.create("Stack 1", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier spell2 = SPELL.create("Stack 2", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier weapon = MELEE.create("Grand soul", FIRE.damage(5).forSecs(14));
 
-    target.hit(FIRE.damage(5).forSecs(14));  // grand soul enchant (no extras)
+    target.hit(spell1);
+    target.hit(spell2);
+    target.hit(weapon);
 
     assertDamageTaken(186.67);  // ~13 * 14
+  }
+
+  @Test
+  void enchantsSuck_breton() {
+    DIFFICULTY = 100;
 
     resurrect("Breton", MAGIC.resist(50));
 
-    target.hit("#1", FIRE.weakness(100), MAGIC.weakness(100));
-    target.hit("#2", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier spell1 = SPELL.create("Stack 1", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier spell2 = SPELL.create("Stack 2", FIRE.weakness(100), MAGIC.weakness(100));
+    Carrier weapon = MELEE.create("Grand soul", FIRE.damage(5).forSecs(14));
 
-    target.hit(FIRE.damage(5).forSecs(14));
+    target.hit(spell1);
+    target.hit(spell2);
+    target.hit(weapon);
 
     assertDamageTaken(58.33);  // ~4 * 14
   }
 
   @Test
-  void poisonOP() {
+  void poisonOP_journeyman() {
     DIFFICULTY = 100;
 
-    target.hit("#1", POISON.weakness(100), MAGIC.weakness(100));
-    target.hit("#2", POISON.weakness(100), MAGIC.weakness(100));
+    Carrier spell1 = SPELL.create("Stack 1", POISON.weakness(100), MAGIC.weakness(100));
+    Carrier spell2 = SPELL.create("Stack 2", POISON.weakness(100), MAGIC.weakness(100));
+    Carrier poison = POISON.create("Journeyman", MAGIC.damage(4).forSecs(15));
 
-    target.hit(POISON, MAGIC.damage(4).forSecs(15));  // journeyman-ish poison with 1 effect
+    target.hit(spell1);
+    target.hit(spell2);
+    target.hit(poison);
 
     assertDamageTaken(960);  // 64 * 15
+  }
+
+  @Test
+  void poisonOP_journeyman_argonian() {
+    DIFFICULTY = 100;
 
     resurrect("Argonian", POISON.resist(100));
 
-    target.hit("#1", POISON.weakness(100), MAGIC.weakness(100));
-    target.hit("#2", POISON.weakness(100), MAGIC.weakness(100));
+    Carrier spell1 = SPELL.create("Stack 1", POISON.weakness(100), MAGIC.weakness(100));
+    Carrier spell2 = SPELL.create("Stack 2", POISON.weakness(100), MAGIC.weakness(100));
+    Carrier poison = POISON.create("Journeyman", MAGIC.damage(4).forSecs(15));
 
-    target.hit(POISON, MAGIC.damage(4).forSecs(15));
+    target.hit(spell1);
+    target.hit(spell2);
+    target.hit(poison);
 
     assertDamageTaken(720);  // 48 * 15
+  }
+
+  @Test
+  void poisonOP_journeyman_breton() {
+    DIFFICULTY = 100;
 
     resurrect("Breton", MAGIC.resist(50));
 
-    target.hit("#1", POISON.weakness(100), MAGIC.weakness(100));
-    target.hit("#2", POISON.weakness(100), MAGIC.weakness(100));
+    Carrier spell1 = SPELL.create("Stack 1", POISON.weakness(100), MAGIC.weakness(100));
+    Carrier spell2 = SPELL.create("Stack 2", POISON.weakness(100), MAGIC.weakness(100));
+    Carrier poison = POISON.create("Journeyman", MAGIC.damage(4).forSecs(15));
 
-    target.hit(POISON, MAGIC.damage(4).forSecs(15));
+    target.hit(spell1);
+    target.hit(spell2);
+    target.hit(poison);
 
     assertDamageTaken(300);  // 20 * 15
   }
@@ -381,8 +453,8 @@ class EnemyTest {
   @Test
   void dontEnchantWeaponsWithPoisonWeakness() {
     Hit combo = new Hit(
-      MELEE.create("Weapon", POISON.weakness(100).forSecs(5), MAGIC.weakness(100).forSecs(5)),
-      POISON.create("Poison", MAGIC.damage(10))
+      MELEE.create("Lame", POISON.weakness(100).forSecs(5), MAGIC.weakness(100).forSecs(5)),
+      POISON.create("Generic 1s", MAGIC.damage(10))
     );
 
     target.hit(combo);
@@ -398,9 +470,11 @@ class EnemyTest {
 
   @Test
   void poisonStacks() {
-    target.hit(POISON.create("Poison #1", MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10)));
-    target.hit(POISON.create("Poison #1", MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10)));
-    target.hit(POISON.create("Poison #1", MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10)));
+    Carrier mix = POISON.create("Mix", MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10));
+
+    target.hit(mix);
+    target.hit(mix);
+    target.hit(mix);
 
     assertDamageTaken(90);
   }
