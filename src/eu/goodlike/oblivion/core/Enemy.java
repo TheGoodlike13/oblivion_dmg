@@ -6,7 +6,6 @@ import com.google.common.collect.ListMultimap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
 import static eu.goodlike.oblivion.core.Source.SPELL;
@@ -35,8 +34,7 @@ public final class Enemy implements Target {
   }
 
   public void hit(Source source, EffectText... effects) {
-    String generatedName = "GENERATED_#" + GENERIC_NAME.incrementAndGet();
-    hit(source.create(generatedName, effects));
+    hit(source.create(effects));
   }
 
   public void hit(Carrier monoHit) {
@@ -168,7 +166,5 @@ public final class Enemy implements Target {
     private double totalDmg = 0;
     private double totalDrain = 0;
   }
-
-  private static final AtomicInteger GENERIC_NAME = new AtomicInteger(0);
 
 }

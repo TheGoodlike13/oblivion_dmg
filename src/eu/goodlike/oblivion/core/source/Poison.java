@@ -1,5 +1,6 @@
 package eu.goodlike.oblivion.core.source;
 
+import com.google.common.collect.ImmutableList;
 import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.EffectText;
@@ -18,8 +19,8 @@ public final class Poison implements Method, Source {
   }
 
   @Override
-  public Carrier create(String name, List<EffectText> effects) {
-    return new Carrier(this, name, Factor.POISON, AlwaysUnique::new, effects);
+  public Carrier create(List<EffectText> effects) {
+    return new PoisonBottle(effects);
   }
 
   @Override
@@ -43,10 +44,23 @@ public final class Poison implements Method, Source {
 
   private static Poison INSTANCE;
 
-  private static final class AlwaysUnique implements Effect.Id {
-    public AlwaysUnique(Carrier anyPoison, EffectText anyEffect) {
-      // required to make use of method reference (::)
+  private static final class PoisonBottle extends Carrier {
+    @Override
+    public Effect.Id toId(EffectText effect) {
+      return new AlwaysUnique();
     }
+
+    @Override
+    public Carrier copy() {
+      return new PoisonBottle(ImmutableList.copyOf(this));
+    }
+
+    public PoisonBottle(List<EffectText> effects) {
+      super(Source.POISON, Factor.POISON, effects);
+    }
+  }
+
+  private static final class AlwaysUnique implements Effect.Id {
   }
 
 }

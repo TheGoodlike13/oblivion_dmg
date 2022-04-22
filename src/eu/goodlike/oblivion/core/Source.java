@@ -20,14 +20,14 @@ public interface Source extends Comparable<Source> {
   List<Source> ORDER = ImmutableList.of(MELEE, BOW, ARROW, POISON, SPELL, STAFF);
 
   default Carrier withNoEffect() {
-    return create("EMPTY_" + toString());
+    return create();
   }
 
-  default Carrier create(String name, EffectText... effects) {
-    return create(name, Arrays.asList(effects));
+  default Carrier create(EffectText... effects) {
+    return create(Arrays.asList(effects));
   }
 
-  Carrier create(String name, List<EffectText> effects);
+  Carrier create(List<EffectText> effects);
 
   @Override
   String toString();
