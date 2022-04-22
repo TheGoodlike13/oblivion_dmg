@@ -43,6 +43,7 @@ class EnemyTest {
 
     assertDamageTaken(10);
     assertHealthRemaining(990);
+    assertThat(target.isAlive()).isTrue();
   }
 
   @Test
@@ -53,6 +54,7 @@ class EnemyTest {
 
     assertDamageTaken(10);
     assertHealthRemaining(990);
+    assertThat(target.isAlive()).isTrue();
   }
 
   @Test
