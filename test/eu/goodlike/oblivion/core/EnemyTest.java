@@ -483,6 +483,16 @@ class EnemyTest {
     assertDamageTaken(160);
   }
 
+  @Test
+  void floatingPointDeath() {
+    target.hit(MAGIC.damage(1000));
+    target.resolve();
+
+    assertThat(target.healthRemaining()).isGreaterThan(0);
+    assertThat(target.healthRemaining()).isLessThan(0.005);
+    assertThat(target.isAlive()).isFalse();
+  }
+
   @SuppressWarnings("unused")
   private void resurrect(String description, EffectText... baseEffects) {
     target = new Enemy(1000, baseEffects);
@@ -490,12 +500,12 @@ class EnemyTest {
 
   private void assertDamageTaken(double expected) {
     target.resolve();
-    assertThat(target.damageTaken()).isEqualTo(expected, within(0.01));
+    assertThat(target.damageTaken()).isEqualTo(expected, within(0.005));
   }
 
   private void assertHealthRemaining(double expected) {
     target.resolve();
-    assertThat(target.healthRemaining()).isEqualTo(expected, within(0.01));
+    assertThat(target.healthRemaining()).isEqualTo(expected, within(0.005));
   }
 
 }

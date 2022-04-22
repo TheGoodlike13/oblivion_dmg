@@ -14,7 +14,7 @@ import static eu.goodlike.oblivion.global.Settings.TICK;
 public final class Enemy implements Target {
 
   public double healthRemaining() {
-    return isAlive() ? health : 0;
+    return Math.max(0, health);
   }
 
   public double damageTaken() {
@@ -22,7 +22,7 @@ public final class Enemy implements Target {
   }
 
   public boolean isAlive() {
-    return health > 0;
+    return health >= BASICALLY_DEAD;
   }
 
   public boolean isAffected() {
@@ -139,6 +139,7 @@ public final class Enemy implements Target {
   }
 
   private static final double NO_WEAKNESS = 100;
+  private static final double BASICALLY_DEAD = 0.005;
 
   private static final class Dummy implements Target {
     @Override
