@@ -13,6 +13,8 @@ import static java.util.stream.Collectors.joining;
 /**
  * Entity which carries multiple effects to be applied on hit.
  * In-game this would be a single weapon, arrow, spell or anything else with multiple effects.
+ * Just like in-game, each effect must have unique type.
+ * <p/>
  * Carriers can be combined to create actual {@link Hit}s, like {@link Source#BOW} + {@link Source#ARROW}.
  * <p/>
  * The effects should be applied in iteration order.
