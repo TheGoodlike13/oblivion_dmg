@@ -16,14 +16,6 @@ import static java.util.stream.Collectors.joining;
 
 public final class Hit implements Iterable<Carrier> {
 
-  public boolean isMelee() {
-    return MELEE.matches(baseCarrier());
-  }
-
-  public boolean isBow() {
-    return BOW.matches(baseCarrier());
-  }
-
   @Override
   public Iterator<Carrier> iterator() {
     return carriers.iterator();
