@@ -19,7 +19,7 @@ public final class Magic extends Element implements Method, Source {
 
   @Override
   public Carrier create(String name, List<EffectText> effects) {
-    return new Carrier(this, name, MAGIC, UniquePerSpellPerType::new, effects);
+    return new Spell(this, name, MAGIC, UniquePerSpellPerType::new, effects);
   }
 
   @Override
@@ -28,6 +28,28 @@ public final class Magic extends Element implements Method, Source {
   }
 
   public static final Magic INSTANCE = new Magic();
+
+  /**
+   * The game does not allow creating spells with duplicate names.
+   */
+  private static final class Spell extends Carrier {
+    public Spell(Source source, String name, Method method, IdStrategy strategy, List<EffectText> effects) {
+      super(source, name, method, strategy, effects);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Spell other = (Spell)o;
+      return Objects.equals(getName(), other.getName());
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(getName());
+    }
+  }
 
   private static final class UniquePerSpellPerType implements Effect.Id {
     private UniquePerSpellPerType(Carrier carrier, EffectText effect) {

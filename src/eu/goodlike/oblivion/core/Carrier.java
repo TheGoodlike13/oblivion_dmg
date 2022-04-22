@@ -6,9 +6,29 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-public final class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
+/**
+ * Entity which carries multiple effects to be applied on hit.
+ * In-game this would be a single weapon, arrow, spell or anything else with multiple effects.
+ * Carriers can be combined to create actual {@link Hit}s, like {@link Source#BOW} + {@link Source#ARROW}.
+ * <p/>
+ * This class should only be extended to impose limits by {@link #equals(Object)}, if needed.
+ * This can allow to identify duplicate carriers which otherwise would not be allowed.
+ */
+public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
+  /**
+   * Strategy for determining uniqueness of an effect.
+   */
   public interface IdStrategy {
+    /**
+     * When hitting a target multiple times with the same carrier (e.g. spell), effects do not stack, but override
+     * each other instead (usually).
+     * The id from this method allows us to identify effects which should be overriden rather than stacked.
+     *
+     * @param carrier carrier which produced the given effect
+     * @param effect effect which we must uniquely identify
+     * @return id which uniquely identifies the given effect
+     */
     Effect.Id toId(Carrier carrier, EffectText effect);
   }
 
