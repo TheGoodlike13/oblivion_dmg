@@ -34,17 +34,13 @@ public final class Enemy implements Target {
     hit(SPELL, effects);
   }
 
-  public void hit(String name, EffectText... effects) {
-    hit(SPELL.create(name, effects));
-  }
-
   public void hit(Source source, EffectText... effects) {
     String generatedName = "GENERATED_#" + GENERIC_NAME.incrementAndGet();
     hit(source.create(generatedName, effects));
   }
 
-  public void hit(Carrier hit) {
-    hit(new Hit(hit));
+  public void hit(Carrier monoHit) {
+    hit(new Hit(monoHit));
   }
 
   public void hit(Hit hit) {
