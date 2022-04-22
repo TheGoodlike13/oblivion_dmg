@@ -3,7 +3,7 @@ package eu.goodlike.oblivion.core;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * Effects as their appear in in-game menus.
+ * Effects as they appear in-game on various carriers (e.g. spells in your spell book).
  * The magnitudes of these effects can be affected by the resistance of the target or in-game difficulty
  * when actually applied.
  * The duration of these effects is 1s by default.
@@ -37,9 +37,6 @@ public final class EffectText {
     return type.activate(magnitudeSnapshot, duration);
   }
 
-  /**
-   * @return type of this effect
-   */
   public Effect.Type getType() {
     return type;
   }
