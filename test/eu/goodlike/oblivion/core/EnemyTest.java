@@ -364,7 +364,7 @@ class EnemyTest {
 
     target.hit(spell1);
     target.hit(spell2);
-    target.hit(FIRE.damage(40));
+    target.hit(weapon);
 
     assertDamageTaken(106.67);
   }
@@ -479,6 +479,7 @@ class EnemyTest {
     assertDamageTaken(90);
   }
 
+  @SuppressWarnings("unused")
   private void resurrect(String description, EffectText... baseEffects) {
     target = new Enemy(1000, baseEffects);
   }
