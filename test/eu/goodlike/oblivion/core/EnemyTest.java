@@ -86,7 +86,7 @@ class EnemyTest {
 
   @Test
   void damageUnaffected() {
-    target.hit(FROST.resist(100));
+    target.hit(FROST.resist(50));
 
     target.hit(FIRE.damage(10));
 
