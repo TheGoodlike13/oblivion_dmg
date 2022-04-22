@@ -15,7 +15,10 @@ import static java.util.stream.Collectors.joining;
  * In-game this would be a single weapon, arrow, spell or anything else with multiple effects.
  * Carriers can be combined to create actual {@link Hit}s, like {@link Source#BOW} + {@link Source#ARROW}.
  * <p/>
+ * The effects should be applied in iteration order.
+ * <p/>
  * Carriers have a natural ordering that is consistent with their {@link Source}.
+ * This ordering conveys how multiple carriers that belong to a single {@link Hit} should be applied.
  * {@link #equals(Object)} is NOT consistent with this ordering!
  * Avoid {@link SortedSet} and similar!
  * <p/>
