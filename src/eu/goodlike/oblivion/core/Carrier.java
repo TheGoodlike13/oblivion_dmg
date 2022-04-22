@@ -47,7 +47,7 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
   }
 
   /**
-   * Creates a copy of this carrier. This allows the effects of the carrier to be always stacked.
+   * Creates a copy of this carrier. The effects of this carrier and the copy will likely stack!
    */
   public Carrier copy() {
     return new Carrier(source, method, effects);
