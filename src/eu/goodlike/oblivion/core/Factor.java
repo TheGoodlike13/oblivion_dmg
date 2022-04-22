@@ -12,9 +12,9 @@ public interface Factor {
 
   Poison POISON = Poison.getInstance();
   Magic MAGIC = Magic.INSTANCE;
-  Element FIRE = new Element();
-  Element FROST = new Element();
-  Element SHOCK = new Element();
+  Element FIRE = new Element("FIRE");
+  Element FROST = new Element("FROST");
+  Element SHOCK = new Element("SHOCK");
 
   /**
    * @param pc percent of weakness
@@ -29,5 +29,8 @@ public interface Factor {
    * @return magical effect which applies a resistance to this factor
    */
   EffectText resist(int pc);
+
+  @Override
+  String toString();
 
 }

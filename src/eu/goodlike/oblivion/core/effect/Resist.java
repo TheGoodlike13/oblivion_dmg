@@ -22,6 +22,11 @@ public final class Resist extends BaseEffect {
     }
 
     private final Factor factor;
+
+    @Override
+    public String toString() {
+      return "RESIST " + factor;
+    }
   }
 
   @Override

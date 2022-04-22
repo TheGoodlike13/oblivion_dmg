@@ -20,9 +20,8 @@ public final class Magic extends Element implements Method, Source {
     return new Carrier(this, MAGIC, effects);
   }
 
-  @Override
-  public String toString() {
-    return "SPELL";
+  public Magic() {
+    super("MAGIC");
   }
 
   public static final Magic INSTANCE = new Magic();

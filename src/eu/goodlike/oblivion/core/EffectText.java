@@ -60,4 +60,9 @@ public final class EffectText {
   private final double magnitude;
   private final double duration;
 
+  @Override
+  public String toString() {
+    return String.format("%s %.2f for %.1fs", type, magnitude, duration);
+  }
+
 }

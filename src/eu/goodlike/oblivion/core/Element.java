@@ -18,9 +18,22 @@ public class Element implements Factor {
    * @return effect which does given damage of this element per second
    */
   public EffectText damage(int dmg) {
-    return new EffectText(this, Damage.TYPE, dmg);
+    return new EffectText(this, damageElement, dmg);
   }
 
-  private final Resist.Type resistElement = new Resist.OfFactor(this);
+  public Element(String elementName) {
+    this.elementName = elementName;
+    this.resistElement = new Resist.OfFactor(this);
+    this.damageElement = new Damage.OfElement(this);
+  }
+
+  private final String elementName;
+  private final Resist.Type resistElement;
+  private final Damage.Type damageElement;
+
+  @Override
+  public String toString() {
+    return elementName;
+  }
 
 }

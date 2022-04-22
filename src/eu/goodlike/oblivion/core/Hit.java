@@ -1,14 +1,12 @@
 package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import eu.goodlike.oblivion.core.source.Equipment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import static eu.goodlike.oblivion.core.Source.ARROW;
 import static eu.goodlike.oblivion.core.Source.BOW;
@@ -38,9 +36,7 @@ public final class Hit implements Iterable<Carrier> {
   public Hit(List<Carrier> carriers) {
     this.carriers = ensureOrderAndEquipment(carriers);
 
-    if (!VALID_HITS.contains(hitTrace())) {
-      throw new StructureException("Invalid hit: " + hitTrace() + "; expected one of " + VALID_HITS);
-    }
+    StructureException.throwOnInvalidHit(hitTrace());
   }
 
   private final List<Carrier> carriers;
@@ -78,13 +74,11 @@ public final class Hit implements Iterable<Carrier> {
     return carriers.get(0);
   }
 
-  private static final Set<String> VALID_HITS = ImmutableSet.of(
-    "SPELL",
-    "STAFF",
-    "MELEE",
-    "MELEE + POISON",
-    "BOW + ARROW",
-    "BOW + ARROW + POISON"
-  );
+  @Override
+  public String toString() {
+    return carriers.stream()
+      .map(Carrier::toString)
+      .collect(joining(" + "));
+  }
 
 }

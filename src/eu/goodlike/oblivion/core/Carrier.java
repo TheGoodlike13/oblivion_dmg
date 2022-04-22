@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.SortedSet;
 
+import static java.util.stream.Collectors.joining;
+
 /**
  * Entity which carries multiple effects to be applied on hit.
  * In-game this would be a single weapon, arrow, spell or anything else with multiple effects.
@@ -67,11 +69,20 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
     this.source = source;
     this.method = method;
     this.effects = ImmutableList.copyOf(effects);
+
+    StructureException.throwOnDuplicateEffectTypes(this.effects);
   }
 
   private final Source source;
   private final Method method;
   private final List<EffectText> effects;
+
+  @Override
+  public String toString() {
+    return effects.stream()
+      .map(EffectText::toString)
+      .collect(joining(" + "));
+  }
 
   private static final Comparator<Carrier> ORDER = Comparator.comparing(Carrier::getSource);
 
