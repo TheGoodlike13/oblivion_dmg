@@ -16,8 +16,10 @@ public class Element implements Factor {
 
   /**
    * @return effect which does given damage of this element per second
+   * @throws StructureException if damage is negative
    */
   public EffectText damage(int dmg) {
+    StructureException.throwOnNegativeDamage(dmg);
     return new EffectText(this, damageElement, dmg);
   }
 

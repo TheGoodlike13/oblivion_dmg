@@ -95,9 +95,9 @@ public final class Enemy implements Target {
   }
 
   @Override
-  public void modifyResist(Factor factor, double magnitude) {
-    double currentWeakness = getWeakness(factor);
-    weaknessPercent.put(factor, currentWeakness - magnitude);
+  public void modifyResist(Factor factor, double percent) {
+    double currentPc = getWeakness(factor);
+    weaknessPercent.put(factor, currentPc - percent);
   }
 
   @Override
@@ -143,8 +143,8 @@ public final class Enemy implements Target {
 
   private static final class Dummy implements Target {
     @Override
-    public void modifyResist(Factor factor, double magnitude) {
-      allMods.put(factor, magnitude);
+    public void modifyResist(Factor factor, double percent) {
+      allMods.put(factor, percent);
     }
 
     @Override

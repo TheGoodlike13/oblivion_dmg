@@ -14,6 +14,7 @@ import static eu.goodlike.oblivion.core.Source.MELEE;
 import static eu.goodlike.oblivion.core.Source.SPELL;
 import static eu.goodlike.oblivion.global.Settings.DIFFICULTY;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.within;
 
 class EnemyTest {
@@ -52,6 +53,12 @@ class EnemyTest {
     assertDamageTaken(10);
     assertHealthRemaining(990);
     assertThat(target.isAlive()).isTrue();
+  }
+
+  @Test
+  void healingNotAllowed() {
+    assertThatExceptionOfType(StructureException.class)
+      .isThrownBy(() -> MAGIC.damage(-1));
   }
 
   @Test

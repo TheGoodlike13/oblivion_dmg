@@ -15,6 +15,12 @@ It could be possible to make such a spell in-game, but it would be of no practic
 
 ### Caveats
 
+Hit effects are applied all at once, including "drain hp".
+If a single hit has multiple drain effects, e.g. weapon + poison,
+they will be bundled together.
+This has no effect on calculations leading up to death, only overkill.
+Normally, the overkill damage will not include any drains past death.
+
 Anything that this application allows that is outside of the bounds of the base
 game should be considered extra.
 As a result, there are a few assumptions that I have no way of testing

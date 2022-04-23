@@ -5,6 +5,9 @@ import com.google.common.collect.ImmutableSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Exception used to validate the structure of objects of the application.
+ */
 public final class StructureException extends RuntimeException {
 
   public static void throwOnInvalidHit(String hitTrace) {
@@ -21,6 +24,12 @@ public final class StructureException extends RuntimeException {
 
     if (uniqueTypeCount < effects.size()) {
       throw new StructureException("Effect types must be unique! Instead: " + effects);
+    }
+  }
+
+  public static void throwOnNegativeDamage(int dmg) {
+    if (dmg < 0) {
+      throw new StructureException("Heals are not allowed!");
     }
   }
 
