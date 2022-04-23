@@ -457,11 +457,9 @@ class EnemyTest {
 
     target.hit(poisonedWeapon);
     target.tick(1);
-    assertThat(target.damageTaken()).isEqualTo(10, within(0.01));
-
     target.hit(poisonedWeapon);
-    target.tick(1);
-    assertThat(target.damageTaken()).isEqualTo(20, within(0.01));
+
+    assertDamageTaken(20);
     // both weakness effects are bundled with poison on the same hit
     // they always have precedence so they override existing effects which then cannot affect the poison
   }
