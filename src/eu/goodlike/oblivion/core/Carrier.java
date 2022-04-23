@@ -11,8 +11,9 @@ import java.util.SortedSet;
 import static java.util.stream.Collectors.joining;
 
 /**
- * Entity which carries multiple effects to be applied on hit.
- * In-game this would be a single weapon, arrow, spell or anything else with one or multiple effects.
+ * Item or spell which carries multiple effects to be applied on hit.
+ * This is equivalent to anything with effects that you can find in in-game menus and can be used against targets.
+ * Examples include: weapons, arrows, spells, poisons.
  * Just like in-game, each effect must have a unique type.
  * <p/>
  * Carriers can be combined to create actual {@link Hit}s, like {@link Source#BOW} + {@link Source#ARROW}.
