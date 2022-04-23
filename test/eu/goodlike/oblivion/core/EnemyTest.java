@@ -498,6 +498,15 @@ class EnemyTest {
     assertThat(target.isAlive()).isFalse();
   }
 
+  @Test
+  void noPermanentDamageEffect() {
+    resurrect("This is fine. No, really.", FIRE.damage(10));
+
+    target.tick(1);
+
+    assertDamageTaken(0);
+  }
+
   @SuppressWarnings("unused")
   private void resurrect(String description, EffectText... baseEffects) {
     target = new Enemy(1000, baseEffects);

@@ -37,6 +37,13 @@ public final class EffectText {
     return type.activate(magnitudeSnapshot, duration);
   }
 
+  /**
+   * @return permanent active effect (i.e. racial bonus, equipment, etc.); unaffected by any multipliers
+   */
+  public Effect permanent() {
+    return type.activate(magnitude, -1);
+  }
+
   public Effect.Type getType() {
     return type;
   }

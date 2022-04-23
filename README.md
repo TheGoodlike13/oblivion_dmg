@@ -13,6 +13,13 @@ For simplicity, resist & weakness of a factor are treated as the same type of ef
 As a result, carriers cannot have both.
 It could be possible to make such a spell in-game, but it would be of no practical use.
 
+Targets can have permanent effects to simulate innate weakness or resist due to
+race or equipment.
+Drain works too, although all it does is effectively reduce max hp from the start.
+Damage effects are ignored.
+While possible, they are not applicable to combat situations, and would only
+add to code complexity.
+
 ### Caveats
 
 Hit effects are applied all at once, including "drain hp".
