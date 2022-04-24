@@ -71,7 +71,7 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
   public Carrier(Source source,
                  Method method,
-                 List<EffectText> effects) {
+                 Iterable<EffectText> effects) {
     this.source = source;
     this.method = method;
     this.effects = ImmutableList.copyOf(effects);

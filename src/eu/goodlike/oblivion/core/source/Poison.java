@@ -1,6 +1,5 @@
 package eu.goodlike.oblivion.core.source;
 
-import com.google.common.collect.ImmutableList;
 import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.EffectText;
@@ -52,10 +51,10 @@ public final class Poison implements Method, Source {
 
     @Override
     public Carrier copy() {
-      return new PoisonBottle(ImmutableList.copyOf(this));
+      return new PoisonBottle(this);
     }
 
-    public PoisonBottle(List<EffectText> effects) {
+    public PoisonBottle(Iterable<EffectText> effects) {
       super(Source.POISON, Factor.POISON, effects);
     }
   }
