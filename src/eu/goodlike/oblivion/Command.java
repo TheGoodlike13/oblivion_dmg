@@ -10,6 +10,8 @@ public interface Command {
 
   enum Name {
     ENEMY,
+    GO,
+    RESET,
     QUIT;
 
     public boolean matches(String input) {
