@@ -19,18 +19,22 @@ public final class OblivionSpellStackingCalculator {
   }
 
   public void run() {
-    String in = read();
-    String[] input = StringUtils.split(in, ' ');
-    String command = input[0];
+    read();
+    String command = lastInput(0);
 
     if ("enemy".startsWith(command)) {
-      String hpStr = input[1];
-      double d = Double.parseDouble(hpStr);
-      enemy = new Enemy(d);
-      write("Today you'll be hitting an enemy with " + d + " hp.");
+      String hpStr = lastInput(1);
+      try {
+        double d = Double.parseDouble(hpStr);
+        enemy = new Enemy(d);
+        write("Today you'll be hitting an enemy with " + d + " hp.");
+      }
+      catch (NumberFormatException e) {
+        write("Bad input: cannot parse enemy hp <" + hpStr + ">");
+      }
     }
     else if (!"quit".startsWith(command)) {
-      write("No idea what <" + in + "> is supposed to mean.");
+      write("No idea what <" + lastInput() + "> is supposed to mean.");
     }
   }
 
@@ -48,18 +52,24 @@ public final class OblivionSpellStackingCalculator {
   @VisibleForTesting
   Enemy enemy;
 
+  private String[] lastInput;
+
   private final Supplier<String> input;
   private final Consumer<String> output;
 
-  private String read() {
-    output.accept(">> ");
+  private String lastInput() {
+    return String.join(" ", lastInput);
+  }
 
-    String in;
+  private String lastInput(int index) {
+    return index >= lastInput.length ? "" : lastInput[index];
+  }
+
+  private void read() {
     do {
-      in = input.get().trim().toLowerCase();
-    } while (StringUtils.isBlank(in));
-
-    return in;
+      output.accept(">> ");
+      lastInput = StringUtils.split(input.get().trim().toLowerCase(), ' ');
+    } while (lastInput.length == 0);
   }
 
   private void write(String line) {

@@ -63,6 +63,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertEquals(1000, calc.enemy.healthRemaining());
   }
 
+  @Test
+  void whereHp() {
+    mockInput("enemy");
+    assertOutput("Bad input: cannot parse enemy hp <>");
+  }
+
   private void mockInput(String... lines) {
     input = Stream.of(lines).iterator();
   }
