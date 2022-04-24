@@ -2,11 +2,28 @@ package eu.goodlike.oblivion.core.effect;
 
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.Target;
+import eu.goodlike.oblivion.global.Settings;
 
 import static eu.goodlike.oblivion.global.Settings.TICK;
 
+/**
+ * Common logic for active effects.
+ * Ensures that ticking is done using {@link Settings#TICK}.
+ */
 public abstract class BaseEffect implements Effect {
 
+  /**
+   * Called by {@link #onTick)} to influence the target in proportion to the exact amount of time
+   * used in the last {@link Settings#TICK}.
+   * In most cases, given tick will be equal to {@link Settings#TICK}.
+   * However, when the effect is about to expire and the remaining duration is less than the tick,
+   * it will be equal to remaining duration instead.
+   * After the effect is expired, it will always be 0.
+   * This ensures large values of {@link Settings#TICK} do not cause the effect to influence the target
+   * more than the magnitude would suggest.
+   * <p/>
+   * Undefined if target is null or tick is negative.
+   */
   protected abstract void onEffectiveTick(Target target, double tick);
 
   @Override

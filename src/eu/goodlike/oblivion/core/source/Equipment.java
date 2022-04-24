@@ -15,15 +15,15 @@ public final class Equipment implements Source {
     return new Carrier(this, MAGIC, effects);
   }
 
-  public Equipment(String sourceName) {
-    this.sourceName = sourceName;
+  public Equipment(String type) {
+    this.type = type;
   }
 
-  private final String sourceName;
+  private final String type;
 
   @Override
   public String toString() {
-    return sourceName;
+    return type;
   }
 
 }

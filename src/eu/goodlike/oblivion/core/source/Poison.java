@@ -34,6 +34,12 @@ public final class Poison implements Method, Source {
     return "POISON";
   }
 
+  /**
+   * The way class loading works must be preventing referencing static instances.
+   * Basically, in some cases they are referenced before they are assigned, leaving them as NULL.
+   * This is likely because of the interface structure and not much can be done about it.
+   * This idiom ensures every static reference to {@link Poison} will exist.
+   */
   public static Poison getInstance() {
     if (INSTANCE == null) {
       INSTANCE = new Poison();

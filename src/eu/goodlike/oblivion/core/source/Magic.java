@@ -24,6 +24,9 @@ public final class Magic extends Element implements Method, Source {
     super("MAGIC");
   }
 
+  /**
+   * Similar to {@link Poison#getInstance()}, this is necessary to prevent NULL references.
+   */
   public static final Magic INSTANCE = new Magic();
 
 }
