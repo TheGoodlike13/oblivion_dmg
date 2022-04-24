@@ -45,19 +45,19 @@ public final class OblivionSpellStackingCalculator {
 
   private final Arena arena = new Arena();
 
-  private final Map<Command.Name, Supplier<BaseCommand>> commands = ImmutableMap.of(
+  private final Map<Command.Name, Supplier<Command>> commands = ImmutableMap.of(
     ENEMY, SetEnemy::new,
     QUIT, Quit::new
   );
 
-  private BaseCommand nextCommand() {
+  private Command nextCommand() {
     String[] input;
     do {
       Write.inline(">> ");
       input = StringUtils.split(reader.get().trim().toLowerCase(), ' ');
     } while (input.length == 0);
 
-    BaseCommand command = Command.Name.find(input[0])
+    Command command = Command.Name.find(input[0])
       .map(commands::get)
       .orElse(ButWhatDoesThisMean::new)
       .get();
