@@ -22,11 +22,11 @@ import static java.util.stream.Collectors.joining;
  * <p/>
  * Carriers have a natural ordering that is consistent with their {@link Source}.
  * This ordering conveys how multiple carriers that belong to a single {@link Hit} should be applied.
- * {@link #equals(Object)} is NOT consistent with this ordering!
+ * {@link #equals)} is NOT consistent with this ordering!
  * Avoid {@link SortedSet} and similar!
  * <p/>
  * This class can be overridden to provide different strategies for uniquely identifying effects.
- * In such cases, {@link #copy()} should also be overridden!
+ * In such cases, {@link #copy)} should also be overridden!
  */
 public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
