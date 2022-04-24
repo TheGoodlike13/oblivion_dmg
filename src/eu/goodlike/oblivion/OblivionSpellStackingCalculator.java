@@ -1,12 +1,18 @@
 package eu.goodlike.oblivion;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableMap;
 import eu.goodlike.oblivion.core.Enemy;
+import eu.goodlike.oblivion.core.StructureException;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import static eu.goodlike.oblivion.Command.Name.ENEMY;
+import static eu.goodlike.oblivion.Command.Name.QUIT;
 
 public final class OblivionSpellStackingCalculator {
 
@@ -19,22 +25,9 @@ public final class OblivionSpellStackingCalculator {
   }
 
   public void run() {
-    read();
-    String command = lastInput(0);
-
-    if ("enemy".startsWith(command)) {
-      String hpStr = lastInput(1);
-      try {
-        double d = Double.parseDouble(hpStr);
-        enemy = new Enemy(d);
-        write("Today you'll be hitting an enemy with " + d + " hp.");
-      }
-      catch (NumberFormatException e) {
-        write("Bad input: cannot parse enemy hp <" + hpStr + ">");
-      }
-    }
-    else if (!"quit".startsWith(command)) {
-      write("No idea what <" + lastInput() + "> is supposed to mean.");
+    while (!itsAllOverCalculator) {
+      read();
+      lastCommand.execute();
     }
   }
 
@@ -52,28 +45,75 @@ public final class OblivionSpellStackingCalculator {
   @VisibleForTesting
   Enemy enemy;
 
-  private String[] lastInput;
+  private Command lastCommand;
+  private boolean itsAllOverCalculator = false;
 
   private final Supplier<String> input;
   private final Consumer<String> output;
 
-  private String lastInput() {
-    return String.join(" ", lastInput);
-  }
-
-  private String lastInput(int index) {
-    return index >= lastInput.length ? "" : lastInput[index];
-  }
+  private final Map<Command.Name, Supplier<Command>> commands = ImmutableMap.of(
+    ENEMY, NewEnemy::new,
+    QUIT, Quit::new
+  );
 
   private void read() {
+    String[] input;
     do {
       output.accept(">> ");
-      lastInput = StringUtils.split(input.get().trim().toLowerCase(), ' ');
-    } while (lastInput.length == 0);
+      input = StringUtils.split(this.input.get().trim().toLowerCase(), ' ');
+    } while (input.length == 0);
+
+    String command = input[0];
+    this.lastCommand = Command.Name.find(command)
+      .map(commands::get)
+      .orElse(ButWhatDoesThisMean::new)
+      .get();
+
+    lastCommand.setParams(input);
   }
 
   private void write(String line) {
     output.accept(line + System.lineSeparator());
+  }
+
+  private final class NewEnemy extends BaseCommand {
+    @Override
+    protected void performTask() {
+      double hp = parseHp();
+      enemy = new Enemy(hp);
+      write("Today you'll be hitting an enemy with " + hp + " hp.");
+    }
+
+    private double parseHp() {
+      String hp = input(1);
+      try {
+        return Double.parseDouble(hp);
+      }
+      catch (NumberFormatException e) {
+        throw new StructureException("Cannot parse enemy hp <" + hp + ">", e);
+      }
+    }
+  }
+
+  private final class Quit extends BaseCommand {
+    @Override
+    protected void performTask() {
+      itsAllOverCalculator = true;
+    }
+  }
+
+  private final class ButWhatDoesThisMean extends BaseCommand {
+    @Override
+    protected void performTask() {
+      write("No idea what <" + input() + "> is supposed to mean.");
+    }
+  }
+
+  private abstract class BaseCommand extends Command {
+    @Override
+    protected void write(String line) {
+      OblivionSpellStackingCalculator.this.write(line);
+    }
   }
 
 }

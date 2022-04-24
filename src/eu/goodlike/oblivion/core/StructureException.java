@@ -37,6 +37,10 @@ public final class StructureException extends RuntimeException {
     super(message);
   }
 
+  public StructureException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
   private static final Set<String> VALID_HITS = ImmutableSet.of(
     "MAGIC",
     "STAFF",
