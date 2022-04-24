@@ -27,7 +27,7 @@ public final class StructureException extends RuntimeException {
     }
   }
 
-  public static void throwOnNegativeDamage(int dmg) {
+  public static void throwOnNegativeDamage(double dmg) {
     if (dmg < 0) {
       throw new StructureException("Heals are not allowed!");
     }

@@ -32,7 +32,8 @@ public abstract class BaseCommand implements Command {
       Write.line("Bad input: " + e.getMessage());
     }
     catch (Exception e) {
-      Write.line("Unexpected exception: " + e.getMessage());
+      Write.line("Unexpected exception: " + e);
+      e.printStackTrace();
     }
   }
 
@@ -44,8 +45,7 @@ public abstract class BaseCommand implements Command {
     return inputs.size() <= index ? "" : inputs.get(index);
   }
 
+  protected final List<String> inputs = new ArrayList<>();
   protected Arena arena;
-
-  private final List<String> inputs = new ArrayList<>();
 
 }

@@ -17,7 +17,7 @@ public final class EffectText {
   /**
    * @return copy of this effect, but with given duration instead
    */
-  public EffectText forSecs(double duration) {
+  public EffectText forSecs(int duration) {
     return new EffectText(factor, type, magnitude, duration);
   }
 
@@ -48,11 +48,11 @@ public final class EffectText {
     return type;
   }
 
-  public EffectText(Factor factor, Effect.Type type, double magnitude) {
+  public EffectText(Factor factor, Effect.Type type, int magnitude) {
     this(factor, type, magnitude, 1);
   }
 
-  public EffectText(Factor factor, Effect.Type type, double magnitude, double duration) {
+  public EffectText(Factor factor, Effect.Type type, int magnitude, int duration) {
     this.factor = factor;
     this.type = type;
     this.magnitude = magnitude;
@@ -61,12 +61,12 @@ public final class EffectText {
 
   private final Factor factor;
   private final Effect.Type type;
-  private final double magnitude;
-  private final double duration;
+  private final int magnitude;
+  private final int duration;
 
   @Override
   public String toString() {
-    return String.format("%s %.2f for %.1fs", type, magnitude, duration);
+    return String.format("%s %d for %ds", type, magnitude, duration);
   }
 
 }

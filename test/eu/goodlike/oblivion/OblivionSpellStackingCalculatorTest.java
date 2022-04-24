@@ -80,6 +80,20 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutput("Bad input: Cannot parse enemy hp <>");
   }
 
+  @Test
+  void nowThatsALotOfDamage() {
+    sendInput("+spell 100magic10s 100drain1s 100weaknessmagic");
+
+    assertOutput("Hit #1: MAGIC {MAGIC DMG 100 for 10s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s}");
+  }
+
+  @Test
+  void nowThatsALotOfDamage_shortVersion() {
+    sendInput("+s 100m10s 100d 100wm");
+
+    assertOutput("Hit #1: MAGIC {MAGIC DMG 100 for 10s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s}");
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);

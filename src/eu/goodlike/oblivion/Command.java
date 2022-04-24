@@ -10,8 +10,10 @@ public interface Command {
   enum Name {
     ENEMY,
     GO,
+    HIT,
     RESET,
-    QUIT;
+    QUIT,
+    WHAT;
 
     public boolean matches(String input) {
       return StringUtils.startsWithIgnoreCase(name(), input);

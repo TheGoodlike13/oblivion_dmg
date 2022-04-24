@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import eu.goodlike.oblivion.command.BaseCommand;
 import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
 import eu.goodlike.oblivion.command.SetEnemy;
+import eu.goodlike.oblivion.command.SetHit;
 import eu.goodlike.oblivion.global.Write;
 import org.apache.commons.lang3.StringUtils;
 
@@ -46,6 +47,7 @@ public final class OblivionSpellStackingCalculator {
 
   private final Arena arena = new Arena();
 
+  // TODO: move to enum?
   private final Map<Command.Name, Supplier<Command>> commands = ImmutableMap.of(
     ENEMY, SetEnemy::new,
     QUIT, Quit::new
@@ -57,6 +59,15 @@ public final class OblivionSpellStackingCalculator {
       Write.inline(">> ");
       input = StringUtils.split(reader.get().trim().toLowerCase(), ' ');
     } while (input.length == 0);
+
+    if (input[0].startsWith("+")) {
+      Command command = new SetHit();
+
+      command.setParams(input);
+      command.setArena(arena);
+
+      return command;
+    }
 
     Command command = Command.Name.find(input[0])
       .map(commands::get)

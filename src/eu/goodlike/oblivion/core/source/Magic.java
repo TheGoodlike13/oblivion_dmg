@@ -11,7 +11,7 @@ import java.util.List;
 
 public final class Magic extends Element implements Method, Source {
 
-  public EffectText drain(double hp) {
+  public EffectText drain(int hp) {
     return new EffectText(this, Drain.TYPE, hp);
   }
 

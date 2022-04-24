@@ -18,7 +18,7 @@ public final class Drain extends BaseEffect {
 
     @Override
     public String toString() {
-      return "DRAIN HP";
+      return "DRAIN LIFE";
     }
   };
 
