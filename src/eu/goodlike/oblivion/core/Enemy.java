@@ -142,6 +142,14 @@ public final class Enemy implements Target {
     }
   }
 
+  /**
+   * Wipes all active effects and sets hp back to max.
+   */
+  public void resurrect() {
+    resolve();
+    this.health = maxHealth;
+  }
+
   @Override
   public double getMultiplier(Factor factor) {
     return Math.max(0, getWeakness(factor) / 100);

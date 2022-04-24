@@ -1,9 +1,9 @@
 package eu.goodlike.oblivion;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableMap;
-import eu.goodlike.oblivion.core.Enemy;
-import eu.goodlike.oblivion.core.StructureException;
+import eu.goodlike.oblivion.command.BaseCommand;
+import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
+import eu.goodlike.oblivion.command.SetEnemy;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
@@ -26,93 +26,60 @@ public final class OblivionSpellStackingCalculator {
 
   public void run() {
     while (!itsAllOverCalculator) {
-      read();
-      lastCommand.execute();
+      nextCommand().execute();
     }
   }
 
   public void intro() {
     write("Welcome to Oblivion spell stacking calculator!");
-    write("Please select a target, cast some spells or perform attacks and GO!");
+    write("Please select an enemy, cast some spells or perform attacks and GO!");
     write("You can quit any time ;)");
   }
 
-  public OblivionSpellStackingCalculator(Supplier<String> input, Consumer<String> output) {
-    this.input = input;
-    this.output = output;
+  public OblivionSpellStackingCalculator(Supplier<String> reader, Consumer<String> writer) {
+    this.reader = reader;
+    this.writer = writer;
   }
 
-  @VisibleForTesting
-  Enemy enemy;
-
-  private Command lastCommand;
   private boolean itsAllOverCalculator = false;
 
-  private final Supplier<String> input;
-  private final Consumer<String> output;
+  private final Supplier<String> reader;
+  private final Consumer<String> writer;
 
-  private final Map<Command.Name, Supplier<Command>> commands = ImmutableMap.of(
-    ENEMY, NewEnemy::new,
+  private final Arena arena = new Arena();
+
+  private final Map<Command.Name, Supplier<BaseCommand>> commands = ImmutableMap.of(
+    ENEMY, SetEnemy::new,
     QUIT, Quit::new
   );
 
-  private void read() {
+  private BaseCommand nextCommand() {
     String[] input;
     do {
-      output.accept(">> ");
-      input = StringUtils.split(this.input.get().trim().toLowerCase(), ' ');
+      writer.accept(">> ");
+      input = StringUtils.split(reader.get().trim().toLowerCase(), ' ');
     } while (input.length == 0);
 
-    String command = input[0];
-    this.lastCommand = Command.Name.find(command)
+    BaseCommand command = Command.Name.find(input[0])
       .map(commands::get)
       .orElse(ButWhatDoesThisMean::new)
       .get();
 
-    lastCommand.setParams(input);
+    command.setParams(input);
+    command.setArena(arena);
+    command.setWriter(this::write);
+
+    return command;
   }
 
   private void write(String line) {
-    output.accept(line + System.lineSeparator());
-  }
-
-  private final class NewEnemy extends BaseCommand {
-    @Override
-    protected void performTask() {
-      double hp = parseHp();
-      enemy = new Enemy(hp);
-      write("Today you'll be hitting an enemy with " + hp + " hp.");
-    }
-
-    private double parseHp() {
-      String hp = input(1);
-      try {
-        return Double.parseDouble(hp);
-      }
-      catch (NumberFormatException e) {
-        throw new StructureException("Cannot parse enemy hp <" + hp + ">", e);
-      }
-    }
+    writer.accept(line + System.lineSeparator());
   }
 
   private final class Quit extends BaseCommand {
     @Override
     protected void performTask() {
       itsAllOverCalculator = true;
-    }
-  }
-
-  private final class ButWhatDoesThisMean extends BaseCommand {
-    @Override
-    protected void performTask() {
-      write("No idea what <" + input() + "> is supposed to mean.");
-    }
-  }
-
-  private abstract class BaseCommand extends Command {
-    @Override
-    protected void write(String line) {
-      OblivionSpellStackingCalculator.this.write(line);
     }
   }
 
