@@ -1,4 +1,4 @@
-package eu.goodlike.oblivion;
+package eu.goodlike.oblivion.global;
 
 import java.util.function.Consumer;
 

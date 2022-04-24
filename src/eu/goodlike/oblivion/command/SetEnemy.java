@@ -1,8 +1,8 @@
 package eu.goodlike.oblivion.command;
 
-import eu.goodlike.oblivion.Write;
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.StructureException;
+import eu.goodlike.oblivion.global.Write;
 
 public final class SetEnemy extends BaseCommand {
 

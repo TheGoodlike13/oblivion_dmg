@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import eu.goodlike.oblivion.command.BaseCommand;
 import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
 import eu.goodlike.oblivion.command.SetEnemy;
+import eu.goodlike.oblivion.global.Write;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;

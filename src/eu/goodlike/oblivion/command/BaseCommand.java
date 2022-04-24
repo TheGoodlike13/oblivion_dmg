@@ -2,8 +2,8 @@ package eu.goodlike.oblivion.command;
 
 import eu.goodlike.oblivion.Arena;
 import eu.goodlike.oblivion.Command;
-import eu.goodlike.oblivion.Write;
 import eu.goodlike.oblivion.core.StructureException;
+import eu.goodlike.oblivion.global.Write;
 
 import java.util.ArrayList;
 import java.util.Collections;
