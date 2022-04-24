@@ -15,6 +15,10 @@ public final class OblivionSpellStackingCalculator {
   }
 
   public void run() {
+    String input = read();
+    if (!"quit".equals(input)) {
+      write("No idea what <" + input + "> is supposed to mean.");
+    }
   }
 
   public void intro() {

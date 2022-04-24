@@ -46,6 +46,15 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutput();
   }
 
+  @Test
+  void unrecognizedOutput() {
+    mockInput("?");
+
+    calc.run();
+
+    assertOutput("No idea what <?> is supposed to mean.");
+  }
+
   private void mockInput(String... lines) {
     input = Stream.of(lines).iterator();
   }
