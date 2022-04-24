@@ -15,7 +15,6 @@ public final class OblivionSpellStackingCalculator {
   }
 
   public void run() {
-    write("You entered: " + read());
   }
 
   public void intro() {

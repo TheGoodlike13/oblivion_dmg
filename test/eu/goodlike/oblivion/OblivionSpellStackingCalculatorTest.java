@@ -38,12 +38,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
-  void test() {
-    mockInput("anything");
+  void quitImmediately() {
+    mockInput("quit");
 
     calc.run();
 
-    assertOutput("You entered: anything");
+    assertOutput();
   }
 
   private void mockInput(String... lines) {
