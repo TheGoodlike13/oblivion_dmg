@@ -2,12 +2,12 @@ package eu.goodlike.oblivion.command;
 
 import eu.goodlike.oblivion.Arena;
 import eu.goodlike.oblivion.Command;
+import eu.goodlike.oblivion.Write;
 import eu.goodlike.oblivion.core.StructureException;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 public abstract class BaseCommand implements Command {
 
@@ -16,11 +16,6 @@ public abstract class BaseCommand implements Command {
   @Override
   public final void setParams(String... parsedInput) {
     Collections.addAll(inputs, parsedInput);
-  }
-
-  @Override
-  public final void setWriter(Consumer<String> writer) {
-    this.writer = writer;
   }
 
   @Override
@@ -34,15 +29,11 @@ public abstract class BaseCommand implements Command {
       performTask();
     }
     catch (StructureException e) {
-      write("Bad input: " + e.getMessage());
+      Write.line("Bad input: " + e.getMessage());
     }
     catch (Exception e) {
-      write("Unexpected exception: " + e.getMessage());
+      Write.line("Unexpected exception: " + e.getMessage());
     }
-  }
-
-  protected final void write(String line) {
-    writer.accept(line);
   }
 
   protected final String input() {
@@ -56,6 +47,5 @@ public abstract class BaseCommand implements Command {
   protected Arena arena;
 
   private final List<String> inputs = new ArrayList<>();
-  private Consumer<String> writer;
 
 }

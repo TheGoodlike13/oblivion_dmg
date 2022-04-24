@@ -1,5 +1,6 @@
 package eu.goodlike.oblivion;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<String> {
 
-  private final OblivionSpellStackingCalculator calc = new OblivionSpellStackingCalculator(this, this);
+  private final OblivionSpellStackingCalculator calc = new OblivionSpellStackingCalculator(this);
 
   private Iterator<String> input;
   private List<String> output;
@@ -35,6 +36,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void setup() {
     input = null;
     output = new ArrayList<>();
+    Write.WRITER = this;
+  }
+
+  @AfterAll
+  static void tearDown() {
+    Write.resetToFactory();
   }
 
   @Test

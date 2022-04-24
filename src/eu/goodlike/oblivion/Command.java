@@ -3,7 +3,6 @@ package eu.goodlike.oblivion;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public interface Command {
@@ -26,8 +25,6 @@ public interface Command {
   }
 
   void setParams(String... parsedInput);
-
-  void setWriter(Consumer<String> writer);
 
   void setArena(Arena arena);
 
