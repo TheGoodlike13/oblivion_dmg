@@ -35,7 +35,7 @@ public final class OblivionSpellStackingCalculator {
   }
 
   public void intro() {
-    write("Welcome!");
+    write("Welcome to Oblivion spell stacking calculator!");
     write("Please select a target, cast some spells or perform attacks and GO!");
     write("You can quit any time ;)");
   }
