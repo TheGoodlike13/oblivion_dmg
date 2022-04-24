@@ -44,7 +44,7 @@ public interface Source extends Comparable<Source> {
   Carrier create(List<EffectText> effects);
 
   /**
-   * @return unique name of the carrier; can be used to identify it, but need not match variable name
+   * @return unique name of the source; can be used to identify it, but need not match variable name
    */
   @Override
   String toString();
