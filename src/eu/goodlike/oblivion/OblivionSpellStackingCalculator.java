@@ -17,9 +17,9 @@ public final class OblivionSpellStackingCalculator {
 
   public static void main(String... args) {
     try (Scanner scanner = new Scanner(System.in)) {
-      OblivionSpellStackingCalculator c = new OblivionSpellStackingCalculator(scanner::nextLine);
-      c.intro();
-      c.run();
+      OblivionSpellStackingCalculator calc = new OblivionSpellStackingCalculator(scanner::nextLine);
+      calc.intro();
+      calc.run();
     }
   }
 
