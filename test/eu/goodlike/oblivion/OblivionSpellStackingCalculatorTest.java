@@ -39,15 +39,21 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
+  void unrecognizedOutput() {
+    mockInput("?");
+    assertOutput("No idea what <?> is supposed to mean.");
+  }
+
+  @Test
   void quitImmediately() {
     mockInput("quit");
     assertOutput();
   }
 
   @Test
-  void unrecognizedOutput() {
-    mockInput("?");
-    assertOutput("No idea what <?> is supposed to mean.");
+  void commandPrefix() {
+    mockInput("q");
+    assertOutput();
   }
 
   @Test
