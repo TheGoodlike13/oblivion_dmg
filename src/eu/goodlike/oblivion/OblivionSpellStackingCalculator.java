@@ -19,15 +19,18 @@ public final class OblivionSpellStackingCalculator {
   }
 
   public void run() {
-    String input = read();
-    if (input.startsWith("enemy")) {
-      String hpStr = StringUtils.substringAfter(input, "enemy ");
+    String in = read();
+    String[] input = StringUtils.split(in, ' ');
+    String command = input[0];
+
+    if ("enemy".startsWith(command)) {
+      String hpStr = input[1];
       double d = Double.parseDouble(hpStr);
       enemy = new Enemy(d);
       write("Today you'll be hitting an enemy with " + d + " hp.");
     }
-    else if (!"quit".equals(input)) {
-      write("No idea what <" + input + "> is supposed to mean.");
+    else if (!"quit".startsWith(command)) {
+      write("No idea what <" + in + "> is supposed to mean.");
     }
   }
 
@@ -50,7 +53,13 @@ public final class OblivionSpellStackingCalculator {
 
   private String read() {
     output.accept(">> ");
-    return input.get().toLowerCase();
+
+    String in;
+    do {
+      in = input.get().trim().toLowerCase();
+    } while (StringUtils.isBlank(in));
+
+    return in;
   }
 
   private void write(String line) {
