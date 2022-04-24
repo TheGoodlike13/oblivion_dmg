@@ -1,5 +1,7 @@
 package eu.goodlike.oblivion;
 
+import com.google.common.annotations.VisibleForTesting;
+import eu.goodlike.oblivion.core.Enemy;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Scanner;
@@ -18,10 +20,11 @@ public final class OblivionSpellStackingCalculator {
 
   public void run() {
     String input = read();
-    if (input.startsWith("target")) {
-      String hpStr = StringUtils.substringAfter(input, "target ");
+    if (input.startsWith("enemy")) {
+      String hpStr = StringUtils.substringAfter(input, "enemy ");
       double d = Double.parseDouble(hpStr);
-      write("Today you'll be hitting a target with " + d + " hp.");
+      enemy = new Enemy(d);
+      write("Today you'll be hitting an enemy with " + d + " hp.");
     }
     else if (!"quit".equals(input)) {
       write("No idea what <" + input + "> is supposed to mean.");
@@ -38,6 +41,9 @@ public final class OblivionSpellStackingCalculator {
     this.input = input;
     this.output = output;
   }
+
+  @VisibleForTesting
+  Enemy enemy;
 
   private final Supplier<String> input;
   private final Consumer<String> output;

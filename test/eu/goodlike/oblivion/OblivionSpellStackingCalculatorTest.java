@@ -11,6 +11,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<String> {
 
@@ -50,9 +51,10 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
-  void newTarget() {
-    mockInput("target 1000");
-    assertOutput("Today you'll be hitting a target with 1000.0 hp.");
+  void newEnemy() {
+    mockInput("enemy 1000");
+    assertOutput("Today you'll be hitting an enemy with 1000.0 hp.");
+    assertThat(calc.enemy.healthRemaining()).isEqualTo(1000, within(0.01));
   }
 
   private void mockInput(String... lines) {
