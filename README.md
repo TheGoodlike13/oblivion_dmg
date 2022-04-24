@@ -7,7 +7,7 @@ https://en.uesp.net/wiki/Oblivion:Spell_Making#Spell_Stacking
 Strictly speaking, it performs a quick simulation of casting spells and/or
 performing attacks with magical weapons & poisons.
 
-This is a command line application and requires JDK 1.8+ to build & run.
+This is a command line application and requires JDK 8+ to build & run.
 
 ## Usage examples
 
