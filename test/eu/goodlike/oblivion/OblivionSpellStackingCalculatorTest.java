@@ -49,6 +49,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutput("No idea what <?> is supposed to mean.");
   }
 
+  @Test
+  void newTarget() {
+    mockInput("target 1000");
+    assertOutput("Today you'll be hitting a target with 1000.0 hp.");
+  }
+
   private void mockInput(String... lines) {
     input = Stream.of(lines).iterator();
   }

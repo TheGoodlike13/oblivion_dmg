@@ -1,5 +1,7 @@
 package eu.goodlike.oblivion;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Scanner;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -16,7 +18,12 @@ public final class OblivionSpellStackingCalculator {
 
   public void run() {
     String input = read();
-    if (!"quit".equals(input)) {
+    if (input.startsWith("target")) {
+      String hpStr = StringUtils.substringAfter(input, "target ");
+      double d = Double.parseDouble(hpStr);
+      write("Today you'll be hitting a target with " + d + " hp.");
+    }
+    else if (!"quit".equals(input)) {
       write("No idea what <" + input + "> is supposed to mean.");
     }
   }
