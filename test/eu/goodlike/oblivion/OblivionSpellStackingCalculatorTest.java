@@ -54,7 +54,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void newEnemy() {
     mockInput("enemy 1000");
     assertOutput("Today you'll be hitting an enemy with 1000.0 hp.");
-    assertThat(calc.enemy.healthRemaining()).isEqualTo(1000, within(0.01));
+    assertEquals(1000, calc.enemy.healthRemaining());
   }
 
   private void mockInput(String... lines) {
@@ -64,6 +64,10 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   private void assertOutput(String... lines) {
     calc.run();
     assertThat(output).containsExactly(lines);
+  }
+
+  private void assertEquals(double expected, double actual) {
+    assertThat(actual).isEqualTo(expected, within(0.01));
   }
 
 }
