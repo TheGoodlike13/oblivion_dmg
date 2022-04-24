@@ -40,18 +40,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   @Test
   void quitImmediately() {
     mockInput("quit");
-
-    calc.run();
-
     assertOutput();
   }
 
   @Test
   void unrecognizedOutput() {
     mockInput("?");
-
-    calc.run();
-
     assertOutput("No idea what <?> is supposed to mean.");
   }
 
@@ -60,6 +54,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   private void assertOutput(String... lines) {
+    calc.run();
     assertThat(output).containsExactly(lines);
   }
 
