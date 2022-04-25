@@ -60,7 +60,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
-  void commandPrefix() {
+  void prefixWorksForCommands() {
     sendInput("q");
 
     assertOutput();
