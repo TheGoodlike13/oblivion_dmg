@@ -1,9 +1,9 @@
 package eu.goodlike.oblivion;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 
 public interface Command {
 
@@ -16,7 +16,7 @@ public interface Command {
     WHAT;
 
     public boolean matches(String input) {
-      return StringUtils.startsWithIgnoreCase(name(), input);
+      return startsWithIgnoreCase(name(), input);
     }
 
     public static Optional<Name> find(String input) {

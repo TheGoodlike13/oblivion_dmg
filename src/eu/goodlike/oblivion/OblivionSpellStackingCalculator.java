@@ -6,7 +6,6 @@ import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
 import eu.goodlike.oblivion.command.SetEnemy;
 import eu.goodlike.oblivion.command.SetHit;
 import eu.goodlike.oblivion.global.Write;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -14,6 +13,7 @@ import java.util.function.Supplier;
 
 import static eu.goodlike.oblivion.Command.Name.ENEMY;
 import static eu.goodlike.oblivion.Command.Name.QUIT;
+import static org.apache.commons.lang3.StringUtils.split;
 
 public final class OblivionSpellStackingCalculator {
 
@@ -57,7 +57,7 @@ public final class OblivionSpellStackingCalculator {
     String[] input;
     do {
       Write.inline(">> ");
-      input = StringUtils.split(reader.get().trim().toLowerCase(), ' ');
+      input = split(reader.get().trim().toLowerCase(), ' ');
     } while (input.length == 0);
 
     if (input[0].startsWith("+")) {
