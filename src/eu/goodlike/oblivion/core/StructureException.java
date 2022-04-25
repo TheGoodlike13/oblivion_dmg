@@ -37,6 +37,10 @@ public final class StructureException extends RuntimeException {
     super(message);
   }
 
+  public StructureException(String parsingProblem, String input) {
+    super(parsingProblem + " <" + input + ">");
+  }
+
   public StructureException(String message, Throwable cause) {
     super(message, cause);
   }

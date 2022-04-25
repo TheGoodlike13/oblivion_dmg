@@ -42,7 +42,7 @@ public final class SetHit extends BaseCommand {
         return e.getValue();
       }
     }
-    throw new StructureException("Unknown source reference <" + sourceInput + ">");
+    throw new StructureException("Unknown source reference", sourceInput);
   }
 
   private List<EffectText> parseEffects() {
@@ -51,7 +51,7 @@ public final class SetHit extends BaseCommand {
     for (String input : inputs.subList(1, inputs.size())) {
       Matcher matcher = EFFECT_PATTERN.matcher(input);
       if (!matcher.matches()) {
-        throw new StructureException("Invalid effect format <" + input + ">");
+        throw new StructureException("Invalid effect format", input);
       }
 
       EffectText effect = null;
@@ -76,7 +76,7 @@ public final class SetHit extends BaseCommand {
           }
 
           if (factor == null) {
-            throw new StructureException("Cannot parse weakness factor <" + f + ">");
+            throw new StructureException("Cannot parse weakness factor", f);
           }
         }
 
@@ -93,7 +93,7 @@ public final class SetHit extends BaseCommand {
         }
 
         if (effect == null) {
-          throw new StructureException("Cannot parse effect type <" + desc + ">");
+          throw new StructureException("Cannot parse effect type", desc);
         }
       }
 
