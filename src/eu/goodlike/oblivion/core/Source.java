@@ -17,12 +17,12 @@ import java.util.List;
  */
 public interface Source extends Comparable<Source> {
 
-  Equipment MELEE = new Equipment("MELEE");
-  Equipment BOW = new Equipment("BOW");
-  Equipment ARROW = new Equipment("ARROW");
-  Poison POISON = Poison.getInstance();
-  Magic SPELL = Magic.INSTANCE;
-  Equipment STAFF = new Equipment("STAFF");
+  Source MELEE = new Equipment("MELEE");
+  Source BOW = new Equipment("BOW");
+  Source ARROW = new Equipment("ARROW");
+  Source POISON = Poison.getInstance();
+  Source SPELL = new Magic("SPELL");
+  Source STAFF = new Equipment("STAFF");
 
   List<Source> ORDER = ImmutableList.of(MELEE, BOW, ARROW, POISON, SPELL, STAFF);
 

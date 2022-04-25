@@ -20,13 +20,8 @@ public final class Magic extends Element implements Method, Source {
     return new Carrier(this, MAGIC, effects);
   }
 
-  public Magic() {
-    super("MAGIC");
+  public Magic(String name) {
+    super(name);
   }
-
-  /**
-   * Similar to {@link Poison#getInstance()}, this is necessary to prevent NULL references.
-   */
-  public static final Magic INSTANCE = new Magic();
 
 }

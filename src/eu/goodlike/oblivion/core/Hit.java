@@ -1,7 +1,6 @@
 package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ImmutableList;
-import eu.goodlike.oblivion.core.source.Equipment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,7 +67,7 @@ public final class Hit implements Iterable<Carrier> {
     return ImmutableList.sortedCopyOf(mutableCopy);
   }
 
-  private void ensure(Equipment equipment, List<Carrier> carriers) {
+  private void ensure(Source equipment, List<Carrier> carriers) {
     if (!equipment.any(carriers)) {
       carriers.add(equipment.withNoEffect());
     }

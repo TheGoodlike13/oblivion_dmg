@@ -42,7 +42,7 @@ public final class StructureException extends RuntimeException {
   }
 
   private static final Set<String> VALID_HITS = ImmutableSet.of(
-    "MAGIC",
+    "SPELL",
     "STAFF",
     "MELEE",
     "MELEE + POISON",
