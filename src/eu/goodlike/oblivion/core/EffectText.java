@@ -2,6 +2,8 @@ package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ImmutableSet;
 
+import java.util.Objects;
+
 /**
  * Effects as they appear in-game on various carriers (e.g. spells in your spell book).
  * The magnitudes of these effects can be affected by the resistance of the target or in-game difficulty
@@ -18,7 +20,9 @@ public final class EffectText {
    * @return copy of this effect, but with given duration instead
    */
   public EffectText forSecs(int duration) {
-    return new EffectText(factor, type, magnitude, duration);
+    return this.duration == duration
+      ? this
+      : new EffectText(factor, type, magnitude, duration);
   }
 
   /**
@@ -67,6 +71,22 @@ public final class EffectText {
   @Override
   public String toString() {
     return String.format("%s %d for %ds", type, magnitude, duration);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    EffectText that = (EffectText)o;
+    return magnitude == that.magnitude &&
+      duration == that.duration &&
+      Objects.equals(factor, that.factor) &&
+      Objects.equals(getType(), that.getType());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(factor, getType(), magnitude, duration);
   }
 
 }

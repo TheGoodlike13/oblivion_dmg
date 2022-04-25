@@ -24,7 +24,7 @@ public interface Source extends Comparable<Source> {
   Source SPELL = new Magic("SPELL");
   Source STAFF = new Equipment("STAFF");
 
-  List<Source> ORDER = ImmutableList.of(MELEE, BOW, ARROW, POISON, SPELL, STAFF);
+  List<Source> ALL_IN_ORDER = ImmutableList.of(MELEE, BOW, ARROW, POISON, SPELL, STAFF);
 
   default Carrier withNoEffect() {
     return create();
@@ -51,7 +51,7 @@ public interface Source extends Comparable<Source> {
 
   @Override
   default int compareTo(Source other) {
-    return ORDER.indexOf(this) - ORDER.indexOf(other);
+    return ALL_IN_ORDER.indexOf(this) - ALL_IN_ORDER.indexOf(other);
   }
 
   /**
