@@ -31,14 +31,11 @@ public final class Arena {
       combatLog("You perform " + hit);
     }
 
-    while (enemy.isAffected()) {
+    while (enemy.isAlive() && enemy.isAffected()) {
       enemy.tick();
       duration += Settings.TICK;
 
-      if (!enemy.isAlive()) {
-        combatLog(capitalize(label) + " has died.");
-        break;
-      }
+      checkEnemyStatus();
     }
 
     duration += enemy.resolve();
@@ -56,6 +53,12 @@ public final class Arena {
   private Enemy enemy;
 
   private double duration;
+
+  private void checkEnemyStatus() {
+    if (!enemy.isAlive()) {
+      combatLog(capitalize(label) + " has died.");
+    }
+  }
 
   private void combatLog(String text) {
     Write.line(String.format("%06.3f " + text, duration));
