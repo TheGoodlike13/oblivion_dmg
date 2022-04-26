@@ -2,7 +2,6 @@ package eu.goodlike.oblivion.command;
 
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.StructureException;
-import eu.goodlike.oblivion.global.Write;
 
 public final class SetEnemy extends BaseCommand {
 
@@ -10,7 +9,6 @@ public final class SetEnemy extends BaseCommand {
   protected void performTask() {
     double hp = parseHp();
     arena.setEnemy(new Enemy(hp));
-    Write.line("Today you'll be hitting an enemy with " + hp + " hp.");
   }
 
   private double parseHp() {

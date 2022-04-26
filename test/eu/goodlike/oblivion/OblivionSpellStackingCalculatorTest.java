@@ -97,6 +97,13 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "POISON {MAGIC DMG 9999 for 1s + FIRE DMG 9999 for 1s + SHOCK DMG 9999 for 1s}");
   }
 
+  @Test
+  void sliceAndDice() {
+    sendInput("+m 1f", "+m 1f");
+
+    assertOutput("Hit #1: MELEE {FIRE DMG 1 for 1s}", "Hit #2: MELEE {FIRE DMG 1 for 1s}");
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);

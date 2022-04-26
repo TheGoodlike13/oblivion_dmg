@@ -5,7 +5,6 @@ import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.Source;
-import eu.goodlike.oblivion.global.Write;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,6 @@ public final class SetHit extends BaseCommand {
 
     Hit hit = new Hit(carriers);
     arena.addHit(hit);
-    Write.line("Hit #1: " + hit);
   }
 
   private void consumeLastParsedSource() {
