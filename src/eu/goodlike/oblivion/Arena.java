@@ -29,6 +29,8 @@ public final class Arena {
     for (Hit hit : hits) {
       enemy.hit(hit);
       combatLog("You perform " + hit);
+
+      checkEnemyStatus();
     }
 
     while (enemy.isAlive() && enemy.isAffected()) {

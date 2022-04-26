@@ -113,20 +113,27 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void letsKillDaHo() {
-    sendInput(
-      "enemy @beeeetch 999",
-      "+s 1000s",
-      "go"
-    );
+    sendInput("enemy @beeeetch 999", "+s 1000s", "go");
 
-    assertOutput(
+    assertOutputSegment(
       "Today you'll be hitting beeeetch with 999.0 hp.",
       "Hit #1: SPELL {SHOCK DMG 1000 for 1s}",
       "00.000 You perform SPELL {SHOCK DMG 1000 for 1s}",
       "01.000 Beeeetch has died.",
-      "01.000 All effects have expired.",
-      "-----",
-      "Today you'll be hitting beeeetch with 999.0 hp."
+      "01.000 All effects have expired."
+    );
+  }
+
+  @Test
+  void instakill() {
+    sendInput("enemy 99", "+s 100d", "go");
+
+    assertOutputSegment(
+      "Today you'll be hitting an enemy with 99.0 hp.",
+      "Hit #1: SPELL {DRAIN LIFE 100 for 1s}",
+      "00.000 You perform SPELL {DRAIN LIFE 100 for 1s}",
+      "00.000 An enemy has died.",
+      "01.000 All effects have expired."
     );
   }
 
@@ -141,6 +148,10 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   private void assertOutput(String... lines) {
     assertThat(output).containsExactly(lines);
+  }
+
+  private void assertOutputSegment(String... lines) {
+    assertThat(output.stream().limit(lines.length)).containsExactly(lines);
   }
 
 }
