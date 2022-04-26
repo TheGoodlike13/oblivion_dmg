@@ -1,8 +1,8 @@
 package eu.goodlike.oblivion;
 
 import com.google.common.collect.ImmutableMap;
-import eu.goodlike.oblivion.command.BaseCommand;
 import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
+import eu.goodlike.oblivion.command.Quit;
 import eu.goodlike.oblivion.command.SetEnemy;
 import eu.goodlike.oblivion.command.SetHit;
 import eu.goodlike.oblivion.command.TimeToGo;
@@ -19,6 +19,8 @@ import static org.apache.commons.lang3.StringUtils.split;
 
 public final class OblivionSpellStackingCalculator {
 
+  public static boolean ITS_ALL_OVER = false;
+
   public static void main(String... args) {
     try (Scanner scanner = new Scanner(System.in)) {
       OblivionSpellStackingCalculator calc = new OblivionSpellStackingCalculator(scanner::nextLine);
@@ -28,7 +30,7 @@ public final class OblivionSpellStackingCalculator {
   }
 
   public void run() {
-    while (!itsAllOverCalculator) {
+    while (!ITS_ALL_OVER) {
       nextCommand().execute();
     }
   }
@@ -42,8 +44,6 @@ public final class OblivionSpellStackingCalculator {
   public OblivionSpellStackingCalculator(Supplier<String> reader) {
     this.reader = reader;
   }
-
-  private boolean itsAllOverCalculator = false;
 
   private final Supplier<String> reader;
 
@@ -81,13 +81,6 @@ public final class OblivionSpellStackingCalculator {
     command.setArena(arena);
 
     return command;
-  }
-
-  private final class Quit extends BaseCommand {
-    @Override
-    protected void performTask() {
-      itsAllOverCalculator = true;
-    }
   }
 
 }

@@ -38,6 +38,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     input = null;
     output = new ArrayList<>();
     Write.WRITER = this;
+    OblivionSpellStackingCalculator.ITS_ALL_OVER = false;
   }
 
   @AfterAll
