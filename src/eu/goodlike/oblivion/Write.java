@@ -17,6 +17,10 @@ public final class Write {
     WRITER.accept(s);
   }
 
+  public static void separator() {
+    line("-----");
+  }
+
   public static void resetToFactory() {
     WRITER = System.out::print;
   }

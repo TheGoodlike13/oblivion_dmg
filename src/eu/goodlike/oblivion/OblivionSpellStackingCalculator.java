@@ -29,7 +29,7 @@ public final class OblivionSpellStackingCalculator {
     Write.line("Welcome to Oblivion spell stacking calculator!");
     Write.line("Please select an enemy, cast some spells or perform attacks and GO!");
     Write.line("You can quit any time ;)");
-    Write.line("-----");
+    Write.separator();
   }
 
   public OblivionSpellStackingCalculator(Supplier<String> reader) {

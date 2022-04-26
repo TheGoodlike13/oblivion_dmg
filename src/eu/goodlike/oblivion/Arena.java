@@ -71,7 +71,7 @@ public final class Arena {
   }
 
   private void refresh() {
-    Write.line("-----");
+    Write.separator();
 
     hits = new ArrayList<>();
     enemy.resurrect();
