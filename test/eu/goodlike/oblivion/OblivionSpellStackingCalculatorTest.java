@@ -73,7 +73,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void newEnemy() {
     sendInput("enemy 1000");
 
-    assertOutput("Today you'll be hitting an enemy with 1000.0 hp.");
+    assertOutput("You face the enemy (1000.0 hp).");
   }
 
   @Test
@@ -87,7 +87,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void spaceMan() {
     sendInput("enemy        1000");
 
-    assertOutput("Today you'll be hitting an enemy with 1000.0 hp.");
+    assertOutput("You face the enemy (1000.0 hp).");
   }
 
   @Test
@@ -126,10 +126,10 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy @beeeetch 999", "+s 1000s", "go");
 
     assertOutputSegment(
-      "Today you'll be hitting beeeetch with 999.0 hp.",
+      "You face the beeeetch (999.0 hp).",
       "Hit #1: SPELL {SHOCK DMG 1000 for 1s}",
       "00.000 You hit with SPELL {SHOCK DMG 1000 for 1s}",
-      "01.000 Beeeetch has died.",
+      "01.000 The beeeetch has died.",
       "01.000 All effects have expired."
     );
   }
@@ -139,10 +139,10 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 99", "+s 100d", "go");
 
     assertOutputSegment(
-      "Today you'll be hitting an enemy with 99.0 hp.",
+      "You face the enemy (99.0 hp).",
       "Hit #1: SPELL {DRAIN LIFE 100 for 1s}",
       "00.000 You hit with SPELL {DRAIN LIFE 100 for 1s}",
-      "00.000 An enemy has died.",
+      "00.000 The enemy has died.",
       "01.000 All effects have expired."
     );
   }

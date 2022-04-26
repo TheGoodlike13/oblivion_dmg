@@ -6,8 +6,6 @@ import eu.goodlike.oblivion.core.Hit;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang3.StringUtils.capitalize;
-
 public final class Arena {
 
   public static final Arena THE_ARENA = new Arena();
@@ -64,7 +62,7 @@ public final class Arena {
 
   private void checkEnemyStatus() {
     if (!enemy.isAlive()) {
-      combatLog(capitalize(label) + " has died.");
+      combatLog("The " + label + " has died.");
     }
   }
 
@@ -81,7 +79,7 @@ public final class Arena {
   }
 
   private void announceOpponent() {
-    Write.line("Today you'll be hitting " + label + " with " + enemy.healthRemaining() + " hp.");
+    Write.line("You face the " + label + " (" + enemy.healthRemaining() + " hp).");
   }
 
 }

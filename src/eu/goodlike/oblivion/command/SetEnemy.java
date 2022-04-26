@@ -36,7 +36,7 @@ public final class SetEnemy extends BaseCommand {
     }
   }
 
-  private String label = "an enemy";
+  private String label = "enemy";
   private String hp = "";
 
 }
