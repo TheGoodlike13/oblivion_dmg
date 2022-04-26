@@ -113,9 +113,18 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void letsKillDaHo() {
-    sendInput("enemy @beeeetch 999");
+    sendInput(
+      "enemy @beeeetch 999",
+      "+s 1000s",
+      "go"
+    );
 
-    assertOutput("Today you'll be hitting beeeetch with 999.0 hp.");
+    assertOutput(
+      "Today you'll be hitting beeeetch with 999.0 hp.",
+      "Hit #1: SPELL {SHOCK DMG 1000 for 1s}",
+      "00.000 You perform SPELL {SHOCK DMG 1000 for 1s}",
+      "01.000 Beeeetch has died."
+    );
   }
 
   private void sendInput(String... lines) {

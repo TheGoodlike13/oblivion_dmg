@@ -5,6 +5,7 @@ import eu.goodlike.oblivion.command.BaseCommand;
 import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
 import eu.goodlike.oblivion.command.SetEnemy;
 import eu.goodlike.oblivion.command.SetHit;
+import eu.goodlike.oblivion.command.TimeToGo;
 import eu.goodlike.oblivion.global.Write;
 
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.Scanner;
 import java.util.function.Supplier;
 
 import static eu.goodlike.oblivion.Command.Name.ENEMY;
+import static eu.goodlike.oblivion.Command.Name.GO;
 import static eu.goodlike.oblivion.Command.Name.QUIT;
 import static org.apache.commons.lang3.StringUtils.split;
 
@@ -50,6 +52,7 @@ public final class OblivionSpellStackingCalculator {
   // TODO: move to enum?
   private final Map<Command.Name, Supplier<Command>> commands = ImmutableMap.of(
     ENEMY, SetEnemy::new,
+    GO, TimeToGo::new,
     QUIT, Quit::new
   );
 
