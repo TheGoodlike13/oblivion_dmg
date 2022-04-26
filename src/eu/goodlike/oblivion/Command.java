@@ -2,8 +2,8 @@ package eu.goodlike.oblivion;
 
 import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
 import eu.goodlike.oblivion.command.ItsAllOver;
+import eu.goodlike.oblivion.command.LowerTheGates;
 import eu.goodlike.oblivion.command.SetEnemy;
-import eu.goodlike.oblivion.command.TimeToGo;
 
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -14,7 +14,7 @@ public interface Command {
 
   enum Name {
     ENEMY(SetEnemy::new),
-    GO(TimeToGo::new),
+    GO(LowerTheGates::new),
     HIT(ButWhatDoesThisMean::new),
     RESET(ButWhatDoesThisMean::new),
     QUIT(ItsAllOver::new),
