@@ -2,7 +2,7 @@ package eu.goodlike.oblivion;
 
 import com.google.common.collect.ImmutableMap;
 import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
-import eu.goodlike.oblivion.command.Quit;
+import eu.goodlike.oblivion.command.ItsAllOver;
 import eu.goodlike.oblivion.command.SetEnemy;
 import eu.goodlike.oblivion.command.SetHit;
 import eu.goodlike.oblivion.command.TimeToGo;
@@ -53,7 +53,7 @@ public final class OblivionSpellStackingCalculator {
   private final Map<Command.Name, Supplier<Command>> commands = ImmutableMap.of(
     ENEMY, SetEnemy::new,
     GO, TimeToGo::new,
-    QUIT, Quit::new
+    QUIT, ItsAllOver::new
   );
 
   private Command nextCommand() {

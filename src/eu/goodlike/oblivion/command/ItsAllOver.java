@@ -2,7 +2,7 @@ package eu.goodlike.oblivion.command;
 
 import eu.goodlike.oblivion.OblivionSpellStackingCalculator;
 
-public final class Quit extends BaseCommand {
+public final class ItsAllOver extends BaseCommand {
 
   @Override
   protected void performTask() {
