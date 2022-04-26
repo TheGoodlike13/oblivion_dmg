@@ -9,6 +9,8 @@ import eu.goodlike.oblivion.core.Source;
 import java.util.ArrayList;
 import java.util.List;
 
+import static eu.goodlike.oblivion.Arena.THE_ARENA;
+
 public final class SetHit extends BaseCommand {
 
   @Override
@@ -26,7 +28,7 @@ public final class SetHit extends BaseCommand {
     consumeLastParsedSource();
 
     Hit hit = new Hit(carriers);
-    arena.addHit(hit);
+    THE_ARENA.addHit(hit);
   }
 
   private void consumeLastParsedSource() {

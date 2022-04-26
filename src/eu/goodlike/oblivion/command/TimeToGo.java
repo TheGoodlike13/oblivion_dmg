@@ -1,10 +1,12 @@
 package eu.goodlike.oblivion.command;
 
+import static eu.goodlike.oblivion.Arena.THE_ARENA;
+
 public final class TimeToGo extends BaseCommand {
 
   @Override
   protected void performTask() {
-    arena.lowerTheGates();
+    THE_ARENA.lowerTheGates();
   }
 
 }

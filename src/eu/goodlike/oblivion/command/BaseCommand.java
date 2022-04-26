@@ -1,6 +1,5 @@
 package eu.goodlike.oblivion.command;
 
-import eu.goodlike.oblivion.Arena;
 import eu.goodlike.oblivion.Command;
 import eu.goodlike.oblivion.core.StructureException;
 import eu.goodlike.oblivion.global.Write;
@@ -17,11 +16,6 @@ public abstract class BaseCommand implements Command {
   @Override
   public final void setParams(String... parsedInput) {
     Collections.addAll(inputs, parsedInput);
-  }
-
-  @Override
-  public final void setArena(Arena arena) {
-    this.arena = arena;
   }
 
   @Override
@@ -56,6 +50,5 @@ public abstract class BaseCommand implements Command {
   }
 
   protected final List<String> inputs = new ArrayList<>();
-  protected Arena arena;
 
 }

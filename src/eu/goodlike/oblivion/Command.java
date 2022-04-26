@@ -44,8 +44,6 @@ public interface Command {
 
   void setParams(String... parsedInput);
 
-  void setArena(Arena arena);
-
   void execute();
 
 }

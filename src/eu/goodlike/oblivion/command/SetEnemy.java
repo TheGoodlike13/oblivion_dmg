@@ -3,13 +3,15 @@ package eu.goodlike.oblivion.command;
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.StructureException;
 
+import static eu.goodlike.oblivion.Arena.THE_ARENA;
+
 public final class SetEnemy extends BaseCommand {
 
   @Override
   protected void performTask() {
     identifyArgs();
     double hp = parseHp();
-    arena.setEnemy(label, new Enemy(hp));
+    THE_ARENA.setEnemy(label, new Enemy(hp));
   }
 
   private void identifyArgs() {

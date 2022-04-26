@@ -38,8 +38,6 @@ public final class OblivionSpellStackingCalculator {
 
   private final Supplier<String> reader;
 
-  private final Arena arena = new Arena();
-
   private Command nextCommand() {
     String[] input;
     do {
@@ -48,10 +46,7 @@ public final class OblivionSpellStackingCalculator {
     } while (input.length == 0);
 
     Command command = newCommand(input[0]);
-
     command.setParams(input);
-    command.setArena(arena);
-
     return command;
   }
 

@@ -12,6 +12,14 @@ import static org.apache.commons.lang3.StringUtils.capitalize;
 
 public final class Arena {
 
+  public static final Arena THE_ARENA = new Arena();
+
+  public void reset() {
+    hits = new ArrayList<>();
+    label = null;
+    enemy = null;
+  }
+
   public void setEnemy(String label, Enemy enemy) {
     this.label = label;
     this.enemy = enemy;
@@ -64,12 +72,6 @@ public final class Arena {
 
   private void combatLog(String text) {
     Write.line(String.format("%06.3f " + text, duration));
-  }
-
-  private void reset() {
-    hits = new ArrayList<>();
-    label = null;
-    enemy = null;
   }
 
   private void refresh() {
