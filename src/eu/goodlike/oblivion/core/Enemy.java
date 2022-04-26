@@ -190,6 +190,8 @@ public final class Enemy implements Target {
     for (EffectText effect : bonus) {
       effect.permanent().onApply(this);
     }
+
+    StructureException.throwOnAlreadyDead(this);
   }
 
   private double maxHealth;

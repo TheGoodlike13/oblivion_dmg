@@ -33,6 +33,12 @@ public final class StructureException extends RuntimeException {
     }
   }
 
+  public static void throwOnAlreadyDead(Enemy enemy) {
+    if (!enemy.isAlive()) {
+      throw new StructureException("Enemy cannot start off dead!");
+    }
+  }
+
   public StructureException(String message) {
     super(message);
   }

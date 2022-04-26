@@ -47,6 +47,13 @@ class EnemyTest {
   }
 
   @Test
+  void alreadyDeadNotAllowed() {
+    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> new Enemy(0));
+    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> new Enemy(-1));
+    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> new Enemy(0.004));
+  }
+
+  @Test
   void damage() {
     target.hit(MAGIC.damage(10));
 
