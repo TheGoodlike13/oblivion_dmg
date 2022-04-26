@@ -123,7 +123,9 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "Today you'll be hitting beeeetch with 999.0 hp.",
       "Hit #1: SPELL {SHOCK DMG 1000 for 1s}",
       "00.000 You perform SPELL {SHOCK DMG 1000 for 1s}",
-      "01.000 Beeeetch has died."
+      "01.000 Beeeetch has died.",
+      "-----",
+      "Today you'll be hitting beeeetch with 999.0 hp."
     );
   }
 

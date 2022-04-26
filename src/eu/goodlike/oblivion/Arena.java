@@ -15,7 +15,7 @@ public final class Arena {
   public void setEnemy(String label, Enemy enemy) {
     this.label = label;
     this.enemy = enemy;
-    Write.line("Today you'll be hitting " + label + " with " + enemy.healthRemaining() + " hp.");
+    announceOpponent();
   }
 
   public void addHit(Hit hit) {
@@ -48,9 +48,9 @@ public final class Arena {
     reset();
   }
 
+  private List<Hit> hits;
   private String label;
   private Enemy enemy;
-  private List<Hit> hits;
   private double duration;
 
   private void combatLog(String text) {
@@ -58,16 +58,23 @@ public final class Arena {
   }
 
   private void reset() {
+    hits = new ArrayList<>();
     label = null;
     enemy = null;
-    hits = new ArrayList<>();
     duration = 0;
   }
 
   private void refresh() {
-    enemy.resurrect();
+    Write.line("-----");
+
     hits = new ArrayList<>();
+    enemy.resurrect();
+    announceOpponent();
     duration = 0;
+  }
+
+  private void announceOpponent() {
+    Write.line("Today you'll be hitting " + label + " with " + enemy.healthRemaining() + " hp.");
   }
 
 }
