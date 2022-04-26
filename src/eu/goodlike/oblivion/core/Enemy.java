@@ -178,6 +178,8 @@ public final class Enemy implements Target {
    * The enemy starts at max hp.
    * The effects are equivalent to racial or passive equipment bonuses that various characters can have.
    * Damage effects are ignored.
+   *
+   * @throws StructureException if maxHealth is too low to be considered alive
    */
   public Enemy(double maxHealth, EffectText... bonus) {
     this.maxHealth = maxHealth;
