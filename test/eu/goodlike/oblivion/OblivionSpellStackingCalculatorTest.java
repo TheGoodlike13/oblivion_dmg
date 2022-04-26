@@ -82,6 +82,13 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
+  void spaceMan() {
+    sendInput("enemy        1000");
+
+    assertOutput("Today you'll be hitting an enemy with 1000.0 hp.");
+  }
+
+  @Test
   void nowThatsALotOfDamage() {
     sendInput("+s 100m10s 100d 100wm");
 
