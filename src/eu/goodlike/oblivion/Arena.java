@@ -34,7 +34,7 @@ public final class Arena {
 
     for (Hit hit : hits) {
       enemy.hit(hit);
-      combatLog("You perform " + hit);
+      combatLog("You hit with " + hit);
 
       checkEnemyStatus();
     }
