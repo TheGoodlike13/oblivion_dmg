@@ -87,6 +87,16 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutput("Hit #1: SPELL {MAGIC DMG 100 for 10s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s}");
   }
 
+  @Test
+  void bigFuckingHit() {
+    sendInput("+p 9999m 9999f 9999s +a 9999fr +b 9999m");
+
+    assertOutput("Hit #1: " +
+      "BOW {MAGIC DMG 9999 for 1s} + " +
+      "ARROW {FROST DMG 9999 for 1s} + " +
+      "POISON {MAGIC DMG 9999 for 1s + FIRE DMG 9999 for 1s + SHOCK DMG 9999 for 1s}");
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);

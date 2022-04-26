@@ -14,21 +14,33 @@ public final class SetHit extends BaseCommand {
 
   @Override
   protected void performTask() {
-    Source source = Parse.source(input(0).substring(1));
-    Carrier carrier = source.create(parseEffects());
-    Hit hit = new Hit(carrier);
+    for (String input : inputs) {
+      if (input.startsWith("+")) {
+        consumeLastParsedSource();
+        source = Parse.source(input.substring(1));
+        effects = new ArrayList<>();
+      }
+      else {
+        effects.add(Parse.effect(input));
+      }
+    }
+    consumeLastParsedSource();
+
+    Hit hit = new Hit(carriers);
     arena.addHit(hit);
     Write.line("Hit #1: " + hit);
   }
 
-  private List<EffectText> parseEffects() {
-    List<EffectText> effects = new ArrayList<>();
-
-    for (String input : inputs.subList(1, inputs.size())) {
-      effects.add(Parse.effect(input));
+  private void consumeLastParsedSource() {
+    if (source != null) {
+      Carrier carrier = source.create(effects);
+      carriers.add(carrier);
+      source = null;
     }
-
-    return effects;
   }
+
+  private Source source;
+  private List<EffectText> effects;
+  private final List<Carrier> carriers = new ArrayList<>();
 
 }
