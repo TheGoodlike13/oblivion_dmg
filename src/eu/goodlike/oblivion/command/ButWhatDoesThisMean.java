@@ -1,6 +1,6 @@
 package eu.goodlike.oblivion.command;
 
-import eu.goodlike.oblivion.global.Write;
+import eu.goodlike.oblivion.Write;
 
 public final class ButWhatDoesThisMean extends BaseCommand {
 

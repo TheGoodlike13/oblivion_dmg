@@ -1,8 +1,8 @@
 package eu.goodlike.oblivion.core;
 
-import eu.goodlike.oblivion.global.Settings;
+import eu.goodlike.oblivion.Settings;
 
-import static eu.goodlike.oblivion.global.Settings.DIFFICULTY;
+import static eu.goodlike.oblivion.Settings.DIFFICULTY;
 
 /**
  * Describes how the influence of the effects is delivered.

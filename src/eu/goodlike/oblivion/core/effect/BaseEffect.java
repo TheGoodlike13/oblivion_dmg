@@ -1,10 +1,10 @@
 package eu.goodlike.oblivion.core.effect;
 
+import eu.goodlike.oblivion.Settings;
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.Target;
-import eu.goodlike.oblivion.global.Settings;
 
-import static eu.goodlike.oblivion.global.Settings.TICK;
+import static eu.goodlike.oblivion.Settings.TICK;
 
 /**
  * Common logic for active effects.

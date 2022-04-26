@@ -1,4 +1,4 @@
-package eu.goodlike.oblivion.global;
+package eu.goodlike.oblivion;
 
 import eu.goodlike.oblivion.core.Method;
 

@@ -1,6 +1,6 @@
 package eu.goodlike.oblivion.core;
 
-import eu.goodlike.oblivion.global.Settings;
+import eu.goodlike.oblivion.Settings;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 

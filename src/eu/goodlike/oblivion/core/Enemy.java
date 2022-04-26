@@ -2,15 +2,15 @@ package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
-import eu.goodlike.oblivion.global.Settings;
+import eu.goodlike.oblivion.Settings;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static eu.goodlike.oblivion.Settings.TICK;
 import static eu.goodlike.oblivion.core.Source.SPELL;
-import static eu.goodlike.oblivion.global.Settings.TICK;
 
 /**
  * Target for all of the hits.

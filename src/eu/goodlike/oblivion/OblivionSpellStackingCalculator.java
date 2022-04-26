@@ -1,7 +1,6 @@
 package eu.goodlike.oblivion;
 
 import eu.goodlike.oblivion.command.SetHit;
-import eu.goodlike.oblivion.global.Write;
 
 import java.util.Scanner;
 import java.util.function.Supplier;

@@ -2,8 +2,6 @@ package eu.goodlike.oblivion;
 
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Hit;
-import eu.goodlike.oblivion.global.Settings;
-import eu.goodlike.oblivion.global.Write;
 
 import java.util.ArrayList;
 import java.util.List;

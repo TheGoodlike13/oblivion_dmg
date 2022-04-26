@@ -1,10 +1,11 @@
 package eu.goodlike.oblivion.core;
 
-import eu.goodlike.oblivion.global.Settings;
+import eu.goodlike.oblivion.Settings;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static eu.goodlike.oblivion.Settings.DIFFICULTY;
 import static eu.goodlike.oblivion.core.Factor.FIRE;
 import static eu.goodlike.oblivion.core.Factor.FROST;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
@@ -12,7 +13,6 @@ import static eu.goodlike.oblivion.core.Factor.POISON;
 import static eu.goodlike.oblivion.core.Factor.SHOCK;
 import static eu.goodlike.oblivion.core.Source.MELEE;
 import static eu.goodlike.oblivion.core.Source.SPELL;
-import static eu.goodlike.oblivion.global.Settings.DIFFICULTY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.within;
