@@ -24,6 +24,8 @@ public final class Arena {
   }
 
   public void lowerTheGates() {
+    duration = 0;
+
     for (Hit hit : hits) {
       enemy.hit(hit);
       combatLog("You perform " + hit);
@@ -39,7 +41,8 @@ public final class Arena {
       }
     }
 
-    enemy.resolve();
+    duration += enemy.resolve();
+    combatLog("All effects have expired.");
 
     refresh();
   }
@@ -51,6 +54,7 @@ public final class Arena {
   private List<Hit> hits;
   private String label;
   private Enemy enemy;
+
   private double duration;
 
   private void combatLog(String text) {
@@ -61,7 +65,6 @@ public final class Arena {
     hits = new ArrayList<>();
     label = null;
     enemy = null;
-    duration = 0;
   }
 
   private void refresh() {
@@ -70,7 +73,6 @@ public final class Arena {
     hits = new ArrayList<>();
     enemy.resurrect();
     announceOpponent();
-    duration = 0;
   }
 
   private void announceOpponent() {
