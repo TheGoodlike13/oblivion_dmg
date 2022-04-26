@@ -1,20 +1,11 @@
 package eu.goodlike.oblivion;
 
-import com.google.common.collect.ImmutableMap;
-import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
-import eu.goodlike.oblivion.command.ItsAllOver;
-import eu.goodlike.oblivion.command.SetEnemy;
 import eu.goodlike.oblivion.command.SetHit;
-import eu.goodlike.oblivion.command.TimeToGo;
 import eu.goodlike.oblivion.global.Write;
 
-import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Supplier;
 
-import static eu.goodlike.oblivion.Command.Name.ENEMY;
-import static eu.goodlike.oblivion.Command.Name.GO;
-import static eu.goodlike.oblivion.Command.Name.QUIT;
 import static org.apache.commons.lang3.StringUtils.split;
 
 public final class OblivionSpellStackingCalculator {
@@ -49,13 +40,6 @@ public final class OblivionSpellStackingCalculator {
 
   private final Arena arena = new Arena();
 
-  // TODO: move to enum?
-  private final Map<Command.Name, Supplier<Command>> commands = ImmutableMap.of(
-    ENEMY, SetEnemy::new,
-    GO, TimeToGo::new,
-    QUIT, ItsAllOver::new
-  );
-
   private Command nextCommand() {
     String[] input;
     do {
@@ -63,24 +47,20 @@ public final class OblivionSpellStackingCalculator {
       input = split(reader.get().trim().toLowerCase(), ' ');
     } while (input.length == 0);
 
-    if (input[0].startsWith("+")) {
-      Command command = new SetHit();
-
-      command.setParams(input);
-      command.setArena(arena);
-
-      return command;
-    }
-
-    Command command = Command.Name.find(input[0])
-      .map(commands::get)
-      .orElse(ButWhatDoesThisMean::new)
-      .get();
+    Command command = newCommand(input[0]);
 
     command.setParams(input);
     command.setArena(arena);
 
     return command;
+  }
+
+  private Command newCommand(String input0) {
+    if (input0.startsWith("+")) {
+      return new SetHit();
+    }
+
+    return Command.Name.find(input0).newCommand();
   }
 
 }
