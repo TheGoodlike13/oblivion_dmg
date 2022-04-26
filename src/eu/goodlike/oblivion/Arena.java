@@ -9,9 +9,9 @@ import java.util.List;
 
 public final class Arena {
 
-  public void setEnemy(Enemy enemy) {
+  public void setEnemy(String label, Enemy enemy) {
     this.enemy = enemy;
-    Write.line("Today you'll be hitting an enemy with " + enemy.healthRemaining() + " hp.");
+    Write.line("Today you'll be hitting " + label + " with " + enemy.healthRemaining() + " hp.");
   }
 
   public void addHit(Hit hit) {

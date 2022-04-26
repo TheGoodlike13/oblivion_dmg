@@ -8,6 +8,7 @@ import eu.goodlike.oblivion.global.Write;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 public abstract class BaseCommand implements Command {
 
@@ -43,6 +44,15 @@ public abstract class BaseCommand implements Command {
 
   protected final String input(int index) {
     return inputs.size() <= index ? "" : inputs.get(index);
+  }
+
+  protected final Stream<String> args() {
+    return inputs.stream().skip(1);
+  }
+
+  protected final Stream<String> args(int maxArgCount) {
+    Stream<String> infiniteBlankWorks = Stream.generate(() -> "");
+    return Stream.concat(args(), infiniteBlankWorks).limit(maxArgCount);
   }
 
   protected final List<String> inputs = new ArrayList<>();
