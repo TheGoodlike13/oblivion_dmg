@@ -44,6 +44,9 @@ See below for any limitations or caveats.
 Plus, it's been a while since I did some nice and refreshing JAVA programming.
 So that's a bonus.
 
+P.S. I may have gone a little insane half way through the project.
+Please excuse any code or comments that seems a little too avant-garde.
+
 ## Limitations
 
 Physical damage is ignored.
