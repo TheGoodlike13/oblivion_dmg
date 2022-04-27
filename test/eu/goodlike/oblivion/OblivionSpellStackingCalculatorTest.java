@@ -241,6 +241,37 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutput("Bad input: Cannot parse repeat count <d>");
   }
 
+  @Test
+  void howManyTimesOldMan() {
+    sendInput("go", "enemy 10", "go", "reset", "+s 10m", "go");
+
+    assertOutput(
+      "You stare at the void.",
+      "The void stares at you.",
+      "How about casting some spells?",
+      "You face the enemy (10.0 hp).",
+      "You stare at the enemy.",
+      "The enemy stares at you.",
+      "How about casting some spells?",
+      "Everything has been reset.",
+      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
+      "All your hits land on the wall.",
+      "Good job.",
+      "How about picking an enemy?"
+    );
+  }
+
+  @Test
+  void amnesia() {
+    sendInput("+s 10m", "reset", "+s 20m");
+
+    assertOutput(
+      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
+      "Everything has been reset.",
+      "[#1] Next hit: SPELL {MAGIC DMG 20 for 1s}"
+    );
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);

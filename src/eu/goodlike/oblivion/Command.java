@@ -4,6 +4,7 @@ import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
 import eu.goodlike.oblivion.command.ItsAllOver;
 import eu.goodlike.oblivion.command.LowerTheGates;
 import eu.goodlike.oblivion.command.RepeatHit;
+import eu.goodlike.oblivion.command.Reset;
 import eu.goodlike.oblivion.command.SetEnemy;
 
 import java.util.function.Supplier;
@@ -17,7 +18,7 @@ public interface Command {
     ENEMY(SetEnemy::new),
     GO(LowerTheGates::new),
     HIT(RepeatHit::new),
-    RESET(ButWhatDoesThisMean::new),
+    RESET(Reset::new),
     QUIT(ItsAllOver::new),
     WHAT(ButWhatDoesThisMean::new);
 

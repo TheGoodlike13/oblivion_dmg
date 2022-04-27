@@ -28,26 +28,9 @@ public final class Arena {
   }
 
   public void lowerTheGates() {
-    duration = 0;
-
-    for (Hit hit : hits) {
-      enemy.hit(hit);
-      combatLog("You hit with " + hit);
-
-      checkEnemyStatus();
+    if (ready()) {
+      fight();
     }
-
-    while (enemy.isAlive() && enemy.isAffected()) {
-      enemy.tick();
-      duration += Settings.TICK;
-
-      checkEnemyStatus();
-    }
-
-    duration += enemy.resolve();
-    combatLog("All effects have expired.");
-
-    refresh();
   }
 
   public Arena() {
@@ -59,6 +42,51 @@ public final class Arena {
   private Enemy enemy;
 
   private double duration;
+
+  private boolean ready() {
+    if (hits.isEmpty()) {
+      String beholdee = enemy == null ? "void" : label;
+      Write.line("You stare at the " + beholdee + ".");
+      Write.line("The " + beholdee + " stares at you.");
+      Write.line("How about casting some spells?");
+      return false;
+    }
+    if (enemy == null) {
+      Write.line("All your hits land on the wall.");
+      Write.line("Good job.");
+      Write.line("How about picking an enemy?");
+      return false;
+    }
+    return true;
+  }
+
+  private void fight() {
+    duration = 0;
+    performHits();
+    awaitEffectExpiration();
+    refresh();
+  }
+
+  private void performHits() {
+    for (Hit hit : hits) {
+      enemy.hit(hit);
+      combatLog("You hit with " + hit);
+
+      checkEnemyStatus();
+    }
+  }
+
+  private void awaitEffectExpiration() {
+    while (enemy.isAlive() && enemy.isAffected()) {
+      enemy.tick();
+      duration += Settings.TICK;
+
+      checkEnemyStatus();
+    }
+
+    duration += enemy.resolve();
+    combatLog("All effects have expired.");
+  }
 
   private void checkEnemyStatus() {
     if (!enemy.isAlive()) {
