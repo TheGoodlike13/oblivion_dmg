@@ -35,7 +35,7 @@ public final class SetEnemy extends BaseCommand {
       return Double.parseDouble(hp);
     }
     catch (NumberFormatException e) {
-      throw new StructureException("Cannot parse enemy hp <" + hp + ">", e);
+      throw new StructureException("Cannot parse enemy hp", hp, e);
     }
   }
 
