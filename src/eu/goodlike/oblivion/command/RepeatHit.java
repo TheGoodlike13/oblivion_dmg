@@ -29,8 +29,7 @@ public final class RepeatHit extends BaseCommand {
     args().forEach(this::addOrRepeat);
   }
 
-  private String lastRef;
-  private Hit lastHit;
+  private String lastRef = "";
 
   private void addOrRepeat(String ref) {
     if (ref.startsWith("x")) {
@@ -38,29 +37,22 @@ public final class RepeatHit extends BaseCommand {
       repeatLastHit(times);
     }
     else {
-      findAndAdd(ref);
+      lastRef = ref;
+      addHit();
     }
   }
 
   private void repeatLastHit(int times) {
-    if (lastHit == null) {
-      throw new StructureException("Nothing to repeat", times);
-    }
-    IntStream.range(1, times).forEach(any -> addHit(lastRef));
+    IntStream.range(1, times).forEach(any -> addHit());
   }
 
-  private void findAndAdd(String ref) {
-    lastRef = ref;
-    lastHit = HITS.get(ref);
-    if (lastHit == null) {
-      throw new StructureException("No such hit", ref);
+  private void addHit() {
+    Hit hit = HITS.get(lastRef);
+    if (hit == null) {
+      throw new StructureException("No hit found", lastRef);
     }
-    addHit(ref);
-  }
-
-  private void addHit(String ref) {
-    writeRef(ref);
-    THE_ARENA.addHit(lastHit);
+    writeRef(lastRef);
+    THE_ARENA.addHit(hit);
   }
 
   private static void writeRef(String ref) {
