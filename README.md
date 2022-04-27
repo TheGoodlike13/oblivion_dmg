@@ -68,7 +68,7 @@ add to code complexity.
 
 ### Caveats
 
-Effects of a single hit are applied all at once, including "drain hp".
+Effects of a single hit are applied all at once, including "drain life".
 If this hit has multiple drain effects, e.g. weapon + poison,
 they will be bundled together.
 This has no effect on calculations leading up to death, only overkill.
@@ -81,7 +81,7 @@ without modding the game:
 1) I've added a magic factor to weakness/resist effects.
 To verify, I'd need a poison with such an effect.
 Under the assumption, it is affected by magic resistance.
-For reference, "drain hp" did have this factor as a poison.
+For reference, "drain life" did have this factor as a poison.
 Elemental damage did not.
 2) I assume a hit is processed in order of bow -> arrow -> poison.
 This seems like a logical order, but it's possible arrow and poison are switched.
