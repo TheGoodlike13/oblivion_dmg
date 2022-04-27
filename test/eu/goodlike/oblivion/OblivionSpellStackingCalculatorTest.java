@@ -190,6 +190,21 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutput("Bad input: No such hit <#1>");
   }
 
+  @Test
+  void thisAintNoDatabaseBoy() {
+    sendInput("enemy 30", "+s 10m", "hit #1 #2", "go");
+
+    assertOutputSegment(
+      "You face the enemy (30.0 hp).",
+      "Hit #1: SPELL {MAGIC DMG 10 for 1s}",
+      "Hit #1: SPELL {MAGIC DMG 10 for 1s}",
+      "Bad input: No such hit <#2>",
+      "00.000 You hit with SPELL {MAGIC DMG 10 for 1s}",
+      "00.000 You hit with SPELL {MAGIC DMG 10 for 1s}",
+      "01.000 All effects have expired."
+    );
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);
