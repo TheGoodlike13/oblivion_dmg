@@ -31,6 +31,10 @@ public final class SetHit extends BaseCommand {
     THE_ARENA.addHit(hit);
   }
 
+  private Source source;
+  private List<EffectText> effects;
+  private final List<Carrier> carriers = new ArrayList<>();
+
   private void consumeLastParsedSource() {
     if (source != null) {
       Carrier carrier = source.create(effects);
@@ -38,9 +42,5 @@ public final class SetHit extends BaseCommand {
       source = null;
     }
   }
-
-  private Source source;
-  private List<EffectText> effects;
-  private final List<Carrier> carriers = new ArrayList<>();
 
 }

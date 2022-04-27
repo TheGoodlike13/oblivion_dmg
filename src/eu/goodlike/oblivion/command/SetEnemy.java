@@ -14,6 +14,9 @@ public final class SetEnemy extends BaseCommand {
     THE_ARENA.setEnemy(label, new Enemy(hp));
   }
 
+  private String label = "enemy";
+  private String hp = "";
+
   private void identifyArgs() {
     args().forEach(this::identify);
   }
@@ -35,8 +38,5 @@ public final class SetEnemy extends BaseCommand {
       throw new StructureException("Cannot parse enemy hp <" + hp + ">", e);
     }
   }
-
-  private String label = "enemy";
-  private String hp = "";
 
 }
