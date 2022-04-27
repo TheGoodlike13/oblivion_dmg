@@ -43,12 +43,16 @@ public final class StructureException extends RuntimeException {
     super(message);
   }
 
-  public StructureException(String parsingProblem, String input) {
-    super(parsingProblem + " <" + input + ">");
-  }
-
   public StructureException(String message, Throwable cause) {
     super(message, cause);
+  }
+
+  public StructureException(String parsingProblem, Object input) {
+    this(parsingProblem + " <" + input + ">", null);
+  }
+
+  public StructureException(String parsingProblem, Object input, Throwable cause) {
+    this(parsingProblem + " <" + input + ">", cause);
   }
 
   private static final Set<String> VALID_HITS = ImmutableSet.of(
