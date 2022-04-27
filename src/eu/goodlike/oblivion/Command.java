@@ -3,6 +3,7 @@ package eu.goodlike.oblivion;
 import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
 import eu.goodlike.oblivion.command.ItsAllOver;
 import eu.goodlike.oblivion.command.LowerTheGates;
+import eu.goodlike.oblivion.command.RepeatHit;
 import eu.goodlike.oblivion.command.SetEnemy;
 
 import java.util.function.Supplier;
@@ -15,7 +16,7 @@ public interface Command {
   enum Name {
     ENEMY(SetEnemy::new),
     GO(LowerTheGates::new),
-    HIT(ButWhatDoesThisMean::new),
+    HIT(RepeatHit::new),
     RESET(ButWhatDoesThisMean::new),
     QUIT(ItsAllOver::new),
     WHAT(ButWhatDoesThisMean::new);

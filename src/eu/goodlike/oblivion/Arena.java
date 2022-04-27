@@ -24,7 +24,7 @@ public final class Arena {
 
   public void addHit(Hit hit) {
     hits.add(hit);
-    Write.line("Hit #" + hits.size() + ": " + hit);
+    Write.line(hit.toString());
   }
 
   public void lowerTheGates() {

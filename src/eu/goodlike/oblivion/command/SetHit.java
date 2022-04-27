@@ -28,6 +28,7 @@ public final class SetHit extends BaseCommand {
     consumeLastParsedSource();
 
     Hit hit = new Hit(carriers);
+    RepeatHit.cache(hit);
     THE_ARENA.addHit(hit);
   }
 

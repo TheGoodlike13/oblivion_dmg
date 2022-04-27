@@ -1,5 +1,6 @@
 package eu.goodlike.oblivion;
 
+import eu.goodlike.oblivion.command.RepeatHit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,9 +11,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static eu.goodlike.oblivion.Arena.THE_ARENA;
 import static eu.goodlike.oblivion.OblivionSpellStackingCalculator.ITS_ALL_OVER;
+import static org.apache.commons.lang3.StringUtils.split;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<String> {
@@ -30,7 +33,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   @Override
   public void accept(String s) {
     if (!">> ".equals(s)) {
-      output.add(s.trim());
+      output.add(s);
     }
   }
 
@@ -46,6 +49,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     Write.resetToFactory();
     ITS_ALL_OVER = false;
     THE_ARENA.reset();
+    RepeatHit.invalidate();
   }
 
   @Test
@@ -154,6 +158,38 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     );
   }
 
+  @Test
+  void definitionOfInsanity() {
+    sendInput("enemy 10", "+s 10m", "go", "+s 10m", "go", "hit #1", "go");
+
+    assertOutputSegment(
+      "You face the enemy (10.0 hp).",
+      "Hit #1: SPELL {MAGIC DMG 10 for 1s}",
+      "00.000 You hit with SPELL {MAGIC DMG 10 for 1s}",
+      "01.000 The enemy has died.",
+      "01.000 All effects have expired.",
+      "-----",
+      "You face the enemy (10.0 hp).",
+      "Hit #2: SPELL {MAGIC DMG 10 for 1s}",
+      "00.000 You hit with SPELL {MAGIC DMG 10 for 1s}",
+      "01.000 The enemy has died.",
+      "01.000 All effects have expired.",
+      "-----",
+      "You face the enemy (10.0 hp).",
+      "Hit #1: SPELL {MAGIC DMG 10 for 1s}",
+      "00.000 You hit with SPELL {MAGIC DMG 10 for 1s}",
+      "01.000 The enemy has died.",
+      "01.000 All effects have expired."
+    );
+  }
+
+  @Test
+  void watchYourHitting() {
+    sendInput("hit #1");
+
+    assertOutput("Bad input: No such hit <#1>");
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);
@@ -164,11 +200,17 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   private void assertOutput(String... lines) {
-    assertThat(output).containsExactly(lines);
+    assertThat(outputLines()).containsExactly(lines);
   }
 
   private void assertOutputSegment(String... lines) {
-    assertThat(output.stream().limit(lines.length)).containsExactly(lines);
+    assertThat(outputLines().limit(lines.length)).containsExactly(lines);
+  }
+
+  private Stream<String> outputLines() {
+    String allOutput = String.join("", output);
+    String[] lines = split(allOutput, System.lineSeparator());
+    return Stream.of(lines);
   }
 
 }
