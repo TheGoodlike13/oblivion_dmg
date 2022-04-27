@@ -95,6 +95,13 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
+  void iAintAfraidOfNoTabs() {
+    sendInput("enemy\t\t\t1000");
+
+    assertOutput("You face the enemy (1000.0 hp).");
+  }
+
+  @Test
   void thisIsNotDarkSouls3() {
     sendInput("enemy 1000 999 1001");
 

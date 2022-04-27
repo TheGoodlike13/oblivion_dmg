@@ -42,7 +42,7 @@ public final class OblivionSpellStackingCalculator {
     String[] input;
     do {
       Write.inline(">> ");
-      input = split(reader.get().trim().toLowerCase(), ' ');
+      input = split(reader.get().trim().toLowerCase());
     } while (input.length == 0);
 
     Command command = newCommand(input[0]);
