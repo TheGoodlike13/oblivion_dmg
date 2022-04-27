@@ -39,6 +39,24 @@ public final class StructureException extends RuntimeException {
     }
   }
 
+  public static double doubleOrThrow(String input, String description) {
+    try {
+      return Double.parseDouble(input);
+    }
+    catch (NumberFormatException e) {
+      throw new StructureException("Cannot parse " + description, input, e);
+    }
+  }
+
+  public static int intOrThrow(String input, String description) {
+    try {
+      return Integer.parseInt(input);
+    }
+    catch (NumberFormatException e) {
+      throw new StructureException("Cannot parse " + description, input, e);
+    }
+  }
+
   public StructureException(String message) {
     super(message);
   }

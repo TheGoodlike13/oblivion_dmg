@@ -33,7 +33,7 @@ public final class RepeatHit extends BaseCommand {
 
   private void addOrRepeat(String ref) {
     if (ref.startsWith("x")) {
-      int times = parseInt(ref.substring(1));
+      int times = StructureException.intOrThrow(ref.substring(1), "repeat count");
       repeatLastHit(times);
     }
     else {
@@ -57,15 +57,6 @@ public final class RepeatHit extends BaseCommand {
 
   private static void writeRef(String ref) {
     Write.inline("[" + ref + "] ");
-  }
-
-  private int parseInt(String count) {
-    try {
-      return Integer.parseInt(count);
-    }
-    catch (NumberFormatException e) {
-      throw new StructureException("Cannot parse repeat count", count, e);
-    }
   }
 
   // TODO: move this cache out (when we have more similar stuff)

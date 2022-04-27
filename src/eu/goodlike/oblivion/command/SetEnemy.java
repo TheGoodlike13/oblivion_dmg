@@ -9,17 +9,13 @@ public final class SetEnemy extends BaseCommand {
 
   @Override
   protected void performTask() {
-    identifyArgs();
-    double hp = parseHp();
+    args().forEach(this::identify);
+    double hp = StructureException.doubleOrThrow(this.hp, "enemy hp");
     THE_ARENA.setEnemy(label, new Enemy(hp));
   }
 
   private String label = "enemy";
   private String hp = "";
-
-  private void identifyArgs() {
-    args().forEach(this::identify);
-  }
 
   private void identify(String input) {
     if (input.startsWith("@")) {
@@ -27,15 +23,6 @@ public final class SetEnemy extends BaseCommand {
     }
     else {
       hp = input;
-    }
-  }
-
-  private double parseHp() {
-    try {
-      return Double.parseDouble(hp);
-    }
-    catch (NumberFormatException e) {
-      throw new StructureException("Cannot parse enemy hp", hp, e);
     }
   }
 
