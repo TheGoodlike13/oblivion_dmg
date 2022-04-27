@@ -68,6 +68,7 @@ public final class RepeatHit extends BaseCommand {
     }
   }
 
+  // TODO: move this cache out (when we have more similar stuff)
   private static final Map<String, Hit> HITS = new HashMap<>();
   private static final AtomicInteger COUNT = new AtomicInteger(0);
 
