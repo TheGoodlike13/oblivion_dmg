@@ -50,6 +50,8 @@ public final class Parse {
 
   /**
    * Parses effect input.
+   * Example: 100d10s -> DRAIN LIFE 100 for 10 seconds.
+   * <p/>
    * Expected format is (magnitude)(type)(optional duration).
    * <p/>Magnitude is a positive number.
    * <p/>Optional duration is a positive number followed by optional 's'.
