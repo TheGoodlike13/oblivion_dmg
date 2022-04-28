@@ -47,6 +47,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @AfterEach
   void tearDown() {
+    Settings.resetToFactory();
     Write.resetToFactory();
     ITS_ALL_OVER = false;
     THE_ARENA.reset();
@@ -107,7 +108,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void thisIsNotDarkSouls3() {
     sendInput("enemy 1001 999 1000");
 
-    assertOutput("You face the enemy (1000.0 hp).");
+    assertOutput("Bad input: Invalid effect format <999>");
   }
 
   @Test
@@ -360,6 +361,31 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "Bad input: Invalid hit: MELEE + SPELL; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, BOW + ARROW, BOW + ARROW + POISON]",
       "Bad input: Invalid hit: MELEE + STAFF; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, BOW + ARROW, BOW + ARROW + POISON]",
       "Bad input: Invalid hit: MELEE + POISON + POISON; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, BOW + ARROW, BOW + ARROW + POISON]"
+    );
+  }
+
+  @Test
+  void andNowForSomethingCompletelyDifferent() {
+    Settings.DIFFICULTY = 100;
+
+    sendInput("enemy $skeleton_champion", "$divine_justice_apprentice", "$divine_justice_expert", "hit #1 #2", "$aetherius", "go");
+
+    assertOutputSegment(
+      "You face the skeleton champion (350.0 hp).",
+      "POISON x0.00",
+      "FROST  x0.30",
+      "[#1] Next hit: <SPELL$divine_justice_apprentice> {RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s + RESIST POISON -100 for 1s}",
+      "[#2] Next hit: <SPELL$divine_justice_expert> {RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s + RESIST POISON -100 for 1s}",
+      "[#1] Next hit: <SPELL$divine_justice_apprentice> {RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s + RESIST POISON -100 for 1s}",
+      "[#2] Next hit: <SPELL$divine_justice_expert> {RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s + RESIST POISON -100 for 1s}",
+      "[#3] Next hit: <MELEE$aetherius> {SHOCK DMG 18 for 1s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s}",
+      "00.000 You hit with <SPELL$divine_justice_apprentice> {RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s + RESIST POISON -100 for 1s}",
+      "00.000 You hit with <SPELL$divine_justice_expert> {RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s + RESIST POISON -100 for 1s}",
+      "00.000 You hit with <SPELL$divine_justice_apprentice> {RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s + RESIST POISON -100 for 1s}",
+      "00.000 You hit with <SPELL$divine_justice_expert> {RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s + RESIST POISON -100 for 1s}",
+      "00.000 You hit with <MELEE$aetherius> {SHOCK DMG 18 for 1s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s}",
+      "00.470 The skeleton champion has died.",
+      "01.000 All effects have expired."
     );
   }
 

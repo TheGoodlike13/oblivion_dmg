@@ -1,6 +1,7 @@
 package eu.goodlike.oblivion;
 
 import eu.goodlike.oblivion.core.Enemy;
+import eu.goodlike.oblivion.core.Factor;
 import eu.goodlike.oblivion.core.Hit;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public final class Arena {
   }
 
   public void setEnemy(String label, Enemy enemy) {
-    this.label = label;
+    this.label = label.replace('_', ' ');
     this.enemy = enemy;
     announceOpponent();
   }
@@ -118,6 +119,16 @@ public final class Arena {
 
   private void announceOpponent() {
     Write.line("You face the " + label + " (" + enemy.healthRemaining() + " hp).");
+    printResists();
+  }
+
+  private void printResists() {
+    for (Factor factor : Factor.ALL) {
+      double multiplier = enemy.getMultiplier(factor);
+      if (multiplier != 1) {
+        Write.line(String.format("%-6s x%.2f", factor, multiplier));
+      }
+    }
   }
 
 }

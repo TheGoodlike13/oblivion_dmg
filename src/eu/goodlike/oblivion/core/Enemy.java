@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import eu.goodlike.oblivion.Settings;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -177,6 +178,11 @@ public final class Enemy implements Target {
     }
   }
 
+
+  public Enemy(double maxHealth, EffectText... bonus) {
+    this(maxHealth, Arrays.asList(bonus));
+  }
+
   /**
    * Creates a new enemy with given max health and given permanent effects.
    * The enemy starts at max hp.
@@ -185,7 +191,7 @@ public final class Enemy implements Target {
    *
    * @throws StructureException if maxHealth is too low to be considered alive
    */
-  public Enemy(double maxHealth, EffectText... bonus) {
+  public Enemy(double maxHealth, Iterable<EffectText> bonus) {
     this.maxHealth = maxHealth;
     this.health = maxHealth;
 

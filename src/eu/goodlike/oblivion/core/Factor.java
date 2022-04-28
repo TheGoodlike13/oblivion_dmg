@@ -1,7 +1,10 @@
 package eu.goodlike.oblivion.core;
 
+import com.google.common.collect.ImmutableList;
 import eu.goodlike.oblivion.core.source.Magic;
 import eu.goodlike.oblivion.core.source.Poison;
+
+import java.util.List;
 
 /**
  * Innate property of effects which can be resisted.
@@ -15,6 +18,8 @@ public interface Factor {
   Element FIRE = new Element("FIRE");
   Element FROST = new Element("FROST");
   Element SHOCK = new Element("SHOCK");
+
+  List<Factor> ALL = ImmutableList.of(POISON, MAGIC, FIRE, FROST, SHOCK);
 
   /**
    * @param pc percent of weakness

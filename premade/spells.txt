@@ -1,0 +1,2 @@
++s 100wm 100ws 100wp @divine_justice_apprentice
++s 100wm 100ws 100wp @divine_justice_expert
