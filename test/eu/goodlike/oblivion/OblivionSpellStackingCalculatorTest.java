@@ -127,11 +127,14 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void sliceAndDice() {
-    sendInput("+m 1f", "+m 1f");
+    sendInput("+m 1f", "+m 1f", "+m 1f", "+m 1f", "+m 1f");
 
     assertOutput(
       "[#1] Next hit: MELEE {FIRE DMG 1 for 1s}",
-      "[#2] Next hit: MELEE {FIRE DMG 1 for 1s}"
+      "[#2] Next hit: MELEE {FIRE DMG 1 for 1s}",
+      "[#3] Next hit: MELEE {FIRE DMG 1 for 1s}",
+      "[#4] Next hit: MELEE {FIRE DMG 1 for 1s}",
+      "[#5] Next hit: MELEE {FIRE DMG 1 for 1s}"
     );
   }
 
