@@ -352,6 +352,17 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     );
   }
 
+  @Test
+  void justCantBeDone() {
+    sendInput("+m 1m +s 1m", "$1 +st 1m", "$1 +p 1m @1m $1m");
+
+    assertOutput(
+      "Bad input: Invalid hit: MELEE + SPELL; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, BOW + ARROW, BOW + ARROW + POISON]",
+      "Bad input: Invalid hit: MELEE + STAFF; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, BOW + ARROW, BOW + ARROW + POISON]",
+      "Bad input: Invalid hit: MELEE + POISON + POISON; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, BOW + ARROW, BOW + ARROW + POISON]"
+    );
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);
