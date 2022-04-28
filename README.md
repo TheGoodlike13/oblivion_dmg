@@ -59,6 +59,12 @@ For simplicity, resist & weakness of a factor are treated as the same type of ef
 As a result, items or spells cannot have both.
 It could be possible to make such a spell in-game, but it would be of no practical use.
 
+The core logic allows multiple spells with the same name that stack.
+This is not possible in-game, as spell names have to be unique (albeit not case sensitive).
+However, the parsing logic ensures all spells and other items will have a unique reference.
+This prevents creating two weapons with the same name, which is possible in-game.
+For the record, such weapon effects would stack in-game.
+
 Targets can have permanent effects to simulate innate weakness or resist due to
 race or equipment.
 Drain works too, although all it does is effectively reduce max hp from the start.
