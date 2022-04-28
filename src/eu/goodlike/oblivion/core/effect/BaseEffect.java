@@ -31,6 +31,8 @@ public abstract class BaseEffect implements Effect {
     double effectiveTick = Math.min(TICK, remaining);
     onEffectiveTick(target, effectiveTick);
     remaining -= effectiveTick;
+
+    expireGracefully(target);
   }
 
   @Override
@@ -46,5 +48,13 @@ public abstract class BaseEffect implements Effect {
   protected final double magnitude;
 
   private double remaining;
+
+  private void expireGracefully(Target target) {
+    if (!hasExpired() && remaining < BASICALLY_EXPIRED) {
+      onTick(target);
+    }
+  }
+
+  private static final double BASICALLY_EXPIRED = 1d / 1_000_000_000;
 
 }

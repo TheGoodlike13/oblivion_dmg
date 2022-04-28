@@ -1,2 +1,2 @@
-+s 100wm 100ws 100wp @divine_justice_apprentice
-+s 100wm 100ws 100wp @divine_justice_expert
++s 100wm6s 100ws6s 100wp6s @divine_justice_apprentice
++s 100wm6s 100ws6s 100wp6s @divine_justice_expert
