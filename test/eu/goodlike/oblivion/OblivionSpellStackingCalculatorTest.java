@@ -105,9 +105,9 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void thisIsNotDarkSouls3() {
-    sendInput("enemy 1000 999 1001");
+    sendInput("enemy 1001 999 1000");
 
-    assertOutput("You face the enemy (1001.0 hp).");
+    assertOutput("You face the enemy (1000.0 hp).");
   }
 
   @Test
