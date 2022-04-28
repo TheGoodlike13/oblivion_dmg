@@ -334,6 +334,13 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     );
   }
 
+  @Test
+  void unknownName() {
+    sendInput("$definitely_not_in_there");
+
+    assertOutput("Bad input: Nothing with name found <definitely_not_in_there>");
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);

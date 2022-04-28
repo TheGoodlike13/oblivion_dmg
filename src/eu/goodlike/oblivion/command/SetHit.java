@@ -31,7 +31,11 @@ public final class SetHit extends BaseCommand {
       }
       else if (input.startsWith("$")) {
         consumeLastParsedSource();
-        Carrier c = CARRIERS.get(input.substring(1));
+        String ref = input.substring(1);
+        Carrier c = CARRIERS.get(ref);
+        if (c == null) {
+          throw new StructureException("Nothing with name found", ref);
+        }
         carriers.add(c);
       }
       else if (input.startsWith("+")) {
