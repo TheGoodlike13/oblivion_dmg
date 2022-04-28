@@ -277,6 +277,41 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     );
   }
 
+  @Test
+  void imAlteringTheDeal() {
+    sendInput("+s 10m", "undo");
+
+    assertOutput(
+      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
+      "Removed hit: SPELL {MAGIC DMG 10 for 1s}"
+    );
+  }
+
+  @Test
+  void imAlteringTheDealFurther() {
+    sendInput("+s 10m", "+s 10m", "undo 2");
+
+    assertOutput(
+      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
+      "[#2] Next hit: SPELL {MAGIC DMG 10 for 1s}",
+      "Removed hit: SPELL {MAGIC DMG 10 for 1s}",
+      "Removed hit: SPELL {MAGIC DMG 10 for 1s}"
+    );
+  }
+
+  @Test
+  void whatTheFuckAmIDoing() {
+    sendInput("undo", "+s 10m", "undo 2", "undo xxx");
+
+    assertOutput(
+      "No hits to remove.",
+      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
+      "Removed hit: SPELL {MAGIC DMG 10 for 1s}",
+      "No hits to remove.",
+      "Bad input: Cannot parse undo amount <xxx>"
+    );
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);

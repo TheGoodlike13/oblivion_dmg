@@ -27,6 +27,16 @@ public final class Arena {
     Write.line("Next hit: " + hit);
   }
 
+  public void removeLastHit() {
+    if (hits.isEmpty()) {
+      Write.line("No hits to remove.");
+    }
+    else {
+      Hit removed = hits.remove(hits.size() - 1);
+      Write.line("Removed hit: " + removed);
+    }
+  }
+
   public void lowerTheGates() {
     if (ready()) {
       fight();

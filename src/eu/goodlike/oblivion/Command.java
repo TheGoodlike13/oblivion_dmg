@@ -6,6 +6,7 @@ import eu.goodlike.oblivion.command.LowerTheGates;
 import eu.goodlike.oblivion.command.RepeatHit;
 import eu.goodlike.oblivion.command.Reset;
 import eu.goodlike.oblivion.command.SetEnemy;
+import eu.goodlike.oblivion.command.UndoLastHit;
 
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -20,6 +21,7 @@ public interface Command {
     HIT(RepeatHit::new),
     RESET(Reset::new),
     QUIT(ItsAllOver::new),
+    UNDO(UndoLastHit::new),
     WHAT(ButWhatDoesThisMean::new);
 
     public static Name find(String input) {
