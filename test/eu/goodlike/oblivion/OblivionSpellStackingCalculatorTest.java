@@ -324,6 +324,16 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     );
   }
 
+  @Test
+  void duplicateNamesNotAllowed() {
+    sendInput("+m 1m @magic_1 +p 1m @magic_1", "$magic_1");
+
+    assertOutput(
+      "Bad input: Name already in use <magic_1>",
+      "[#1] Next hit: <MELEE$magic_1> {MAGIC DMG 1 for 1s}"
+    );
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);

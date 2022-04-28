@@ -5,6 +5,7 @@ import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.Source;
+import eu.goodlike.oblivion.core.StructureException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +68,9 @@ public final class SetHit extends BaseCommand {
   private Carrier createAndCache() {
     String ref = isBlank(label) ? String.valueOf(COUNT.incrementAndGet()) : label;
     Carrier carrier = source.create(ref, effects);
-    CARRIERS.put(ref, carrier);
+    if (CARRIERS.putIfAbsent(ref, carrier) != null) {
+      throw new StructureException("Name already in use", ref);
+    }
     return carrier;
   }
 
