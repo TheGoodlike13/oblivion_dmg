@@ -1,6 +1,6 @@
 package eu.goodlike.oblivion.core;
 
-import eu.goodlike.oblivion.Settings;
+import eu.goodlike.oblivion.Global;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ class MethodTest {
 
   @AfterEach
   void tearDown() {
-    Settings.resetToFactory();
+    Global.Settings.load();
   }
 
   @Test
@@ -42,7 +42,7 @@ class MethodTest {
   }
   
   private void assertMultiplier(double difficulty, double multiplier) {
-    Settings.DIFFICULTY = difficulty;
+    Global.Settings.DIFFICULTY = difficulty;
 
     assertThat(method.damageMultiplier()).isEqualTo(multiplier);
   }

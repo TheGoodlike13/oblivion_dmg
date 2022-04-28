@@ -116,10 +116,10 @@ public final class SetHit extends BaseCommand {
   }
 
   private static void parseFiles() {
-    for (String file : ImmutableSet.of("equipment.txt", "spells.txt")) {
+    for (String file : ImmutableSet.of("prepared_items.txt", "prepared_spells.txt")) {
       InputStream enemies = SetHit.class.getClassLoader().getResourceAsStream(file);
       if (enemies == null) {
-        throw new IllegalStateException("No " + file + "' found!");
+        throw new IllegalStateException("No '" + file + "' found!");
       }
       new BufferedReader(new InputStreamReader(enemies, StandardCharsets.UTF_8))
         .lines()

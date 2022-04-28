@@ -7,6 +7,8 @@ import eu.goodlike.oblivion.core.Hit;
 import java.util.ArrayList;
 import java.util.List;
 
+import static eu.goodlike.oblivion.Global.Settings.TICK;
+
 public final class Arena {
 
   public static final Arena THE_ARENA = new Arena();
@@ -91,7 +93,7 @@ public final class Arena {
   private void awaitEffectExpiration() {
     while (enemy.isAlive() && enemy.isAffected()) {
       enemy.tick();
-      duration += Settings.TICK;
+      duration += TICK;
 
       checkEnemyStatus();
     }

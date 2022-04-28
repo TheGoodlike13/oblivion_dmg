@@ -1,11 +1,11 @@
 package eu.goodlike.oblivion.core;
 
-import eu.goodlike.oblivion.Settings;
+import eu.goodlike.oblivion.Global;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static eu.goodlike.oblivion.Settings.DIFFICULTY;
+import static eu.goodlike.oblivion.Global.Settings.DIFFICULTY;
 import static eu.goodlike.oblivion.core.Factor.FIRE;
 import static eu.goodlike.oblivion.core.Factor.FROST;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
@@ -36,7 +36,7 @@ class EnemyTest {
 
   @AfterEach
   void tearDown() {
-    Settings.resetToFactory();
+    Global.Settings.load();
   }
 
   @Test

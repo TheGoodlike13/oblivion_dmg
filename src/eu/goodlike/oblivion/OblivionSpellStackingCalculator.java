@@ -5,11 +5,10 @@ import eu.goodlike.oblivion.command.SetHit;
 import java.util.Scanner;
 import java.util.function.Supplier;
 
+import static eu.goodlike.oblivion.Global.ITS_ALL_OVER;
 import static org.apache.commons.lang3.StringUtils.split;
 
 public final class OblivionSpellStackingCalculator {
-
-  public static boolean ITS_ALL_OVER = false;
 
   public static void main(String... args) {
     try (Scanner scanner = new Scanner(System.in)) {

@@ -1,6 +1,6 @@
 package eu.goodlike.oblivion.core;
 
-import eu.goodlike.oblivion.Settings;
+import eu.goodlike.oblivion.Global.Settings;
 
 /**
  * Active effect that influences the target.

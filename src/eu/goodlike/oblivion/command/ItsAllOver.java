@@ -1,6 +1,6 @@
 package eu.goodlike.oblivion.command;
 
-import static eu.goodlike.oblivion.OblivionSpellStackingCalculator.ITS_ALL_OVER;
+import static eu.goodlike.oblivion.Global.ITS_ALL_OVER;
 
 public final class ItsAllOver extends BaseCommand {
 

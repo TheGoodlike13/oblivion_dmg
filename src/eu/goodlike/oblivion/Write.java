@@ -1,13 +1,8 @@
 package eu.goodlike.oblivion;
 
-import java.util.function.Consumer;
+import static eu.goodlike.oblivion.Global.WRITER;
 
-/**
- * System.out that we can mock out.
- */
 public final class Write {
-
-  public static Consumer<String> WRITER = System.out::print;
 
   public static void line(String line) {
     WRITER.accept(line + System.lineSeparator());
@@ -19,10 +14,6 @@ public final class Write {
 
   public static void separator() {
     line("-----");
-  }
-
-  public static void resetToFactory() {
-    WRITER = System.out::print;
   }
 
   private Write() {

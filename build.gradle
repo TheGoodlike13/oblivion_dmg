@@ -30,7 +30,7 @@ sourceSets {
             srcDirs = ['src']
         }
         resources {
-            srcDirs = ['premade']
+            srcDirs = ['config']
         }
     }
     test {
@@ -38,7 +38,7 @@ sourceSets {
             srcDirs = ['test']
         }
         resources {
-            srcDirs = ['premade']
+            srcDirs = []
         }
     }
 }

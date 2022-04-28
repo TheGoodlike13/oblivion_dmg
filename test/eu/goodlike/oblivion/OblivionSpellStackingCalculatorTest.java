@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static eu.goodlike.oblivion.Arena.THE_ARENA;
-import static eu.goodlike.oblivion.OblivionSpellStackingCalculator.ITS_ALL_OVER;
+import static eu.goodlike.oblivion.Global.Settings.DIFFICULTY;
 import static org.apache.commons.lang3.StringUtils.split;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,16 +40,15 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @BeforeEach
   void setup() {
-    Write.WRITER = this;
+    Global.WRITER = this;
     input = null;
     output = new ArrayList<>();
   }
 
   @AfterEach
   void tearDown() {
-    Settings.resetToFactory();
-    Write.resetToFactory();
-    ITS_ALL_OVER = false;
+    Global.initializeEverything();
+
     THE_ARENA.reset();
     RepeatHit.invalidate();
     SetHit.invalidate();
@@ -382,7 +381,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void andNowForSomethingCompletelyDifferent() {
-    Settings.DIFFICULTY = 100;
+    DIFFICULTY = 100;
 
     sendInput("enemy $skeleton_champion", "$divine_justice_apprentice", "$divine_justice_expert", "hit #1 #2", "$aetherius", "go");
 

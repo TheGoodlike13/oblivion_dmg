@@ -67,9 +67,9 @@ public final class SetEnemy extends BaseCommand {
   }
 
   private static void parseFiles() {
-    InputStream enemies = SetEnemy.class.getClassLoader().getResourceAsStream("enemies.txt");
+    InputStream enemies = SetEnemy.class.getClassLoader().getResourceAsStream("prepared_enemies.txt");
     if (enemies == null) {
-      throw new IllegalStateException("No 'enemies.txt' found!");
+      throw new IllegalStateException("No 'prepared_enemies.txt' found!");
     }
     new BufferedReader(new InputStreamReader(enemies, StandardCharsets.UTF_8))
       .lines()
