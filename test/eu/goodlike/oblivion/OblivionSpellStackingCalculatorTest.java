@@ -319,8 +319,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("+b 100d10s +a 10f5s @fire_arrow +p 10m", "$1 $fire_arrow +p 10s");
 
     assertOutput(
-      "[#1] Next hit: <BOW$1> {DRAIN LIFE 100 for 10s} + <$fire_arrow> {FIRE DMG 10 for 5s} + <POISON$2> {MAGIC DMG 10 for 1s}",
-      "[#2] Next hit: <BOW$1> {DRAIN LIFE 100 for 10s} + <$fire_arrow> {FIRE DMG 10 for 5s} + <POISON$3> {SHOCK DMG 10 for 1s}"
+      "[#1] Next hit: <BOW$1> {DRAIN LIFE 100 for 10s} + <ARROW$fire_arrow> {FIRE DMG 10 for 5s} + <POISON$2> {MAGIC DMG 10 for 1s}",
+      "[#2] Next hit: <BOW$1> {DRAIN LIFE 100 for 10s} + <ARROW$fire_arrow> {FIRE DMG 10 for 5s} + <POISON$3> {SHOCK DMG 10 for 1s}"
     );
   }
 

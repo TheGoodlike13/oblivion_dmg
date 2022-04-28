@@ -10,7 +10,6 @@ import java.util.SortedSet;
 
 import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNumeric;
 
 /**
  * Item or spell which carries multiple effects to be applied on hit.
@@ -94,19 +93,11 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
   @Override
   public String toString() {
-    return "<" + getLabel() + "> " + getEffects();
+    return "<" + source + getLabel() + "> " + getEffects();
   }
 
   private String getLabel() {
-    if (isBlank(label)) {
-      return source.toString();
-    }
-
-    if (isNumeric(label)) {
-      return source + "$" + label;
-    }
-
-    return "$" + label;
+    return isBlank(label) ? "" : "$" + label;
   }
 
   private String getEffects() {
