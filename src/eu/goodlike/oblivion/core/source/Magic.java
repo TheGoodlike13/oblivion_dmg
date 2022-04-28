@@ -16,8 +16,8 @@ public final class Magic extends Element implements Method, Source {
   }
 
   @Override
-  public Carrier create(List<EffectText> effects) {
-    return new Carrier(this, MAGIC, effects);
+  public Carrier create(String label, List<EffectText> effects) {
+    return new Carrier(label, this, MAGIC, effects);
   }
 
   public Magic(String name) {

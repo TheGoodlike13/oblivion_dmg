@@ -9,6 +9,8 @@ import java.util.Objects;
 import java.util.SortedSet;
 
 import static java.util.stream.Collectors.joining;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNumeric;
 
 /**
  * Item or spell which carries multiple effects to be applied on hit.
@@ -26,7 +28,7 @@ import static java.util.stream.Collectors.joining;
  * Avoid {@link SortedSet} and similar!
  * <p/>
  * This class can be overridden to provide different strategies for uniquely identifying effects.
- * In such cases, {@link #copy)} should also be overridden!
+ * In such cases, {@link #copy(String)} should also be overridden!
  */
 public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
@@ -52,11 +54,15 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
     return new UniquePerType(this, effect.getType());
   }
 
+  public final Carrier copy() {
+    return copy(label);
+  }
+
   /**
-   * Creates a copy of this carrier. The effects of this carrier and the copy will likely stack!
+   * Creates a copy of this carrier with a different label. The effects of this carrier and the copy will stack!
    */
-  public Carrier copy() {
-    return new Carrier(source, method, effects);
+  public Carrier copy(String label) {
+    return new Carrier(label, source, method, effects);
   }
 
   @Override
@@ -69,9 +75,11 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
     return ORDER.compare(this, other);
   }
 
-  public Carrier(Source source,
+  public Carrier(String label,
+                 Source source,
                  Method method,
                  Iterable<EffectText> effects) {
+    this.label = label;
     this.source = source;
     this.method = method;
     this.effects = ImmutableList.copyOf(effects);
@@ -79,19 +87,36 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
     StructureException.throwOnDuplicateEffectTypes(this.effects);
   }
 
+  private final String label;
   private final Source source;
   private final Method method;
   private final List<EffectText> effects;
 
   @Override
   public String toString() {
+    return "<" + getLabel() + "> " + getEffects();
+  }
+
+  private String getLabel() {
+    if (isBlank(label)) {
+      return source.toString();
+    }
+
+    if (isNumeric(label)) {
+      return source + "$" + label;
+    }
+
+    return "$" + label;
+  }
+
+  private String getEffects() {
     if (effects.isEmpty()) {
-      return source + " {NO EFFECTS}";
+      return "{NO EFFECTS}";
     }
 
     return effects.stream()
       .map(EffectText::toString)
-      .collect(joining(" + ", source + " {", "}"));
+      .collect(joining(" + ", "{", "}"));
   }
 
   private static final Comparator<Carrier> ORDER = Comparator.comparing(Carrier::getSource);

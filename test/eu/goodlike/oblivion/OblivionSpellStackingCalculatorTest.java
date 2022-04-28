@@ -114,7 +114,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void nowThatsALotOfDamage() {
     sendInput("+s 100m10s 100d 100wm");
 
-    assertOutput("[#1] Next hit: SPELL {MAGIC DMG 100 for 10s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s}");
+    assertOutput("[#1] Next hit: <SPELL$1> {MAGIC DMG 100 for 10s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s}");
   }
 
   @Test
@@ -122,21 +122,21 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("+p 9999m 9999f 9999s +a 9999fr +b 9999m");
 
     assertOutput("[#1] Next hit: " +
-      "BOW {MAGIC DMG 9999 for 1s} + " +
-      "ARROW {FROST DMG 9999 for 1s} + " +
-      "POISON {MAGIC DMG 9999 for 1s + FIRE DMG 9999 for 1s + SHOCK DMG 9999 for 1s}");
+      "<BOW$3> {MAGIC DMG 9999 for 1s} + " +
+      "<ARROW$2> {FROST DMG 9999 for 1s} + " +
+      "<POISON$1> {MAGIC DMG 9999 for 1s + FIRE DMG 9999 for 1s + SHOCK DMG 9999 for 1s}");
   }
 
   @Test
   void sliceAndDice() {
-    sendInput("+m 1f", "+m 1f", "+m 1f", "+m 1f", "+m 1f");
+    sendInput("+m 1f", "$1", "$1", "$1", "$1");
 
     assertOutput(
-      "[#1] Next hit: MELEE {FIRE DMG 1 for 1s}",
-      "[#2] Next hit: MELEE {FIRE DMG 1 for 1s}",
-      "[#3] Next hit: MELEE {FIRE DMG 1 for 1s}",
-      "[#4] Next hit: MELEE {FIRE DMG 1 for 1s}",
-      "[#5] Next hit: MELEE {FIRE DMG 1 for 1s}"
+      "[#1] Next hit: <MELEE$1> {FIRE DMG 1 for 1s}",
+      "[#2] Next hit: <MELEE$1> {FIRE DMG 1 for 1s}",
+      "[#3] Next hit: <MELEE$1> {FIRE DMG 1 for 1s}",
+      "[#4] Next hit: <MELEE$1> {FIRE DMG 1 for 1s}",
+      "[#5] Next hit: <MELEE$1> {FIRE DMG 1 for 1s}"
     );
   }
 
@@ -144,7 +144,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void iToldYouToTakeHisStaff() {
     sendInput("+st 9999s");
 
-    assertOutput("[#1] Next hit: STAFF {SHOCK DMG 9999 for 1s}");
+    assertOutput("[#1] Next hit: <STAFF$1> {SHOCK DMG 9999 for 1s}");
   }
 
   @Test
@@ -153,8 +153,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
     assertOutputSegment(
       "You face the beeeetch (999.0 hp).",
-      "[#1] Next hit: SPELL {SHOCK DMG 1000 for 1s}",
-      "00.000 You hit with SPELL {SHOCK DMG 1000 for 1s}",
+      "[#1] Next hit: <SPELL$1> {SHOCK DMG 1000 for 1s}",
+      "00.000 You hit with <SPELL$1> {SHOCK DMG 1000 for 1s}",
       "01.000 The beeeetch has died.",
       "01.000 All effects have expired."
     );
@@ -166,8 +166,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
     assertOutputSegment(
       "You face the enemy (99.0 hp).",
-      "[#1] Next hit: SPELL {DRAIN LIFE 100 for 1s}",
-      "00.000 You hit with SPELL {DRAIN LIFE 100 for 1s}",
+      "[#1] Next hit: <SPELL$1> {DRAIN LIFE 100 for 1s}",
+      "00.000 You hit with <SPELL$1> {DRAIN LIFE 100 for 1s}",
       "00.000 The enemy has died.",
       "01.000 All effects have expired."
     );
@@ -179,20 +179,20 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
     assertOutputSegment(
       "You face the enemy (10.0 hp).",
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
-      "00.000 You hit with SPELL {MAGIC DMG 10 for 1s}",
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "00.000 You hit with <SPELL$1> {MAGIC DMG 10 for 1s}",
       "01.000 The enemy has died.",
       "01.000 All effects have expired.",
       "-----",
       "You face the enemy (10.0 hp).",
-      "[#2] Next hit: SPELL {MAGIC DMG 10 for 1s}",
-      "00.000 You hit with SPELL {MAGIC DMG 10 for 1s}",
+      "[#2] Next hit: <SPELL$2> {MAGIC DMG 10 for 1s}",
+      "00.000 You hit with <SPELL$2> {MAGIC DMG 10 for 1s}",
       "01.000 The enemy has died.",
       "01.000 All effects have expired.",
       "-----",
       "You face the enemy (10.0 hp).",
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
-      "00.000 You hit with SPELL {MAGIC DMG 10 for 1s}",
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "00.000 You hit with <SPELL$1> {MAGIC DMG 10 for 1s}",
       "01.000 The enemy has died.",
       "01.000 All effects have expired."
     );
@@ -211,11 +211,11 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
     assertOutputSegment(
       "You face the enemy (30.0 hp).",
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "Bad input: No hit found <#2>",
-      "00.000 You hit with SPELL {MAGIC DMG 10 for 1s}",
-      "00.000 You hit with SPELL {MAGIC DMG 10 for 1s}",
+      "00.000 You hit with <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "00.000 You hit with <SPELL$1> {MAGIC DMG 10 for 1s}",
       "01.000 All effects have expired."
     );
   }
@@ -225,10 +225,10 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("+s 10m", "hit #1 x3");
 
     assertOutput(
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}"
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}"
     );
   }
 
@@ -260,7 +260,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "How about casting some spells?",
       "-----",
       "Everything has been reset.",
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "All your hits land on the wall.",
       "Good job.",
       "How about picking an enemy?"
@@ -272,10 +272,10 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("+s 10m", "reset", "+s 20m");
 
     assertOutput(
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "-----",
       "Everything has been reset.",
-      "[#1] Next hit: SPELL {MAGIC DMG 20 for 1s}"
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 20 for 1s}"
     );
   }
 
@@ -284,8 +284,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("+s 10m", "undo");
 
     assertOutput(
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
-      "Removed hit: SPELL {MAGIC DMG 10 for 1s}"
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}"
     );
   }
 
@@ -294,10 +294,10 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("+s 10m", "+s 10m", "undo 2");
 
     assertOutput(
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
-      "[#2] Next hit: SPELL {MAGIC DMG 10 for 1s}",
-      "Removed hit: SPELL {MAGIC DMG 10 for 1s}",
-      "Removed hit: SPELL {MAGIC DMG 10 for 1s}"
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "[#2] Next hit: <SPELL$2> {MAGIC DMG 10 for 1s}",
+      "Removed hit: <SPELL$2> {MAGIC DMG 10 for 1s}",
+      "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}"
     );
   }
 
@@ -307,8 +307,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
     assertOutput(
       "No hits to remove.",
-      "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
-      "Removed hit: SPELL {MAGIC DMG 10 for 1s}",
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "No hits to remove.",
       "Bad input: Cannot parse undo amount <xxx>"
     );
@@ -319,8 +319,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("+b 100d10s +a 10f5s @fire_arrow +p 10m", "$1 $fire_arrow +p 10s");
 
     assertOutput(
-      "[#1] Next hit: BOW {DRAIN LIFE 100 for 10s} + ARROW {FIRE DMG 10 for 5s} + POISON {MAGIC DMG 10 for 1s}",
-      "[#2] Next hit: BOW {DRAIN LIFE 100 for 10s} + ARROW {FIRE DMG 10 for 5s} + POISON {SHOCK DMG 10 for 1s}"
+      "[#1] Next hit: <BOW$1> {DRAIN LIFE 100 for 10s} + <$fire_arrow> {FIRE DMG 10 for 5s} + <POISON$2> {MAGIC DMG 10 for 1s}",
+      "[#2] Next hit: <BOW$1> {DRAIN LIFE 100 for 10s} + <$fire_arrow> {FIRE DMG 10 for 5s} + <POISON$3> {SHOCK DMG 10 for 1s}"
     );
   }
 

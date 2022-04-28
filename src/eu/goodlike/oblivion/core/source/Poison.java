@@ -18,8 +18,8 @@ public final class Poison implements Method, Source {
   }
 
   @Override
-  public Carrier create(List<EffectText> effects) {
-    return new PoisonBottle(effects);
+  public Carrier create(String label, List<EffectText> effects) {
+    return new PoisonBottle(label, effects);
   }
 
   @Override
@@ -56,12 +56,12 @@ public final class Poison implements Method, Source {
     }
 
     @Override
-    public Carrier copy() {
-      return new PoisonBottle(this);
+    public Carrier copy(String label) {
+      return new PoisonBottle(label, this);
     }
 
-    public PoisonBottle(Iterable<EffectText> effects) {
-      super(Source.POISON, Factor.POISON, effects);
+    public PoisonBottle(String label, Iterable<EffectText> effects) {
+      super(label, Source.POISON, Factor.POISON, effects);
     }
   }
 

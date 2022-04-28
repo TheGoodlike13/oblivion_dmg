@@ -34,14 +34,20 @@ public interface Source extends Comparable<Source> {
     return create(Arrays.asList(effects));
   }
 
+  default Carrier create(List<EffectText> effects) {
+    return create(null, effects);
+  }
+
   /**
    * Creates a new carrier with given effects.
    * This source is effectively the type of the new carrier.
    * Hits from this carrier will always stack with other carriers.
+   * <p/>
+   * The label is optional and can be null. It's entirely cosmetic (affects only {@link #toString}).
    *
    * @throws StructureException if any of the given effects are duplicate
    */
-  Carrier create(List<EffectText> effects);
+  Carrier create(String label, List<EffectText> effects);
 
   /**
    * @return unique name of the source; can be used to identify it, but need not match variable name

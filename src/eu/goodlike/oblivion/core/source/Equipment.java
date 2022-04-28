@@ -11,8 +11,8 @@ import static eu.goodlike.oblivion.core.Factor.MAGIC;
 public final class Equipment implements Source {
 
   @Override
-  public Carrier create(List<EffectText> effects) {
-    return new Carrier(this, MAGIC, effects);
+  public Carrier create(String label, List<EffectText> effects) {
+    return new Carrier(label, this, MAGIC, effects);
   }
 
   public Equipment(String type) {

@@ -55,8 +55,7 @@ public final class SetHit extends BaseCommand {
 
   private void consumeLastParsedSource() {
     if (source != null) {
-      Carrier carrier = source.create(effects);
-      cache(carrier);
+      Carrier carrier = createAndCache();
       carriers.add(carrier);
     }
 
@@ -65,9 +64,11 @@ public final class SetHit extends BaseCommand {
     effects = new ArrayList<>();
   }
 
-  private void cache(Carrier carrier) {
+  private Carrier createAndCache() {
     String ref = isBlank(label) ? String.valueOf(COUNT.incrementAndGet()) : label;
+    Carrier carrier = source.create(ref, effects);
     CARRIERS.put(ref, carrier);
+    return carrier;
   }
 
   // TODO: move this cache out (when we have more similar stuff)
