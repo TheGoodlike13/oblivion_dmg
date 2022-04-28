@@ -341,6 +341,17 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutput("Bad input: Nothing with name found <definitely_not_in_there>");
   }
 
+  @Test
+  void gettingALittleWildHere() {
+    sendInput("+s 1m @seed", "$seed @not_seed", "$seed 1f");
+
+    assertOutput(
+      "[#1] Next hit: <SPELL$seed> {MAGIC DMG 1 for 1s}",
+      "Bad input: Dangling hit param <@not_seed>",
+      "Bad input: Dangling hit param <1f>"
+    );
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);

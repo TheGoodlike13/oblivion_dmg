@@ -26,24 +26,17 @@ public final class SetHit extends BaseCommand {
   @Override
   protected void performTask() {
     for (String input : inputs) {
-      if (input.startsWith("@")) {
-        label = input.substring(1);
-      }
-      else if (input.startsWith("$")) {
+      if (input.startsWith("$")) {
         consumeLastParsedSource();
-        String ref = input.substring(1);
-        Carrier c = CARRIERS.get(ref);
-        if (c == null) {
-          throw new StructureException("Nothing with name found", ref);
-        }
-        carriers.add(c);
+        parseNextReference(input);
       }
       else if (input.startsWith("+")) {
         consumeLastParsedSource();
         source = Parse.source(input.substring(1));
       }
       else {
-        effects.add(Parse.effect(input));
+        ensureNoDangleBerries(input);
+        parseSimpleParam(input);
       }
     }
     consumeLastParsedSource();
@@ -57,6 +50,30 @@ public final class SetHit extends BaseCommand {
   private Source source;
   private List<EffectText> effects;
   private final List<Carrier> carriers = new ArrayList<>();
+
+  private void parseNextReference(String input) {
+    String ref = input.substring(1);
+    Carrier c = CARRIERS.get(ref);
+    if (c == null) {
+      throw new StructureException("Nothing with name found", ref);
+    }
+    carriers.add(c);
+  }
+
+  private void ensureNoDangleBerries(String input) {
+    if (source == null) {
+      throw new StructureException("Dangling hit param", input);
+    }
+  }
+
+  private void parseSimpleParam(String input) {
+    if (input.startsWith("@")) {
+      label = input.substring(1);
+    }
+    else {
+      effects.add(Parse.effect(input));
+    }
+  }
 
   private void consumeLastParsedSource() {
     if (source != null) {
