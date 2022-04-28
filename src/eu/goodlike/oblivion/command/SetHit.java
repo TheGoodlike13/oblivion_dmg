@@ -55,7 +55,7 @@ public final class SetHit extends BaseCommand {
     String ref = input.substring(1);
     Carrier c = CARRIERS.get(ref);
     if (c == null) {
-      throw new StructureException("Nothing with name found", ref);
+      throw new StructureException("Nothing with name", ref);
     }
     carriers.add(c);
   }

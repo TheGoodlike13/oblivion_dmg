@@ -338,7 +338,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void unknownName() {
     sendInput("$definitely_not_in_there");
 
-    assertOutput("Bad input: Nothing with name found <definitely_not_in_there>");
+    assertOutput("Bad input: Nothing with name <definitely_not_in_there>");
   }
 
   @Test
