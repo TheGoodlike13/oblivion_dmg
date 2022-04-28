@@ -253,6 +253,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "You stare at the enemy.",
       "The enemy stares at you.",
       "How about casting some spells?",
+      "-----",
       "Everything has been reset.",
       "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
       "All your hits land on the wall.",
@@ -267,6 +268,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
     assertOutput(
       "[#1] Next hit: SPELL {MAGIC DMG 10 for 1s}",
+      "-----",
       "Everything has been reset.",
       "[#1] Next hit: SPELL {MAGIC DMG 20 for 1s}"
     );

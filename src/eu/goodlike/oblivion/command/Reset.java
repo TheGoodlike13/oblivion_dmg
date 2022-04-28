@@ -8,6 +8,8 @@ public final class Reset extends BaseCommand {
 
   @Override
   protected void performTask() {
+    Write.separator();
+
     THE_ARENA.reset();
     RepeatHit.invalidate();
     Write.line("Everything has been reset.");
