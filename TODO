@@ -1,10 +1,8 @@
-Implement input parsing
-  Different marker for referencing carriers?
-  Carrier hit speed & cooldowns
-
 Create a bunch of targets & items usable via reference
   e.g. weapons with various effects created using a grand soul
-  Should not be reset, unlike transient refs (no-names)
-    Use reserved char/prefix to differentiate?
+  On reset, re-parse
+  Reserve purely numeric labels
+
+Carrier hit speed & cooldowns
 
 Finish README (usage)
