@@ -38,6 +38,15 @@ public final class Enemy implements Target {
   }
 
   /**
+   * Overkill does not include drain effects applied after death.
+   *
+   * @return amount of damage taken after death, 0 if target is still alive
+   */
+  public double overkill() {
+    return Math.max(0, -health);
+  }
+
+  /**
    * Target is considered dead if when rounded to 2 digits, its remaining health is zero.
    *
    * @return true if the target is dead, false otherwise
@@ -177,7 +186,6 @@ public final class Enemy implements Target {
       health -= hp;
     }
   }
-
 
   public Enemy(double maxHealth, EffectText... bonus) {
     this(maxHealth, Arrays.asList(bonus));

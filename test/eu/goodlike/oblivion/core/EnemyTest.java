@@ -43,6 +43,7 @@ class EnemyTest {
   void initialHealth() {
     assertDamageTaken(0);
     assertHealthRemaining(1000);
+    assertOverkill(0);
     assertThat(target.isAlive()).isTrue();
   }
 
@@ -59,6 +60,7 @@ class EnemyTest {
 
     assertDamageTaken(10);
     assertHealthRemaining(990);
+    assertOverkill(0);
     assertThat(target.isAlive()).isTrue();
   }
 
@@ -76,6 +78,7 @@ class EnemyTest {
 
     assertDamageTaken(10);
     assertHealthRemaining(990);
+    assertOverkill(0);
     assertThat(target.isAlive()).isTrue();
   }
 
@@ -85,6 +88,7 @@ class EnemyTest {
 
     assertDamageTaken(10000);
     assertHealthRemaining(0);
+    assertOverkill(9000);
     assertThat(target.isAlive()).isFalse();
   }
 
@@ -527,6 +531,11 @@ class EnemyTest {
   private void assertHealthRemaining(double expected) {
     target.resolve();
     assertThat(target.healthRemaining()).isEqualTo(expected, within(0.005));
+  }
+
+  private void assertOverkill(double expected) {
+    target.resolve();
+    assertThat(target.overkill()).isEqualTo(expected, within(0.005));
   }
 
 }

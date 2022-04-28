@@ -175,6 +175,19 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
+  void wimp() {
+    sendInput("enemy 100", "+s 50d", "go");
+
+    assertOutputSegment(
+      "You face the enemy (100.0 hp).",
+      "[#1] Next hit: <SPELL$1> {DRAIN LIFE 50 for 1s}",
+      "00.000 You hit with <SPELL$1> {DRAIN LIFE 50 for 1s}",
+      "01.000 All effects have expired.",
+      "The enemy has survived 0.0 damage (100.0 hp left)."
+    );
+  }
+
+  @Test
   void definitionOfInsanity() {
     sendInput("enemy 10", "+s 10m", "go", "+s 10m", "go", "hit #1", "go");
 
@@ -184,18 +197,21 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "00.000 You hit with <SPELL$1> {MAGIC DMG 10 for 1s}",
       "01.000 The enemy has died.",
       "01.000 All effects have expired.",
+      "The enemy took a total of 10.0 damage (0.0 overkill).",
       "-----",
       "You face the enemy (10.0 hp).",
       "[#2] Next hit: <SPELL$2> {MAGIC DMG 10 for 1s}",
       "00.000 You hit with <SPELL$2> {MAGIC DMG 10 for 1s}",
       "01.000 The enemy has died.",
       "01.000 All effects have expired.",
+      "The enemy took a total of 10.0 damage (0.0 overkill).",
       "-----",
       "You face the enemy (10.0 hp).",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "00.000 You hit with <SPELL$1> {MAGIC DMG 10 for 1s}",
       "01.000 The enemy has died.",
-      "01.000 All effects have expired."
+      "01.000 All effects have expired.",
+      "The enemy took a total of 10.0 damage (0.0 overkill)."
     );
   }
 
@@ -385,7 +401,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "00.000 You hit with <SPELL$divine_justice_expert> {RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s + RESIST POISON -100 for 1s}",
       "00.000 You hit with <MELEE$aetherius> {SHOCK DMG 18 for 1s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s}",
       "00.470 The skeleton champion has died.",
-      "01.000 All effects have expired."
+      "01.000 All effects have expired.",
+      "The skeleton champion took a total of 524.0 damage (174.0 overkill)."
     );
   }
 

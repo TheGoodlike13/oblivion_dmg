@@ -75,6 +75,7 @@ public final class Arena {
     duration = 0;
     performHits();
     awaitEffectExpiration();
+    writeObituary();
     refresh();
   }
 
@@ -97,6 +98,15 @@ public final class Arena {
 
     duration += enemy.resolve();
     combatLog("All effects have expired.");
+  }
+
+  private void writeObituary() {
+    if (enemy.isAlive()) {
+      Write.line(String.format("The %s has survived %.1f damage (%.1f hp left).", label, enemy.damageTaken(), enemy.healthRemaining()));
+    }
+    else {
+      Write.line(String.format("The %s took a total of %.1f damage (%.1f overkill).", label, enemy.damageTaken(), enemy.overkill()));
+    }
   }
 
   private void checkEnemyStatus() {
