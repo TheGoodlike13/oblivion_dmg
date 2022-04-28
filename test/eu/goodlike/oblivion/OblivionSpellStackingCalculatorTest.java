@@ -1,6 +1,7 @@
 package eu.goodlike.oblivion;
 
 import eu.goodlike.oblivion.command.RepeatHit;
+import eu.goodlike.oblivion.command.SetHit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,6 +51,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     ITS_ALL_OVER = false;
     THE_ARENA.reset();
     RepeatHit.invalidate();
+    SetHit.invalidate();
   }
 
   @Test
@@ -309,6 +311,16 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "Removed hit: SPELL {MAGIC DMG 10 for 1s}",
       "No hits to remove.",
       "Bad input: Cannot parse undo amount <xxx>"
+    );
+  }
+
+  @Test
+  void nameIsTheNameOfTheGame() {
+    sendInput("+b 100d10s +a 10f5s @fire_arrow +p 10m", "$1 $fire_arrow +p 10s");
+
+    assertOutput(
+      "[#1] Next hit: BOW {DRAIN LIFE 100 for 10s} + ARROW {FIRE DMG 10 for 5s} + POISON {MAGIC DMG 10 for 1s}",
+      "[#2] Next hit: BOW {DRAIN LIFE 100 for 10s} + ARROW {FIRE DMG 10 for 5s} + POISON {SHOCK DMG 10 for 1s}"
     );
   }
 

@@ -51,7 +51,7 @@ public final class OblivionSpellStackingCalculator {
   }
 
   private Command newCommand(String input0) {
-    if (input0.startsWith("+")) {
+    if (input0.startsWith("+") || input0.startsWith("$")) {
       return new SetHit();
     }
 

@@ -12,6 +12,7 @@ public final class Reset extends BaseCommand {
 
     THE_ARENA.reset();
     RepeatHit.invalidate();
+    SetHit.invalidate();
     Write.line("Everything has been reset.");
   }
 
