@@ -1,7 +1,5 @@
 package eu.goodlike.oblivion;
 
-import eu.goodlike.oblivion.command.RepeatHit;
-import eu.goodlike.oblivion.command.SetHit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +12,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static eu.goodlike.oblivion.Arena.THE_ARENA;
 import static eu.goodlike.oblivion.Global.Settings.DIFFICULTY;
 import static org.apache.commons.lang3.StringUtils.split;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,15 +40,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     Global.WRITER = this;
     input = null;
     output = new ArrayList<>();
+    Global.ITS_ALL_OVER = false;
   }
 
   @AfterEach
   void tearDown() {
     Global.initializeEverything();
-
-    THE_ARENA.reset();
-    RepeatHit.invalidate();
-    SetHit.invalidate();
   }
 
   @Test
@@ -264,35 +258,38 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void howManyTimesOldMan() {
-    sendInput("go", "enemy 10", "go", "reset", "+s 10m", "go");
+    sendInput("go", "+s 10m", "go", "undo", "enemy 10", "go");
 
     assertOutput(
       "You stare at the void.",
       "The void stares at you.",
       "How about casting some spells?",
-      "You face the enemy (10.0 hp).",
-      "You stare at the enemy.",
-      "The enemy stares at you.",
-      "How about casting some spells?",
-      "-----",
-      "Everything has been reset.",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "All your hits land on the wall.",
       "Good job.",
-      "How about picking an enemy?"
+      "How about picking an enemy?",
+      "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "You face the enemy (10.0 hp).",
+      "You stare at the enemy.",
+      "The enemy stares at you.",
+      "How about casting some spells?"
     );
   }
 
   @Test
-  void amnesia() {
-    sendInput("+s 10m", "reset", "+s 20m");
+  void resetIsSeriousBusiness() {
+    sendInput("+s 10m", "reset");
 
     assertOutput(
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "-----",
-      "Everything has been reset.",
-      "[#1] Next hit: <SPELL$1> {MAGIC DMG 20 for 1s}"
+      "-----"
     );
+
+    setup();
+
+    sendInput("+s 20m");
+
+    assertOutput("[#1] Next hit: <SPELL$1> {MAGIC DMG 20 for 1s}");
   }
 
   @Test

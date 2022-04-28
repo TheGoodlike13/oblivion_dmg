@@ -1,5 +1,7 @@
 package eu.goodlike.oblivion;
 
+import eu.goodlike.oblivion.command.RepeatHit;
+import eu.goodlike.oblivion.command.SetHit;
 import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.StructureException;
 
@@ -7,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.function.Consumer;
+
+import static eu.goodlike.oblivion.Arena.THE_ARENA;
 
 /**
  * Various objects that are accessible globally to simplify APIs.
@@ -21,6 +25,9 @@ public final class Global {
   public static void initializeEverything() {
     Settings.load();
     WRITER = System.out::print;
+    THE_ARENA.reset();
+    RepeatHit.invalidate();
+    SetHit.invalidate();
     ITS_ALL_OVER = false;
   }
 
