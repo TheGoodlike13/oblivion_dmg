@@ -129,10 +129,10 @@ public final class Arena {
 
   private void announceOpponent() {
     Write.line("You face the " + label + " (" + enemy.healthRemaining() + " hp).");
-    printResists();
+    writeResists();
   }
 
-  private void printResists() {
+  private void writeResists() {
     for (Factor factor : Factor.ALL) {
       double multiplier = enemy.getMultiplier(factor);
       if (multiplier != 1) {
