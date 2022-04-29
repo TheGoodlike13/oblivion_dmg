@@ -1,7 +1,5 @@
 Create a bunch of targets & items usable via reference
   e.g. weapons with various effects created using a grand soul
-  On reset, re-parse
-  Reserve purely numeric labels
 
 Carrier hit speed & cooldowns
 
