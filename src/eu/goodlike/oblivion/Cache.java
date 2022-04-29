@@ -57,11 +57,6 @@ public final class Cache<T> {
     }
   }
 
-  public Cache(String prefix) {
-    this.prefix = prefix;
-  }
-
-  private final String prefix;
   private final Map<String, T> cache = new HashMap<>();
   private final AtomicInteger counter = new AtomicInteger(0);
 
@@ -70,7 +65,7 @@ public final class Cache<T> {
   }
 
   private String nextRef() {
-    return prefix + counter.incrementAndGet();
+    return String.valueOf(counter.incrementAndGet());
   }
 
   private void init(String prepFile, Consumer<String> parser) {

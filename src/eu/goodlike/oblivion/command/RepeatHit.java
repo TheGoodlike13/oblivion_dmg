@@ -25,7 +25,7 @@ public final class RepeatHit extends BaseCommand {
     args().forEach(this::addOrRepeat);
   }
 
-  private String lastRef = "";
+  private String lastRef = "#";
 
   private void addOrRepeat(String ref) {
     if (ref.startsWith("x")) {
@@ -43,16 +43,16 @@ public final class RepeatHit extends BaseCommand {
   }
 
   private void addHit() {
-    Hit hit = CACHE.get(lastRef);
-    writeRef(lastRef);
+    Hit hit = CACHE.get(lastRef.substring(1));
+    writeRef(lastRef.substring(1));
     THE_ARENA.addHit(hit);
   }
 
   private static void writeRef(String ref) {
-    Write.inline("[" + ref + "] ");
+    Write.inline("[#" + ref + "] ");
   }
 
   // TODO: move this cache out (when we have more similar stuff)
-  private static final Cache<Hit> CACHE = new Cache<>("#");
+  private static final Cache<Hit> CACHE = new Cache<>();
 
 }
