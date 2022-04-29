@@ -212,7 +212,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void watchYourHitting() {
     sendInput("hit #1");
 
-    assertOutput("Bad input: No hit found <#1>");
+    assertOutput("Bad input: Nothing with name <#1>");
   }
 
   @Test
@@ -223,7 +223,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "You face the enemy (30.0 hp).",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "Bad input: No hit found <#2>",
+      "Bad input: Nothing with name <#2>",
       "00.000 You hit with <SPELL$1> {MAGIC DMG 10 for 1s}",
       "00.000 You hit with <SPELL$1> {MAGIC DMG 10 for 1s}",
       "01.000 All effects have expired."
@@ -246,7 +246,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void repeatWhat() {
     sendInput("hit x3");
 
-    assertOutput("Bad input: No hit found <>");
+    assertOutput("Bad input: Nothing with name <>");
   }
 
   @Test

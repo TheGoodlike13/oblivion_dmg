@@ -1,12 +1,10 @@
 package eu.goodlike.oblivion.command;
 
+import eu.goodlike.oblivion.Cache;
 import eu.goodlike.oblivion.Write;
 import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.StructureException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import static eu.goodlike.oblivion.Arena.THE_ARENA;
@@ -14,14 +12,12 @@ import static eu.goodlike.oblivion.Arena.THE_ARENA;
 public final class RepeatHit extends BaseCommand {
 
   public static void cache(Hit hit) {
-    String ref = "#" + COUNT.incrementAndGet();
-    HITS.put(ref, hit);
+    String ref = CACHE.put(hit);
     writeRef(ref);
   }
 
   public static void invalidate() {
-    HITS.clear();
-    COUNT.set(0);
+    CACHE.reset(null);
   }
 
   @Override
@@ -47,10 +43,7 @@ public final class RepeatHit extends BaseCommand {
   }
 
   private void addHit() {
-    Hit hit = HITS.get(lastRef);
-    if (hit == null) {
-      throw new StructureException("No hit found", lastRef);
-    }
+    Hit hit = CACHE.get(lastRef);
     writeRef(lastRef);
     THE_ARENA.addHit(hit);
   }
@@ -60,7 +53,6 @@ public final class RepeatHit extends BaseCommand {
   }
 
   // TODO: move this cache out (when we have more similar stuff)
-  private static final Map<String, Hit> HITS = new HashMap<>();
-  private static final AtomicInteger COUNT = new AtomicInteger(0);
+  private static final Cache<Hit> CACHE = new Cache<>("#");
 
 }

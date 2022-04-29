@@ -1,34 +1,24 @@
 package eu.goodlike.oblivion.command;
 
-import com.google.common.collect.ImmutableSet;
+import eu.goodlike.oblivion.Cache;
+import eu.goodlike.oblivion.Global;
 import eu.goodlike.oblivion.Parse;
 import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.StructureException;
-import org.apache.commons.lang3.StringUtils;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static eu.goodlike.oblivion.Arena.THE_ARENA;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.split;
 
 public final class SetHit extends BaseCommand {
 
   public static void invalidate() {
-    CARRIERS.clear();
-    COUNT.set(0);
-    parseFiles();
+    CACHE.reset(SetHit::parseCarrier, Global.Settings.PREPARED_ITEMS, Global.Settings.PREPARED_SPELLS);
   }
 
   @Override
@@ -65,10 +55,7 @@ public final class SetHit extends BaseCommand {
 
   private void parseNextReference(String input) {
     String ref = input.substring(1);
-    Carrier c = CARRIERS.get(ref);
-    if (c == null) {
-      throw new StructureException("Nothing with name", ref);
-    }
+    Carrier c = CACHE.get(ref);
     carriers.add(c);
   }
 
@@ -99,35 +86,11 @@ public final class SetHit extends BaseCommand {
   }
 
   private Carrier createAndCache() {
-    String ref = isBlank(label) ? String.valueOf(COUNT.incrementAndGet()) : label;
-    Carrier carrier = source.create(ref, effects);
-    if (CARRIERS.putIfAbsent(ref, carrier) != null) {
-      throw new StructureException("Name already in use", ref);
-    }
-    return carrier;
+    return CACHE.put(label, ref -> source.create(ref, effects));
   }
 
   // TODO: move this cache out (when we have more similar stuff)
-  private static final Map<String, Carrier> CARRIERS = new HashMap<>();
-  private static final AtomicInteger COUNT = new AtomicInteger(0);
-
-  static {
-    parseFiles();
-  }
-
-  private static void parseFiles() {
-    for (String file : ImmutableSet.of("prepared_items.txt", "prepared_spells.txt")) {
-      InputStream enemies = SetHit.class.getClassLoader().getResourceAsStream(file);
-      if (enemies == null) {
-        throw new IllegalStateException("No '" + file + "' found!");
-      }
-      new BufferedReader(new InputStreamReader(enemies, StandardCharsets.UTF_8))
-        .lines()
-        .filter(StringUtils::isNotBlank)
-        .filter(line -> !line.startsWith("#"))
-        .forEach(SetHit::parseCarrier);
-    }
-  }
+  private static final Cache<Carrier> CACHE = new Cache<>("");
 
   private static void parseCarrier(String line) {
     String[] inputs = split(line.trim().toLowerCase());

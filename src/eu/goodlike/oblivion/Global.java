@@ -1,6 +1,7 @@
 package eu.goodlike.oblivion;
 
 import eu.goodlike.oblivion.command.RepeatHit;
+import eu.goodlike.oblivion.command.SetEnemy;
 import eu.goodlike.oblivion.command.SetHit;
 import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.StructureException;
@@ -27,6 +28,7 @@ public final class Global {
     WRITER = System.out::print;
     THE_ARENA.reset();
     RepeatHit.invalidate();
+    SetEnemy.invalidate();
     SetHit.invalidate();
     ITS_ALL_OVER = false;
   }
@@ -71,8 +73,8 @@ public final class Global {
      * Config files containing prepared entities which can be parsed and stored into caches for future use.
      */
     public static String PREPARED_ENEMIES = "prepared_enemies.txt";
-    public static String PREPARED_ITEMS = "prepared_enemies.txt";
-    public static String PREPARED_SPELLS = "prepared_enemies.txt";
+    public static String PREPARED_ITEMS = "prepared_items.txt";
+    public static String PREPARED_SPELLS = "prepared_spells.txt";
 
     /**
      * Loads the settings from the settings.properties file.
@@ -95,8 +97,8 @@ public final class Global {
       DIFFICULTY = StructureException.intOrThrow(properties.getProperty("difficulty"), "difficulty setting");
       TICK = StructureException.doubleOrThrow(properties.getProperty("tick"), "tick setting");
       PREPARED_ENEMIES = properties.getProperty("prepared.enemies");
-      PREPARED_ITEMS = properties.getProperty("prepared.enemies");
-      PREPARED_SPELLS = properties.getProperty("prepared.enemies");
+      PREPARED_ITEMS = properties.getProperty("prepared.items");
+      PREPARED_SPELLS = properties.getProperty("prepared.spells");
     }
 
     private Settings() {
