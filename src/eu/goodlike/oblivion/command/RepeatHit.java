@@ -25,16 +25,19 @@ public final class RepeatHit extends BaseCommand {
     args().forEach(this::addOrRepeat);
   }
 
-  private String lastRef = "#";
+  private String lastRef = "";
 
   private void addOrRepeat(String ref) {
     if (ref.startsWith("x")) {
       int times = StructureException.intOrThrow(ref.substring(1), "repeat count");
       repeatLastHit(times);
     }
-    else {
-      lastRef = ref;
+    else if (ref.startsWith("#")) {
+      lastRef = ref.substring(1);
       addHit();
+    }
+    else {
+      throw new StructureException("Unexpected param", ref);
     }
   }
 
@@ -43,8 +46,8 @@ public final class RepeatHit extends BaseCommand {
   }
 
   private void addHit() {
-    Hit hit = CACHE.get(lastRef.substring(1));
-    writeRef(lastRef.substring(1));
+    Hit hit = CACHE.get(lastRef);
+    writeRef(lastRef);
     THE_ARENA.addHit(hit);
   }
 
