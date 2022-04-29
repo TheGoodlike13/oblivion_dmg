@@ -4,7 +4,7 @@ import eu.goodlike.oblivion.core.StructureException;
 
 import java.util.stream.IntStream;
 
-import static eu.goodlike.oblivion.Arena.THE_ARENA;
+import static eu.goodlike.oblivion.Global.THE_ARENA;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public final class UndoLastHit extends BaseCommand {

@@ -13,8 +13,6 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.function.Consumer;
 
-import static eu.goodlike.oblivion.Arena.THE_ARENA;
-
 /**
  * Various objects that are accessible globally to simplify APIs.
  */
@@ -39,6 +37,11 @@ public final class Global {
    * System.out that we can mock out.
    */
   public static Consumer<String> WRITER = System.out::print;
+
+  /**
+   * The place where the magic happens. Literally.
+   */
+  public static final Arena THE_ARENA = new Arena();
 
   /**
    * Caches which holds prepared entities as well as references created as part of parsing user input.

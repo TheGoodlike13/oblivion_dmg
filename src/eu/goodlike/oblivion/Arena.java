@@ -11,8 +11,6 @@ import static eu.goodlike.oblivion.Global.Settings.TICK;
 
 public final class Arena {
 
-  public static final Arena THE_ARENA = new Arena();
-
   public void reset() {
     hits = new ArrayList<>();
     label = null;

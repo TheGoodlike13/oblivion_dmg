@@ -4,8 +4,8 @@ import eu.goodlike.oblivion.NamedValue;
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.parse.AsEnemy;
 
-import static eu.goodlike.oblivion.Arena.THE_ARENA;
 import static eu.goodlike.oblivion.Global.ENEMIES;
+import static eu.goodlike.oblivion.Global.THE_ARENA;
 
 public final class SetEnemy extends BaseCommand {
 

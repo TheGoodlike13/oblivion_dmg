@@ -9,9 +9,9 @@ import eu.goodlike.oblivion.parse.AsCarrier;
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.goodlike.oblivion.Arena.THE_ARENA;
 import static eu.goodlike.oblivion.Global.CARRIERS;
 import static eu.goodlike.oblivion.Global.HITS;
+import static eu.goodlike.oblivion.Global.THE_ARENA;
 
 public final class SetHit extends BaseCommand {
 
