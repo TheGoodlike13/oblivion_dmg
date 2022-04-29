@@ -52,15 +52,15 @@ public final class InputCache<T> {
   }
 
   /**
-   * @return value for given reference
+   * @return value for given reference as name
    * @throws StructureException if no value for reference was found
    */
-  public T get(String ref) {
+  public NamedValue<T> get(String ref) {
     T value = cache.get(ref);
     if (value == null) {
       throw new StructureException("Nothing with name", ref);
     }
-    return value;
+    return new InputCache.Entry<>(ref, value);
   }
 
   /**

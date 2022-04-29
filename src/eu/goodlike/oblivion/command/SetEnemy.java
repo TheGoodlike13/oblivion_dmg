@@ -11,27 +11,13 @@ public final class SetEnemy extends BaseCommand {
 
   @Override
   protected void performTask() {
-    if (input(1).startsWith("$")) {
-      findEnemyByRef(input(1).substring(1));
-    }
-    else {
-      parseNewEnemy();
-    }
-    THE_ARENA.setEnemy(label, enemy);
+    THE_ARENA.setEnemy(fromInput());
   }
 
-  private String label;
-  private Enemy enemy;
-
-  private void findEnemyByRef(String ref) {
-    label = ref;
-    enemy = ENEMIES.get(ref);
-  }
-
-  private void parseNewEnemy() {
-    NamedValue<Enemy> e = new AsEnemy(inputs).inCache();
-    label = e.getName();
-    enemy = e.getValue();
+  private NamedValue<Enemy> fromInput() {
+    return input(1).startsWith("$")
+      ? ENEMIES.get(input(1).substring(1))
+      : new AsEnemy(inputs).inCache();
   }
 
 }

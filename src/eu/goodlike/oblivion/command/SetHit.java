@@ -18,10 +18,8 @@ public final class SetHit extends BaseCommand {
   @Override
   protected void performTask() {
     parseCarriers();
-
     Hit hit = new Hit(carriers);
-    String ref = HITS.put(hit).getName();
-    THE_ARENA.addHit(ref, hit);
+    THE_ARENA.addHit(HITS.put(hit));
   }
 
   private int cursor = -1;
@@ -50,7 +48,7 @@ public final class SetHit extends BaseCommand {
   }
 
   private void parseNextReference(String ref) {
-    carriers.add(CARRIERS.get(ref));
+    carriers.add(CARRIERS.get(ref).getValue());
   }
 
   private void ensureNoDangleBerries(String input) {

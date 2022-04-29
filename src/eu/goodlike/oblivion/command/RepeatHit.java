@@ -1,6 +1,5 @@
 package eu.goodlike.oblivion.command;
 
-import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.StructureException;
 
 import java.util.stream.IntStream;
@@ -36,8 +35,7 @@ public final class RepeatHit extends BaseCommand {
   }
 
   private void addHit() {
-    Hit hit = HITS.get(lastRef);
-    THE_ARENA.addHit(lastRef, hit);
+    THE_ARENA.addHit(HITS.get(lastRef));
   }
 
 }

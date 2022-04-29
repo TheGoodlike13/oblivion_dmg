@@ -19,15 +19,15 @@ public final class Arena {
     enemy = null;
   }
 
-  public void setEnemy(String label, Enemy enemy) {
-    this.label = label.replace('_', ' ');
-    this.enemy = enemy;
+  public void setEnemy(NamedValue<Enemy> enemy) {
+    this.label = enemy.getName().replace('_', ' ');
+    this.enemy = enemy.getValue();
     announceOpponent();
   }
 
-  public void addHit(String ref, Hit hit) {
-    hits.add(hit);
-    Write.line("[#" + ref + "] Next hit: " + hit);
+  public void addHit(NamedValue<Hit> hit) {
+    hits.add(hit.getValue());
+    Write.line("[#" + hit.getName() + "] Next hit: " + hit.getValue());
   }
 
   public void removeLastHit() {
