@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 import static eu.goodlike.oblivion.core.Factor.FIRE;
 import static eu.goodlike.oblivion.core.Factor.FROST;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
-import static eu.goodlike.oblivion.core.Factor.POISON;
 import static eu.goodlike.oblivion.core.Factor.SHOCK;
 import static org.apache.commons.lang3.StringUtils.getCommonPrefix;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -33,14 +32,13 @@ import static org.apache.commons.lang3.StringUtils.substringAfter;
 public final class Parse {
 
   public static Factor factor(String input) {
-    return startsWithIgnoreCase(POISON.toString(), input)
-      ? POISON
-      : Parse.element(input);
+    return matchFirst(input, Factor.ALL)
+      .orElseThrow(() -> new StructureException("Unknown factor reference", input));
   }
 
   public static Element element(String input) {
     return matchFirst(input, ELEMENTS)
-      .orElseThrow(() -> new StructureException("Unknown factor/element reference", input));
+      .orElseThrow(() -> new StructureException("Unknown element reference", input));
   }
 
   public static Source source(String input) {
