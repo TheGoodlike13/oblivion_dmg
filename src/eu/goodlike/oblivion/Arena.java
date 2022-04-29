@@ -25,9 +25,9 @@ public final class Arena {
     announceOpponent();
   }
 
-  public void addHit(Hit hit) {
+  public void addHit(String ref, Hit hit) {
     hits.add(hit);
-    Write.line("Next hit: " + hit);
+    Write.line("[#" + ref + "] Next hit: " + hit);
   }
 
   public void removeLastHit() {

@@ -1,24 +1,14 @@
 package eu.goodlike.oblivion.command;
 
-import eu.goodlike.oblivion.InputCache;
-import eu.goodlike.oblivion.Write;
 import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.StructureException;
 
 import java.util.stream.IntStream;
 
 import static eu.goodlike.oblivion.Arena.THE_ARENA;
+import static eu.goodlike.oblivion.Global.HITS;
 
 public final class RepeatHit extends BaseCommand {
-
-  public static void cache(Hit hit) {
-    String ref = CACHE.put(hit).getName();
-    writeRef(ref);
-  }
-
-  public static void invalidate() {
-    CACHE.reset();
-  }
 
   @Override
   protected void performTask() {
@@ -46,16 +36,8 @@ public final class RepeatHit extends BaseCommand {
   }
 
   private void addHit() {
-    Hit hit = CACHE.get(lastRef);
-    writeRef(lastRef);
-    THE_ARENA.addHit(hit);
+    Hit hit = HITS.get(lastRef);
+    THE_ARENA.addHit(lastRef, hit);
   }
-
-  private static void writeRef(String ref) {
-    Write.inline("[#" + ref + "] ");
-  }
-
-  // TODO: move this cache out (when we have more similar stuff)
-  private static final InputCache<Hit> CACHE = new InputCache<>();
 
 }

@@ -11,6 +11,7 @@ import java.util.List;
 
 import static eu.goodlike.oblivion.Arena.THE_ARENA;
 import static eu.goodlike.oblivion.Global.CARRIERS;
+import static eu.goodlike.oblivion.Global.HITS;
 
 public final class SetHit extends BaseCommand {
 
@@ -19,8 +20,8 @@ public final class SetHit extends BaseCommand {
     parseCarriers();
 
     Hit hit = new Hit(carriers);
-    RepeatHit.cache(hit);
-    THE_ARENA.addHit(hit);
+    String ref = HITS.put(hit).getName();
+    THE_ARENA.addHit(ref, hit);
   }
 
   private int cursor = -1;
