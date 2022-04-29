@@ -49,6 +49,14 @@ public abstract class BaseEffect implements Effect {
 
   private double remaining;
 
+  /**
+   * Prevents having to wait an entire tick for a basically expired effect.
+   * <p/>
+   * Due to floating point arithmetic errors, duration can sometimes be reduced to practically 0.
+   * However, an entire tick, as much as 10^10 times longer than the remaining duration may have to pass.
+   * Such tiny durations are extremely unlikely to have any effect, whether we consider them expired or not.
+   * This approach simplifies the state of the effect to always have exactly 0 duration when expired.
+   */
   private void expireGracefully(Target target) {
     if (!hasExpired() && remaining < BASICALLY_EXPIRED) {
       onTick(target);
