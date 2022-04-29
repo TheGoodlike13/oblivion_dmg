@@ -50,7 +50,7 @@ public abstract class BaseCommand implements Command {
     }
 
     Stream<String> infiniteBlankWorks = Stream.generate(() -> "");
-    return Stream.concat(inputs(start), infiniteBlankWorks).limit(end);
+    return Stream.concat(inputs(start), infiniteBlankWorks).limit(count);
   }
 
   protected final Stream<String> args() {
