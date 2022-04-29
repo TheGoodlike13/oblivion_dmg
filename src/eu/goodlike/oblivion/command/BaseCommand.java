@@ -39,13 +39,22 @@ public abstract class BaseCommand implements Command {
     return inputs.length <= index ? "" : inputs[index];
   }
 
-  protected final Stream<String> args() {
-    return Stream.of(inputs).skip(1);
+  protected final Stream<String> inputs(int start) {
+    return Stream.of(inputs).skip(start);
   }
 
-  protected final Stream<String> args(int maxArgCount) {
+  protected final Stream<String> inputs(int start, int end) {
+    int count = end - start;
+    if (count <= 0) {
+      return Stream.empty();
+    }
+
     Stream<String> infiniteBlankWorks = Stream.generate(() -> "");
-    return Stream.concat(args(), infiniteBlankWorks).limit(maxArgCount);
+    return Stream.concat(inputs(start), infiniteBlankWorks).limit(end);
+  }
+
+  protected final Stream<String> args() {
+    return inputs(1);
   }
 
 }
