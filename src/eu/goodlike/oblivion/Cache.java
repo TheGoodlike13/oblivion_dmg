@@ -4,10 +4,8 @@ import eu.goodlike.oblivion.core.StructureException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -88,10 +86,14 @@ public final class Cache<T> {
         parse(file);
         return;
       }
-    } catch (IOException | UncheckedIOException e) {
+    } catch (Exception e) {
       Write.line("Exception: " + e);
     }
     Write.line("Failed to load prepared file '" + prepFile + "'. Please check config directory or settings.");
+    Write.line("State:");
+    for (Map.Entry<String, T> e : cache.entrySet()) {
+      Write.line(e.getKey() + ": " + e.getValue());
+    }
   }
 
   private void ensureParser() {

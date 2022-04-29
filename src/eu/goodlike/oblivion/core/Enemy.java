@@ -227,6 +227,25 @@ public final class Enemy implements Target {
   private static final double NO_WEAKNESS = 100;
   private static final double BASICALLY_DEAD = 0.005;
 
+  @Override
+  public String toString() {
+    return String.format("%.1f/%.1f%s", health, maxHealth, multipliers());
+  }
+
+  private String multipliers() {
+    StringBuilder b = new StringBuilder();
+    for (Factor factor : Factor.ALL) {
+      double multiplier = getMultiplier(factor);
+      if (multiplier != 1) {
+        b.append(" ")
+          .append(factor)
+          .append("x")
+          .append(String.format("%.2f", multiplier));
+      }
+    }
+    return b.toString();
+  }
+
   private static final class Dummy implements Target {
     @Override
     public void modifyResist(Factor factor, double percent) {

@@ -6,7 +6,6 @@ import java.util.Scanner;
 import java.util.function.Supplier;
 
 import static eu.goodlike.oblivion.Global.ITS_ALL_OVER;
-import static org.apache.commons.lang3.StringUtils.split;
 
 public final class OblivionSpellStackingCalculator {
 
@@ -41,7 +40,7 @@ public final class OblivionSpellStackingCalculator {
     String[] input;
     do {
       Write.inline(">> ");
-      input = split(reader.get().trim().toLowerCase());
+      input = Parse.line(reader.get());
     } while (input.length == 0);
 
     Command command = newCommand(input[0]);
@@ -50,11 +49,9 @@ public final class OblivionSpellStackingCalculator {
   }
 
   private Command newCommand(String input0) {
-    if (input0.startsWith("+") || input0.startsWith("$")) {
-      return new SetHit();
-    }
-
-    return Command.Name.find(input0).newCommand();
+    return input0.startsWith("+") || input0.startsWith("$")
+      ? new SetHit()
+      : Command.Name.find(input0).newCommand();
   }
 
 }

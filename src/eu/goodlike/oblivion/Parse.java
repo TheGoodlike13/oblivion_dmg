@@ -1,11 +1,14 @@
 package eu.goodlike.oblivion;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Streams;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Element;
+import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Factor;
 import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.StructureException;
+import eu.goodlike.oblivion.parse.EnemyParser;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +19,10 @@ import static eu.goodlike.oblivion.core.Factor.FIRE;
 import static eu.goodlike.oblivion.core.Factor.FROST;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
 import static eu.goodlike.oblivion.core.Factor.SHOCK;
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.getCommonPrefix;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.split;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
 
@@ -30,6 +35,14 @@ import static org.apache.commons.lang3.StringUtils.substringAfter;
  * For example: FROST can only be matched by "fr", as "f" will be matched by FIRE first.
  */
 public final class Parse {
+
+  /**
+   * Parses a line of generic user input.
+   * It is split on regions of any whitespace.
+   */
+  public static String[] line(String input) {
+    return split(input.trim().toLowerCase());
+  }
 
   public static Factor factor(String input) {
     return matchFirst(input, Factor.ALL)
@@ -61,6 +74,18 @@ public final class Parse {
    */
   public static EffectText effect(String input) {
     return new EffectParser(input).parse();
+  }
+
+  public static List<EffectText> effects(Iterable<String> effects) {
+    return Streams.stream(effects).map(Parse::effect).collect(toList());
+  }
+
+  public static Enemy enemy(String input) {
+    return enemy(line(input));
+  }
+
+  public static Enemy enemy(String[] input) {
+    return new EnemyParser(input).parseEnemy();
   }
 
   private Parse() {
