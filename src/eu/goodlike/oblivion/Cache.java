@@ -48,17 +48,30 @@ public final class Cache<T> {
     return t;
   }
 
-  public void reset(Consumer<String> parser, String... prepFiles) {
+  public void reset(String... prepFiles) {
     cache.clear();
     counter.set(0);
 
     for (String prepFile : prepFiles) {
-      init(prepFile, parser);
+      parseResource(prepFile);
     }
   }
 
-  private final Map<String, T> cache = new HashMap<>();
-  private final AtomicInteger counter = new AtomicInteger(0);
+  public Cache() {
+    this(null);
+  }
+
+  public Cache(Consumer<String> parser) {
+    this.parser = parser;
+
+    this.cache = new HashMap<>();
+    this.counter = new AtomicInteger(0);
+  }
+
+  private final Consumer<String> parser;
+
+  private final Map<String, T> cache;
+  private final AtomicInteger counter;
 
   private String ensureRef(String label) {
     return isBlank(label) ? nextRef() : label;
@@ -68,10 +81,11 @@ public final class Cache<T> {
     return String.valueOf(counter.incrementAndGet());
   }
 
-  private void init(String prepFile, Consumer<String> parser) {
+  private void parseResource(String prepFile) {
+    ensureParser();
     try (InputStream file = Cache.class.getClassLoader().getResourceAsStream(prepFile)) {
       if (file != null) {
-        parse(file, parser);
+        parse(file);
         return;
       }
     } catch (IOException | UncheckedIOException e) {
@@ -80,7 +94,13 @@ public final class Cache<T> {
     Write.line("Failed to load prepared file '" + prepFile + "'. Please check config directory or settings.");
   }
 
-  private void parse(InputStream file, Consumer<String> parser) {
+  private void ensureParser() {
+    if (parser == null) {
+      throw new IllegalStateException("Cannot parse prepared file: no parser has been provided for this cache.");
+    }
+  }
+
+  private void parse(InputStream file) {
     new BufferedReader(new InputStreamReader(file, StandardCharsets.UTF_8))
       .lines()
       .filter(StringUtils::isNotBlank)

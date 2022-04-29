@@ -17,7 +17,7 @@ public final class RepeatHit extends BaseCommand {
   }
 
   public static void invalidate() {
-    CACHE.reset(null);
+    CACHE.reset();
   }
 
   @Override

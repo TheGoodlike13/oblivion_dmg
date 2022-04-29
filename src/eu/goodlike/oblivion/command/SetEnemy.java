@@ -18,7 +18,7 @@ import static org.apache.commons.lang3.StringUtils.split;
 public final class SetEnemy extends BaseCommand {
 
   public static void invalidate() {
-    CACHE.reset(SetEnemy::parseEnemy, Global.Settings.PREPARED_ENEMIES);
+    CACHE.reset(Global.Settings.PREPARED_ENEMIES);
   }
 
   @Override
@@ -61,7 +61,7 @@ public final class SetEnemy extends BaseCommand {
     }
   }
 
-  private static final Cache<Enemy> CACHE = new Cache<>();
+  private static final Cache<Enemy> CACHE = new Cache<>(SetEnemy::parseEnemy);
 
   private static void parseEnemy(String line) {
     String[] inputs = split("enemy " + line.trim().toLowerCase());

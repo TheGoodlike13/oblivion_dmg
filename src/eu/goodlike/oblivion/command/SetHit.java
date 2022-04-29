@@ -18,7 +18,7 @@ import static org.apache.commons.lang3.StringUtils.split;
 public final class SetHit extends BaseCommand {
 
   public static void invalidate() {
-    CACHE.reset(SetHit::parseCarrier, Global.Settings.PREPARED_ITEMS, Global.Settings.PREPARED_SPELLS);
+    CACHE.reset(Global.Settings.PREPARED_ITEMS, Global.Settings.PREPARED_SPELLS);
   }
 
   @Override
@@ -90,7 +90,7 @@ public final class SetHit extends BaseCommand {
   }
 
   // TODO: move this cache out (when we have more similar stuff)
-  private static final Cache<Carrier> CACHE = new Cache<>();
+  private static final Cache<Carrier> CACHE = new Cache<>(SetHit::parseCarrier);
 
   private static void parseCarrier(String line) {
     String[] inputs = split(line.trim().toLowerCase());
