@@ -51,6 +51,7 @@ public final class Global {
   /**
    * Configurable values for the application.
    * Default values provided for reference, but they are immediately overwritten by {@link #load}.
+   * See settings.properties for actual values.
    */
   public static final class Settings {
     static {

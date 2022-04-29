@@ -145,6 +145,7 @@ public final class Enemy implements Target {
 
   /**
    * Ticks until all active effects have expired.
+   *
    * @return time it took for the remaining effects to expire, 0 if there were no such effects
    */
   public double resolve() {
