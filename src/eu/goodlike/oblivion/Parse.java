@@ -90,7 +90,7 @@ public final class Parse {
      * <p/>
      * As caches have their own labeling logic, the label and even the value may be differ.
      */
-    NamedValue<T> inCache();
+    NamedValue<T> thenCache();
   }
 
   private Parse() {

@@ -55,7 +55,7 @@ public final class InputCache<T> {
    * @return value for given reference as name
    * @throws StructureException if no value for reference was found
    */
-  public NamedValue<T> get(String ref) {
+  public NamedValue<T> getCached(String ref) {
     T value = cache.get(ref);
     if (value == null) {
       throw new StructureException("Nothing with name", ref);
@@ -134,7 +134,7 @@ public final class InputCache<T> {
   }
 
   private void parse(String line) {
-    parserFactory.apply(line).inCache();
+    parserFactory.apply(line).thenCache();
   }
 
   private static final class Entry<T> implements NamedValue<T> {

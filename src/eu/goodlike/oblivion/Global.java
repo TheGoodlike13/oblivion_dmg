@@ -5,8 +5,8 @@ import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.StructureException;
-import eu.goodlike.oblivion.parse.AsCarrier;
-import eu.goodlike.oblivion.parse.AsEnemy;
+import eu.goodlike.oblivion.parse.ParseCarrier;
+import eu.goodlike.oblivion.parse.ParseEnemy;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,8 +46,8 @@ public final class Global {
   /**
    * Caches which holds prepared entities as well as references created as part of parsing user input.
    */
-  public static final InputCache<Enemy> ENEMIES = new InputCache<>(AsEnemy::new);
-  public static final InputCache<Carrier> CARRIERS = new InputCache<>(AsCarrier::new);
+  public static final InputCache<Enemy> ENEMIES = new InputCache<>(ParseEnemy::new);
+  public static final InputCache<Carrier> CARRIERS = new InputCache<>(ParseCarrier::new);
   public static final InputCache<Hit> HITS = new InputCache<>();
 
   /**

@@ -30,7 +30,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * <p/>
  * Enemies with default name 'enemy' is never cached.
  */
-public final class AsEnemy extends BaseParseInput<Enemy> {
+public final class ParseEnemy extends BaseParseInput<Enemy> {
 
   @Override
   protected Enemy parse() {
@@ -40,17 +40,17 @@ public final class AsEnemy extends BaseParseInput<Enemy> {
   }
 
   @Override
-  public NamedValue<Enemy> inCache() {
+  public NamedValue<Enemy> thenCache() {
     return "enemy".equals(label)
       ? this
       : ENEMIES.put(label, getValue());
   }
 
-  public AsEnemy(String input) {
+  public ParseEnemy(String input) {
     this(Parse.line(input));
   }
 
-  public AsEnemy(String[] input) {
+  public ParseEnemy(String[] input) {
     this.label = "enemy";
 
     int start = ENEMY.matches(input[0]) ? 1 : 0;

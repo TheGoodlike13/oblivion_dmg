@@ -32,9 +32,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * They must be parsable.
  * <p/>
  * Cached nameless carrier will receive a name from the cache.
- * Thus both the label and the carrier can be different as a result of {@link #inCache}.
+ * Thus both the label and the carrier can be different as a result of {@link #thenCache}.
  */
-public final class AsCarrier extends BaseParseInput<Carrier> {
+public final class ParseCarrier extends BaseParseInput<Carrier> {
 
   @Override
   protected Carrier parse() {
@@ -44,21 +44,21 @@ public final class AsCarrier extends BaseParseInput<Carrier> {
   }
 
   @Override
-  public NamedValue<Carrier> inCache() {
+  public NamedValue<Carrier> thenCache() {
     String ref = CARRIERS.ensureRef(label);
     Carrier carrier = getValue().copy(ref);
     return CARRIERS.put(ref, carrier);
   }
 
-  public AsCarrier(String input) {
+  public ParseCarrier(String input) {
     this(Parse.line(input));
   }
 
-  public AsCarrier(String[] inputs) {
+  public ParseCarrier(String[] inputs) {
     this(Stream.of(inputs));
   }
 
-  public AsCarrier(Stream<String> inputs) {
+  public ParseCarrier(Stream<String> inputs) {
     inputs.forEach(this::identify);
 
     if (source == null) {

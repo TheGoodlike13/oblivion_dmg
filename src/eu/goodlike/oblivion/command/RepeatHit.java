@@ -35,7 +35,7 @@ public final class RepeatHit extends BaseCommand {
   }
 
   private void addHit() {
-    THE_ARENA.addHit(HITS.get(lastRef));
+    THE_ARENA.addHit(HITS.getCached(lastRef));
   }
 
 }

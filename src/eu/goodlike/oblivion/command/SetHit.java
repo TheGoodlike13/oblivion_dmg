@@ -4,7 +4,7 @@ import eu.goodlike.oblivion.NamedValue;
 import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.StructureException;
-import eu.goodlike.oblivion.parse.AsCarrier;
+import eu.goodlike.oblivion.parse.ParseCarrier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public final class SetHit extends BaseCommand {
   }
 
   private void parseNextReference(String ref) {
-    carriers.add(CARRIERS.get(ref).getValue());
+    carriers.add(CARRIERS.getCached(ref).getValue());
   }
 
   private void ensureNoDangleBerries(String input) {
@@ -59,7 +59,7 @@ public final class SetHit extends BaseCommand {
 
   private void parseNextCarrierIfAny() {
     if (start >= 0) {
-      NamedValue<Carrier> carrier = new AsCarrier(inputs(start, cursor)).inCache();
+      NamedValue<Carrier> carrier = new ParseCarrier(inputs(start, cursor)).thenCache();
       carriers.add(carrier.getValue());
     }
 
