@@ -4,11 +4,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Streams;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Element;
-import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Factor;
 import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.StructureException;
-import eu.goodlike.oblivion.parse.EnemyParser;
 
 import java.util.List;
 import java.util.Optional;
@@ -80,12 +78,19 @@ public final class Parse {
     return Streams.stream(effects).map(Parse::effect).collect(toList());
   }
 
-  public static Enemy enemy(String input) {
-    return enemy(line(input));
-  }
-
-  public static Enemy enemy(String[] input) {
-    return new EnemyParser(input).parseEnemy();
+  /**
+   * Parse logic wrapper.
+   * Takes input in some format & parses it into label and other params.
+   * Finally, allows lazy parsing of value via {@link #getValue}.
+   */
+  public interface Input<T> extends NamedValue<T> {
+    /**
+     * Caches the result of parsing the input.
+     * Returns the result of caching the value.
+     * <p/>
+     * As caches have their own labeling logic, the label and even the value may be differ.
+     */
+    NamedValue<T> inCache();
   }
 
   private Parse() {

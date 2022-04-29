@@ -1,10 +1,11 @@
 package eu.goodlike.oblivion.command;
 
+import eu.goodlike.oblivion.NamedValue;
 import eu.goodlike.oblivion.core.Enemy;
-import eu.goodlike.oblivion.parse.EnemyParser;
+import eu.goodlike.oblivion.parse.AsEnemy;
 
 import static eu.goodlike.oblivion.Arena.THE_ARENA;
-import static eu.goodlike.oblivion.Global.CACHE;
+import static eu.goodlike.oblivion.Global.ENEMIES;
 
 public final class SetEnemy extends BaseCommand {
 
@@ -24,13 +25,13 @@ public final class SetEnemy extends BaseCommand {
 
   private void findEnemyByRef(String ref) {
     label = ref;
-    enemy = CACHE.get(ref);
+    enemy = ENEMIES.get(ref);
   }
 
   private void parseNewEnemy() {
-    EnemyParser parser = new EnemyParser(inputs);
-    label = parser.getLabel();
-    enemy = parser.parseEnemy();
+    NamedValue<Enemy> e = new AsEnemy(inputs).inCache();
+    label = e.getName();
+    enemy = e.getValue();
   }
 
 }

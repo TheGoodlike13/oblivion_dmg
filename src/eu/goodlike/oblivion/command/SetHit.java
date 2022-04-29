@@ -1,25 +1,18 @@
 package eu.goodlike.oblivion.command;
 
-import eu.goodlike.oblivion.Cache;
-import eu.goodlike.oblivion.Global;
-import eu.goodlike.oblivion.Parse;
+import eu.goodlike.oblivion.NamedValue;
 import eu.goodlike.oblivion.core.Carrier;
-import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Hit;
-import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.StructureException;
+import eu.goodlike.oblivion.parse.AsCarrier;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static eu.goodlike.oblivion.Arena.THE_ARENA;
-import static org.apache.commons.lang3.StringUtils.split;
+import static eu.goodlike.oblivion.Global.CARRIERS;
 
 public final class SetHit extends BaseCommand {
-
-  public static void invalidate() {
-    CACHE.reset(Global.Settings.PREPARED_ITEMS, Global.Settings.PREPARED_SPELLS);
-  }
 
   @Override
   protected void performTask() {
@@ -30,73 +23,48 @@ public final class SetHit extends BaseCommand {
     THE_ARENA.addHit(hit);
   }
 
-  private String label;
-  private Source source;
-  private List<EffectText> effects;
+  private int cursor = -1;
+  private int start = -1;
   private final List<Carrier> carriers = new ArrayList<>();
 
   private void parseCarriers() {
-    for (String input : inputs) {
-      if (input.startsWith("$")) {
-        consumeLastParsedSource();
-        parseNextReference(input);
-      }
-      else if (input.startsWith("+")) {
-        consumeLastParsedSource();
-        source = Parse.source(input.substring(1));
-      }
-      else {
-        ensureNoDangleBerries(input);
-        parseSimpleParam(input);
-      }
+    while (++cursor < inputs.length) {
+      identifyInput(inputs[cursor]);
     }
-    consumeLastParsedSource();
+    parseNextCarrierIfAny();
   }
 
-  private void parseNextReference(String input) {
-    String ref = input.substring(1);
-    Carrier c = CACHE.get(ref);
-    carriers.add(c);
+  private void identifyInput(String input) {
+    if (input.startsWith("$")) {
+      parseNextCarrierIfAny();
+      parseNextReference(input.substring(1));
+    }
+    else if (input.startsWith("+")) {
+      parseNextCarrierIfAny();
+      start = cursor;
+    }
+    else {
+      ensureNoDangleBerries(input);
+    }
+  }
+
+  private void parseNextReference(String ref) {
+    carriers.add(CARRIERS.get(ref));
   }
 
   private void ensureNoDangleBerries(String input) {
-    if (source == null) {
+    if (start == -1) {
       throw new StructureException("Dangling hit param", input);
     }
   }
 
-  private void parseSimpleParam(String input) {
-    if (input.startsWith("@")) {
-      label = input.substring(1);
-    }
-    else {
-      effects.add(Parse.effect(input));
-    }
-  }
-
-  private void consumeLastParsedSource() {
-    if (source != null) {
-      Carrier carrier = createAndCache();
-      carriers.add(carrier);
+  private void parseNextCarrierIfAny() {
+    if (start >= 0) {
+      NamedValue<Carrier> carrier = new AsCarrier(inputs(start, cursor)).inCache();
+      carriers.add(carrier.getValue());
     }
 
-    label = null;
-    source = null;
-    effects = new ArrayList<>();
-  }
-
-  private Carrier createAndCache() {
-    return CACHE.put(label, ref -> source.create(ref, effects));
-  }
-
-  // TODO: move this cache out (when we have more similar stuff)
-  private static final Cache<Carrier> CACHE = new Cache<>(SetHit::parseCarrier);
-
-  private static void parseCarrier(String line) {
-    String[] inputs = split(line.trim().toLowerCase());
-    SetHit setHit = new SetHit();
-    setHit.setParams(inputs);
-    setHit.parseCarriers();
+    start = -1;
   }
 
 }

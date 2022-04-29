@@ -1,5 +1,6 @@
 package eu.goodlike.oblivion.parse;
 
+import eu.goodlike.oblivion.NamedValue;
 import eu.goodlike.oblivion.Parse;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Enemy;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static eu.goodlike.oblivion.Command.Name.ENEMY;
-import static eu.goodlike.oblivion.Global.CACHE;
+import static eu.goodlike.oblivion.Global.ENEMIES;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
@@ -19,41 +20,45 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * <p/>
  * Inputs with '@' prefix are treated as labels.
  * Only last label is considered, others ignored.
+ * If it is missing, the enemy is given the default label 'enemy'.
  * <p/>
  * First non-label input is treated as HP.
  * It must be a parsable double.
  * <p/>
  * All other non-label inputs are treated as passive permanent effects.
- * They must be parsable effects.
+ * They must be parsable.
  * <p/>
- * TODO: move caching out?
+ * Enemies with default name 'enemy' is never cached.
  */
-public final class EnemyParser {
+public final class AsEnemy extends BaseParseInput<Enemy> {
 
-  public String getLabel() {
-    return label;
-  }
-
-  public Enemy parseEnemy() {
+  @Override
+  protected Enemy parse() {
     double hp = StructureException.doubleOrThrow(this.hp, "enemy hp");
     List<EffectText> effects = Parse.effects(this.effects);
-
-    Enemy enemy = new Enemy(hp, effects);
-    if (!"enemy".equals(label)) {
-      CACHE.put(label, enemy);
-    }
-    return enemy;
+    return new Enemy(hp, effects);
   }
 
-  public EnemyParser(String[] input) {
-    int start = ENEMY.matches(input[0]) ? 1 : 0;
+  @Override
+  public NamedValue<Enemy> inCache() {
+    return "enemy".equals(label)
+      ? this
+      : ENEMIES.put(label, getValue());
+  }
 
+  public AsEnemy(String input) {
+    this(Parse.line(input));
+  }
+
+  public AsEnemy(String[] input) {
+    this.label = "enemy";
+
+    int start = ENEMY.matches(input[0]) ? 1 : 0;
     for (int i = start; i < input.length; i++) {
       identify(input[i]);
     }
   }
 
-  private String label = "enemy";
   private String hp = "";
   private final List<String> effects = new ArrayList<>();
 

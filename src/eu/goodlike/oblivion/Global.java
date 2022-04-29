@@ -1,10 +1,12 @@
 package eu.goodlike.oblivion;
 
 import eu.goodlike.oblivion.command.RepeatHit;
-import eu.goodlike.oblivion.command.SetHit;
+import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.StructureException;
+import eu.goodlike.oblivion.parse.AsCarrier;
+import eu.goodlike.oblivion.parse.AsEnemy;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,8 +29,8 @@ public final class Global {
     Settings.load();
     WRITER = System.out::print;
     THE_ARENA.reset();
-    CACHE.reset(Settings.PREPARED_ENEMIES);
-    SetHit.invalidate();
+    ENEMIES.reset(Settings.PREPARED_ENEMIES);
+    CARRIERS.reset(Settings.PREPARED_ITEMS, Settings.PREPARED_SPELLS);
     RepeatHit.invalidate();
     ITS_ALL_OVER = false;
   }
@@ -41,7 +43,8 @@ public final class Global {
   /**
    * Caches which holds prepared entities as well as references created as part of parsing user input.
    */
-  public static final Cache<Enemy> CACHE = new Cache<>(Parse::enemy);
+  public static final InputCache<Enemy> ENEMIES = new InputCache<>(AsEnemy::new);
+  public static final InputCache<Carrier> CARRIERS = new InputCache<>(AsCarrier::new);
 
   /**
    * Flag which determines if the application should exit or not.
