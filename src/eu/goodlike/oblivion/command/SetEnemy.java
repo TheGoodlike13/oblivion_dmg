@@ -61,7 +61,7 @@ public final class SetEnemy extends BaseCommand {
     }
   }
 
-  private static final Cache<Enemy> CACHE = new Cache<>("");
+  private static final Cache<Enemy> CACHE = new Cache<>();
 
   private static void parseEnemy(String line) {
     String[] inputs = split("enemy " + line.trim().toLowerCase());
