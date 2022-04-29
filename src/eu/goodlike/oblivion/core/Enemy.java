@@ -202,6 +202,7 @@ public final class Enemy implements Target {
   public Enemy(double maxHealth, Iterable<EffectText> bonus) {
     this.maxHealth = maxHealth;
     this.health = maxHealth;
+    StructureException.throwOnAlreadyDead(this);
 
     this.weaknessPercent = new HashMap<>();
 
@@ -210,8 +211,6 @@ public final class Enemy implements Target {
     for (EffectText effect : bonus) {
       effect.permanent().onApply(this);
     }
-
-    StructureException.throwOnAlreadyDead(this);
   }
 
   private double maxHealth;
