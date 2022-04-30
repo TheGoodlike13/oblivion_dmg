@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import java.util.function.Function;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNumeric;
 
 /**
  * Cache for results of parsing some input.
@@ -27,7 +28,7 @@ public final class InputCache<T> {
    * You will have to try to put an object into the cache to find out.
    */
   public String ensureRef(String label) {
-    return isBlank(label) ? nextRef() : label;
+    return isBlank(label) ? nextRef() : ensureNotReserved(label);
   }
 
   /**
@@ -104,6 +105,17 @@ public final class InputCache<T> {
 
   private String nextRef() {
     return String.valueOf(++counter);
+  }
+
+  private String ensureNotReserved(String label) {
+    if (isNumeric(label)) {
+      int numRef = Integer.parseInt(label);
+      if (numRef < counter) {
+        throw new StructureException("Already reserved", label);
+      }
+      counter = numRef;
+    }
+    return label;
   }
 
   private void parseResource(String prepFile) {

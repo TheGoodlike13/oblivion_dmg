@@ -348,6 +348,19 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
+  void numericNamesAreWeird() {
+    sendInput("+s 1m @1", "+s 3m @3", "+s 4m", "+s 2m @2", "$2");
+
+    assertOutput(
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 1 for 1s}",
+      "[#2] Next hit: <SPELL$3> {MAGIC DMG 3 for 1s}",
+      "[#3] Next hit: <SPELL$4> {MAGIC DMG 4 for 1s}",
+      "Bad input: Already reserved <2>",
+      "Bad input: Nothing matches <2>"
+    );
+  }
+
+  @Test
   void duplicateNamesNotAllowed() {
     sendInput("+m 1m @magic_1 +p 1m @magic_1", "$magic_1");
 
