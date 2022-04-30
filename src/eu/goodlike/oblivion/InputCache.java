@@ -23,6 +23,9 @@ public final class InputCache<T> {
    * Checks if the label is suitable for this cache.
    * If so, returns it.
    * If not, replaces it with a suitable dynamic digit reference.
+   * <p/>
+   * This check does not verify if the label is already in use as reference.
+   * You will have to try to put an object into the cache to find out.
    */
   public String ensureRef(String label) {
     return isBlank(label) ? nextRef() : label;
