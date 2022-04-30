@@ -52,6 +52,11 @@ Please excuse any code or comments that seems a little too avant-garde.
 Physical damage is ignored.
 The focus is on spell stacking and using enchanted weapons or poisons as finishers.
 
+Random effects that nullify magic are ignored.
+This includes absorption and reflection.
+These sort of effects dip too far into simulation territory.
+I'm more interested in calculations :)
+
 Calculations are done using double floating point precision.
 The resulting errors are trivial and unlikely to cause issues, but do keep it in mind.
 
