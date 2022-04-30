@@ -105,6 +105,16 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
+  void whoIsTheRealEnemy() {
+    sendInput("enemy 100 @enemy", "enemy $enemy");
+
+    assertOutput(
+      "You face the enemy (100.0 hp).",
+      "Bad input: Nothing matches <enemy>"
+    );
+  }
+
+  @Test
   void nowThatsALotOfDamage() {
     sendInput("+s 100m10s 100d 100wm");
 
