@@ -127,7 +127,7 @@ public final class Arena {
   }
 
   private void announceOpponent() {
-    Write.line("You face the " + label + " (" + enemy.healthRemaining() + " hp).");
+    Write.line("You face the %s (%.0f hp).", label, enemy.healthRemaining());
     writeResists();
   }
 

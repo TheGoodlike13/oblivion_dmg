@@ -229,7 +229,7 @@ public final class Enemy implements Target {
     }
   }
 
-  public Enemy(double maxHealth, EffectText... bonus) {
+  public Enemy(int maxHealth, EffectText... bonus) {
     this(maxHealth, Arrays.asList(bonus));
   }
 
@@ -241,7 +241,7 @@ public final class Enemy implements Target {
    *
    * @throws StructureException if maxHealth is too low to be considered alive
    */
-  public Enemy(double maxHealth, Iterable<EffectText> bonus) {
+  public Enemy(int maxHealth, Iterable<EffectText> bonus) {
     this.maxHealth = maxHealth;
     this.health = maxHealth;
     StructureException.throwOnAlreadyDead(this);
@@ -255,7 +255,7 @@ public final class Enemy implements Target {
     }
   }
 
-  private double maxHealth;
+  private int maxHealth;
   private double health;
 
   private final Map<Factor, Double> weaknessPercent;
@@ -281,7 +281,7 @@ public final class Enemy implements Target {
 
   @Override
   public String toString() {
-    return String.format("%s%.1f/%.1f%s", level(), health, maxHealth, multipliers());
+    return String.format("%s%.1f/%d%s", level(), health, maxHealth, multipliers());
   }
 
   private String level() {

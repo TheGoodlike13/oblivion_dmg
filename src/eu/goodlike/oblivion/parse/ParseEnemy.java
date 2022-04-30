@@ -18,12 +18,30 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * Ignores "enemy" command input if present.
  * Accepts any amount of inputs.
  * <p/>
+ * For inputs with prefixes, only the last one is considered, rest are ignored.
+ * <p/>
  * Inputs with ':' prefix are treated as labels.
- * Only last label is considered, others ignored.
  * If it is missing, the enemy is given the default label 'enemy'.
  * <p/>
+ * Inputs with '*' prefix are treated as level multipliers.
+ * Only positive numbers are allowed.
+ * If it is set, the enemy is considered to be leveled.
+ * The HP value for the enemy will be treated as lowest possible level HP.
+ * If it is missing, the enemy is not considered leveled and other level related inputs are ignored.
+ * <p/>
+ * Inputs with '<' prefix are treated as minimum level.
+ * Only positive numbers are allowed.
+ * It's only considered if level multiplier is also present.
+ * If it is missing in that case, the enemy is given the default minimum level of 1.
+ * <p/>
+ * Inputs with '>' prefix are treated as maximum level.
+ * Only levels higher than the minimum are allowed.
+ * It's only considered if level multiplier is also present.
+ * If it is missing in that case, the enemy is given the default maximum level of 2^31-1.
+ * <p/>
  * First non-label input is treated as HP.
- * It must be a parsable double.
+ * It must be a positive integer.
+ * If the enemy is leveled, this is considered to be its HP at the lowest level.
  * <p/>
  * All other non-label inputs are treated as passive permanent effects.
  * They must be parsable.
@@ -34,7 +52,7 @@ public final class ParseEnemy extends BaseParseInput<Enemy> {
 
   @Override
   protected Enemy parse() {
-    double hp = StructureException.doubleOrThrow(this.hp, "enemy hp");
+    int hp = StructureException.natOrThrow(this.hp, "enemy hp");
     List<EffectText> effects = Parse.effects(this.effects);
     Enemy enemy = new Enemy(hp, effects);
     if (isBlank(levelMultiplier)) {

@@ -79,7 +79,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void newEnemy() {
     sendInput("enemy 1000");
 
-    assertOutput("You face the enemy (1000.0 hp).");
+    assertOutput("You face the enemy (1000 hp).");
   }
 
   @Test
@@ -93,14 +93,14 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void spaceMan() {
     sendInput("enemy        1000");
 
-    assertOutput("You face the enemy (1000.0 hp).");
+    assertOutput("You face the enemy (1000 hp).");
   }
 
   @Test
   void iAintAfraidOfNoTabs() {
     sendInput("enemy\t\t\t1000");
 
-    assertOutput("You face the enemy (1000.0 hp).");
+    assertOutput("You face the enemy (1000 hp).");
   }
 
   @Test
@@ -115,7 +115,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 100 :enemy", "enemy $enemy");
 
     assertOutput(
-      "You face the enemy (100.0 hp).",
+      "You face the enemy (100 hp).",
       "Bad input: Nothing matches <enemy>"
     );
   }
@@ -162,7 +162,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy :beeeetch 999", "+s 1000s", "go");
 
     assertOutputSegment(
-      "You face the beeeetch (999.0 hp).",
+      "You face the beeeetch (999 hp).",
       "[#1] Next hit: <SPELL$1> {SHOCK DMG 1000 for 1s}",
       "00.000 Added <SPELL$1> SHOCK DMG 1000.0 for 1s",
       "00.250 Took <SPELL$1> SHOCK DMG 250.00",
@@ -179,7 +179,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 99", "+s 100d", "go");
 
     assertOutputSegment(
-      "You face the enemy (99.0 hp).",
+      "You face the enemy (99 hp).",
       "[#1] Next hit: <SPELL$1> {DRAIN LIFE 100 for 1s}",
       "00.000 Added <SPELL$1> DRAIN LIFE 100.0",
       "00.000 The enemy has died.",
@@ -192,7 +192,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 100", "+s 50d", "go");
 
     assertOutputSegment(
-      "You face the enemy (100.0 hp).",
+      "You face the enemy (100 hp).",
       "[#1] Next hit: <SPELL$1> {DRAIN LIFE 50 for 1s}",
       "00.000 Added <SPELL$1> DRAIN LIFE 50.0",
       "01.000 Expired <SPELL$1> DRAIN LIFE",
@@ -206,7 +206,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 10", "+s 10m", "go", "+s 10m", "go", "hit #1", "go");
 
     assertOutputSegment(
-      "You face the enemy (10.0 hp).",
+      "You face the enemy (10 hp).",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "00.000 Added <SPELL$1> MAGIC DMG 10.0 for 1s",
       "00.250 Took <SPELL$1> MAGIC DMG 2.50",
@@ -219,7 +219,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "Total damage by effect id:",
       "<SPELL$1> MAGIC DMG: 10.00",
       "-----",
-      "You face the enemy (10.0 hp).",
+      "You face the enemy (10 hp).",
       "[#2] Next hit: <SPELL$2> {MAGIC DMG 10 for 1s}",
       "00.000 Added <SPELL$2> MAGIC DMG 10.0 for 1s",
       "00.250 Took <SPELL$2> MAGIC DMG 2.50",
@@ -232,7 +232,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "Total damage by effect id:",
       "<SPELL$2> MAGIC DMG: 10.00",
       "-----",
-      "You face the enemy (10.0 hp).",
+      "You face the enemy (10 hp).",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "00.000 Added <SPELL$1> MAGIC DMG 10.0 for 1s",
       "00.250 Took <SPELL$1> MAGIC DMG 2.50",
@@ -259,7 +259,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 30", "+s 10m", "hit #1 #2", "go");
 
     assertOutputSegment(
-      "You face the enemy (30.0 hp).",
+      "You face the enemy (30 hp).",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "Bad input: Nothing matches <2>",
@@ -307,7 +307,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "Good job.",
       "How about picking an enemy?",
       "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "You face the enemy (10.0 hp).",
+      "You face the enemy (10 hp).",
       "You stare at the enemy.",
       "The enemy stares at you.",
       "How about casting some spells?"
@@ -422,7 +422,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 100 :bad_idea", "+s 1m :bad_idea", "forget $bad_idea", "enemy $bad_idea", "$bad_idea");
 
     assertOutput(
-      "You face the bad idea (100.0 hp).",
+      "You face the bad idea (100 hp).",
       "[#1] Next hit: <SPELL$bad_idea> {MAGIC DMG 1 for 1s}",
       "All references to <bad_idea> were removed from caches.",
       "Bad input: Nothing matches <bad_idea>",
@@ -446,9 +446,9 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 100 :good_idea", "forget $good", "enemy $good");
 
     assertOutput(
-      "You face the good idea (100.0 hp).",
+      "You face the good idea (100 hp).",
       "All references to <good> were removed from caches.",
-      "You face the good idea (100.0 hp)."
+      "You face the good idea (100 hp)."
     );
   }
 
@@ -477,7 +477,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
     assertOutputSegment(
       "Difficulty slider has been set to <100.0>.",
-      "You face the skeleton champion (350.0 hp).",
+      "You face the skeleton champion (350 hp).",
       "POISON x0.00",
       "FROST  x0.30",
       "[#1] Next hit: <SPELL$divine_justice_apprentice> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
@@ -548,12 +548,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy $xivilai", "level 31", "refresh");
 
     assertOutput(
-      "You face the xivilai (336.0 hp).",
+      "You face the xivilai (336 hp).",
       "FIRE   x0.67",
       "SHOCK  x1.20",
       "Player level has been set to <31>.",
       "-----",
-      "You face the xivilai (348.0 hp).",
+      "You face the xivilai (348 hp).",
       "FIRE   x0.67",
       "SHOCK  x1.20"
     );
@@ -563,7 +563,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void thatIsQuiteTheGoblin() {
     sendInput("enemy :goblin 50 <5 >25 *10");
 
-    assertOutput("You face the goblin (250.0 hp).");
+    assertOutput("You face the goblin (250 hp).");
   }
 
   @Test
@@ -571,7 +571,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 10", "+s 100d", "+s 100d", "go");
 
     assertOutputSegment(
-      "You face the enemy (10.0 hp).",
+      "You face the enemy (10 hp).",
       "[#1] Next hit: <SPELL$1> {DRAIN LIFE 100 for 1s}",
       "[#2] Next hit: <SPELL$2> {DRAIN LIFE 100 for 1s}",
       "00.000 Added <SPELL$1> DRAIN LIFE 100.0",
@@ -591,7 +591,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 10", "+b 100d +p 100d", "go");
 
     assertOutputSegment(
-      "You face the enemy (10.0 hp).",
+      "You face the enemy (10 hp).",
       "[#1] Next hit: <BOW$1> {DRAIN LIFE 100 for 1s} + <ARROW> {NO EFFECTS} + <POISON$2> {DRAIN LIFE 100 for 1s}",
       "00.000 Added <BOW$1> DRAIN LIFE 100.0",
       "00.000 The enemy has died.",
@@ -610,7 +610,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 10", "+p 1m", "$1", "$1", "+p 2m", "$2", "go");
 
     assertOutputSegment(
-      "You face the enemy (10.0 hp).",
+      "You face the enemy (10 hp).",
       "[#1] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 1 for 1s}",
       "[#2] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 1 for 1s}",
       "[#3] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 1 for 1s}",

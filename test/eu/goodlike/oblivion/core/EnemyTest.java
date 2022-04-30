@@ -53,7 +53,6 @@ class EnemyTest {
   void alreadyDeadNotAllowed() {
     assertBadStructure(() -> new Enemy(0));
     assertBadStructure(() -> new Enemy(-1));
-    assertBadStructure(() -> new Enemy(0.004));
   }
 
   @Test
