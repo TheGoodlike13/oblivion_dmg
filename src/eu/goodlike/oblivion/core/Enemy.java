@@ -90,7 +90,7 @@ public final class Enemy implements Target {
   }
 
   public void hit(Hit hit) {
-    hit(hit, Observer.EMPTY);
+    hit(hit, Observer.NONE);
   }
 
   /**
@@ -121,7 +121,7 @@ public final class Enemy implements Target {
   }
 
   public void tick() {
-    tick(Observer.EMPTY);
+    tick(Observer.NONE);
   }
 
   /**
@@ -166,7 +166,7 @@ public final class Enemy implements Target {
    * @return time it took for the remaining effects to expire, 0 if there were no such effects
    */
   public double resolve() {
-    return resolve(Observer.EMPTY);
+    return resolve(Observer.NONE);
   }
 
   public double resolve(Observer observer) {
@@ -309,13 +309,37 @@ public final class Enemy implements Target {
     return b.toString();
   }
 
+  /**
+   * Collects information about some activity on the enemy.
+   */
   public interface Observer {
+    /**
+     * Observes actual target.
+     * All methods are passed through, but information is collected as well.
+     * Should be called for every hit or tick.
+     */
     Target observing(Target actual);
+
+    /**
+     * Informs this observer that a tick is about to be processed.
+     * If this is not called after {@link #observing}, it assumes we're observing a hit.
+     */
     void tick();
+
+    /**
+     * Sets given effect id as the next to be processed.
+     */
     void next(Effect.Id id);
+
+    /**
+     * Marks the effect being processed as having expired or replaced.
+     */
     void markExpired();
 
-    Observer EMPTY = new Observer() {
+    /**
+     * Non-observing observer, stand-in for null.
+     */
+    Observer NONE = new Observer() {
       @Override
       public Target observing(Target actual) {
         return actual;
