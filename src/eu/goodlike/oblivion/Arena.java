@@ -9,13 +9,12 @@ import java.util.List;
 
 import static eu.goodlike.oblivion.Global.Settings.TICK;
 
+/**
+ * The calculator for using spells/attacks on an enemy.
+ * <p/>
+ * Writes down all inputs and outcomes.
+ */
 public final class Arena {
-
-  public void reset() {
-    hits = new ArrayList<>();
-    label = null;
-    enemy = null;
-  }
 
   public void setEnemy(NamedValue<Enemy> enemy) {
     this.label = enemy.getName().replace('_', ' ');
@@ -42,6 +41,12 @@ public final class Arena {
     if (ready()) {
       fight();
     }
+  }
+
+  public void reset() {
+    hits = new ArrayList<>();
+    label = null;
+    enemy = null;
   }
 
   public Arena() {

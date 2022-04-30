@@ -7,6 +7,7 @@ import eu.goodlike.oblivion.command.LowerTheGates;
 import eu.goodlike.oblivion.command.RepeatHit;
 import eu.goodlike.oblivion.command.Reset;
 import eu.goodlike.oblivion.command.SetEnemy;
+import eu.goodlike.oblivion.command.SetHit;
 import eu.goodlike.oblivion.command.UndoLastHit;
 
 import java.util.function.Supplier;
@@ -14,8 +15,19 @@ import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 
+/**
+ * Represents a unit of work to be done following input.
+ * Instances of this class should be used once following the input and then discarded.
+ * <p/>
+ * Please review implementations for details.
+ */
 public interface Command {
 
+  /**
+   * Identifiers for commands.
+   * Most commands will be referenced using a prefix to their name.
+   * Only {@link SetHit} has no name, as it is recognized differently and parsed in its entirety as arguments.
+   */
   enum Name {
     ENEMY(SetEnemy::new),
     FORGET(JustForget::new),
@@ -48,8 +60,21 @@ public interface Command {
     private final Supplier<Command> factory;
   }
 
+  /**
+   * Sets the input for this command.
+   * This includes the name, if it was used.
+   * <p/>
+   * Using a setter prevents having to pass them via constructor,
+   * which would inevitably make any sub-classes bulkier.
+   * With this, all commands have the default constructor.
+   */
   void setParams(String... parsedInput);
 
+  /**
+   * Performs the unit of work related to the action.
+   * Does not throw exceptions if at all possible.
+   * Writes the expected or unexpected errors instead.
+   */
   void execute();
 
 }
