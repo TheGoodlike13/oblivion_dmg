@@ -458,11 +458,18 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void andNowForSomethingCompletelyDifferent() {
-    DIFFICULTY = 100;
-
-    sendInput("enemy $skeleton_champion", "$divine_justice_apprentice", "$divine_justice_expert", "hit #1 #2", "$aetherius", "go");
+    sendInput(
+      "difficulty 100",
+      "enemy $skeleton_champion",
+      "$divine_justice_apprentice",
+      "$divine_justice_expert",
+      "hit #1 #2",
+      "$aetherius",
+      "go"
+    );
 
     assertOutputSegment(
+      "Difficulty slider has been set to <100.0>.",
       "You face the skeleton champion (350.0 hp).",
       "POISON x0.00",
       "FROST  x0.30",
