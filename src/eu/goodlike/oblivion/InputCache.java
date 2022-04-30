@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -76,7 +75,7 @@ public final class InputCache<T> {
    */
   public void reset(String... prepFiles) {
     cache.clear();
-    counter.set(0);
+    counter = 0;
 
     for (String prepFile : prepFiles) {
       parseResource(prepFile);
@@ -95,16 +94,16 @@ public final class InputCache<T> {
     this.parserFactory = parserFactory;
 
     this.cache = new TreeMap<>();
-    this.counter = new AtomicInteger(0);
+    this.counter = 0;
   }
 
   private final Function<String, Parse.Input<T>> parserFactory;
 
   private final Map<String, T> cache;
-  private final AtomicInteger counter;
+  private int counter;
 
   private String nextRef() {
-    return String.valueOf(counter.incrementAndGet());
+    return String.valueOf(++counter);
   }
 
   private void parseResource(String prepFile) {
