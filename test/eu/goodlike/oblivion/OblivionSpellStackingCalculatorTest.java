@@ -149,7 +149,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "You face the beeeetch (999.0 hp).",
       "[#1] Next hit: <SPELL$1> {SHOCK DMG 1000 for 1s}",
       "00.000 You hit with <SPELL$1> {SHOCK DMG 1000 for 1s}",
-      "01.000 The beeeetch has died.",
+      "00.999 The beeeetch has died.",
       "01.000 All effects have expired."
     );
   }
@@ -396,7 +396,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "00.000 You hit with <SPELL$divine_justice_apprentice> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
       "00.000 You hit with <SPELL$divine_justice_expert> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
       "00.000 You hit with <MELEE$aetherius> {SHOCK DMG 18 for 1s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s}",
-      "00.470 The skeleton champion has died.",
+      "00.463 The skeleton champion has died.",
       "06.000 All effects have expired.",
       "The skeleton champion took a total of 524.0 damage (174.0 overkill)."
     );

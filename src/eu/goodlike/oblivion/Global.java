@@ -80,7 +80,7 @@ public final class Global {
     /**
      * Tick rate in seconds.
      */
-    public static double TICK = 0.01;
+    public static double TICK = 0.001;
 
     /**
      * Config files containing prepared entities which can be parsed and stored into caches for future use.
