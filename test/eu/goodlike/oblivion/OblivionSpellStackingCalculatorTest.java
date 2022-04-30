@@ -196,7 +196,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "[#1] Next hit: <SPELL$1> {DRAIN LIFE 50 for 1s}",
       "00.000 Added <SPELL$1> DRAIN LIFE 50.0",
       "01.000 Expired <SPELL$1> DRAIN LIFE",
-      "The enemy has survived 0.0 damage (100.0 hp left)."
+      "The enemy has survived 0.0 damage (100.0 hp left).",
+      "-----"
     );
   }
 
@@ -215,6 +216,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "01.000 The enemy has died.",
       "01.000 Expired <SPELL$1> MAGIC DMG",
       "The enemy took a total of 10.0 damage (0.0 overkill).",
+      "Total damage by effect id:",
+      "<SPELL$1> MAGIC DMG: 10.00",
       "-----",
       "You face the enemy (10.0 hp).",
       "[#2] Next hit: <SPELL$2> {MAGIC DMG 10 for 1s}",
@@ -226,6 +229,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "01.000 The enemy has died.",
       "01.000 Expired <SPELL$2> MAGIC DMG",
       "The enemy took a total of 10.0 damage (0.0 overkill).",
+      "Total damage by effect id:",
+      "<SPELL$2> MAGIC DMG: 10.00",
       "-----",
       "You face the enemy (10.0 hp).",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
@@ -236,7 +241,9 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "01.000 Took <SPELL$1> MAGIC DMG 2.50",
       "01.000 The enemy has died.",
       "01.000 Expired <SPELL$1> MAGIC DMG",
-      "The enemy took a total of 10.0 damage (0.0 overkill)."
+      "The enemy took a total of 10.0 damage (0.0 overkill).",
+      "Total damage by effect id:",
+      "<SPELL$1> MAGIC DMG: 10.00"
     );
   }
 
@@ -507,7 +514,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "06.000 Expired <SPELL$divine_justice_expert> RESIST MAGIC",
       "06.000 Expired <SPELL$divine_justice_expert> RESIST SHOCK",
       "06.000 Expired <SPELL$divine_justice_expert> RESIST POISON",
-      "The skeleton champion took a total of 524.0 damage (174.0 overkill)."
+      "The skeleton champion took a total of 524.0 damage (174.0 overkill).",
+      "Total damage by effect id:",
+      "<MELEE$aetherius> DRAIN LIFE: 200.00",
+      "<MELEE$aetherius> SHOCK DMG: 150.01",
+      "Total overkill by effect id:",
+      "<MELEE$aetherius> SHOCK DMG: 173.99"
     );
   }
 
@@ -552,6 +564,91 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy :goblin 50 <5 >25 *10");
 
     assertOutput("You face the goblin (250.0 hp).");
+  }
+
+  @Test
+  void overDrain() {
+    sendInput("enemy 10", "+s 100d", "+s 100d", "go");
+
+    assertOutputSegment(
+      "You face the enemy (10.0 hp).",
+      "[#1] Next hit: <SPELL$1> {DRAIN LIFE 100 for 1s}",
+      "[#2] Next hit: <SPELL$2> {DRAIN LIFE 100 for 1s}",
+      "00.000 Added <SPELL$1> DRAIN LIFE 100.0",
+      "00.000 The enemy has died.",
+      "00.000 Added <SPELL$2> DRAIN LIFE 100.0",
+      "01.000 Expired <SPELL$1> DRAIN LIFE",
+      "01.000 Expired <SPELL$2> DRAIN LIFE",
+      "The enemy took a total of 100.0 damage (90.0 overkill).",
+      "Total damage by effect id:",
+      "<SPELL$1> DRAIN LIFE: 100.00",
+      "-----"
+    );
+  }
+
+  @Test
+  void overDrainHit() {
+    sendInput("enemy 10", "+b 100d +p 100d", "go");
+
+    assertOutputSegment(
+      "You face the enemy (10.0 hp).",
+      "[#1] Next hit: <BOW$1> {DRAIN LIFE 100 for 1s} + <ARROW> {NO EFFECTS} + <POISON$2> {DRAIN LIFE 100 for 1s}",
+      "00.000 Added <BOW$1> DRAIN LIFE 100.0",
+      "00.000 The enemy has died.",
+      "00.000 Added (1)<POISON$2> DRAIN LIFE 100.0",
+      "01.000 Expired <BOW$1> DRAIN LIFE",
+      "01.000 Expired (1)<POISON$2> DRAIN LIFE",
+      "The enemy took a total of 100.0 damage (90.0 overkill).",
+      "Total damage by effect id:",
+      "<BOW$1> DRAIN LIFE: 100.00",
+      "-----"
+    );
+  }
+
+  @Test
+  void countThePoisons() {
+    sendInput("enemy 10", "+p 1m", "$1", "$1", "+p 2m", "$2", "go");
+
+    assertOutputSegment(
+      "You face the enemy (10.0 hp).",
+      "[#1] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 1 for 1s}",
+      "[#2] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 1 for 1s}",
+      "[#3] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 1 for 1s}",
+      "[#4] Next hit: <MELEE> {NO EFFECTS} + <POISON$2> {MAGIC DMG 2 for 1s}",
+      "[#5] Next hit: <MELEE> {NO EFFECTS} + <POISON$2> {MAGIC DMG 2 for 1s}",
+      "00.000 Added (1)<POISON$1> MAGIC DMG 1.0 for 1s",
+      "00.000 Added (2)<POISON$1> MAGIC DMG 1.0 for 1s",
+      "00.000 Added (3)<POISON$1> MAGIC DMG 1.0 for 1s",
+      "00.000 Added (1)<POISON$2> MAGIC DMG 2.0 for 1s",
+      "00.000 Added (2)<POISON$2> MAGIC DMG 2.0 for 1s",
+      "00.250 Took (1)<POISON$1> MAGIC DMG 0.25",
+      "00.250 Took (2)<POISON$1> MAGIC DMG 0.25",
+      "00.250 Took (3)<POISON$1> MAGIC DMG 0.25",
+      "00.250 Took (1)<POISON$2> MAGIC DMG 0.50",
+      "00.250 Took (2)<POISON$2> MAGIC DMG 0.50",
+      "00.500 Took (1)<POISON$1> MAGIC DMG 0.25",
+      "00.500 Took (2)<POISON$1> MAGIC DMG 0.25",
+      "00.500 Took (3)<POISON$1> MAGIC DMG 0.25",
+      "00.500 Took (1)<POISON$2> MAGIC DMG 0.50",
+      "00.500 Took (2)<POISON$2> MAGIC DMG 0.50",
+      "00.750 Took (1)<POISON$1> MAGIC DMG 0.25",
+      "00.750 Took (2)<POISON$1> MAGIC DMG 0.25",
+      "00.750 Took (3)<POISON$1> MAGIC DMG 0.25",
+      "00.750 Took (1)<POISON$2> MAGIC DMG 0.50",
+      "00.750 Took (2)<POISON$2> MAGIC DMG 0.50",
+      "01.000 Expired (1)<POISON$1> MAGIC DMG",
+      "01.000 Expired (2)<POISON$1> MAGIC DMG",
+      "01.000 Expired (3)<POISON$1> MAGIC DMG",
+      "01.000 Expired (1)<POISON$2> MAGIC DMG",
+      "01.000 Expired (2)<POISON$2> MAGIC DMG",
+      "The enemy has survived 7.0 damage (3.0 hp left).",
+      "Total damage by effect id:",
+      "(1)<POISON$1> MAGIC DMG: 1.00",
+      "(2)<POISON$1> MAGIC DMG: 1.00",
+      "(3)<POISON$1> MAGIC DMG: 1.00",
+      "(1)<POISON$2> MAGIC DMG: 2.00",
+      "(2)<POISON$2> MAGIC DMG: 2.00"
+    );
   }
 
   private void sendInput(String... lines) {

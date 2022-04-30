@@ -123,6 +123,7 @@ public final class Arena {
     else {
       Write.line("The %s took a total of %.1f damage (%.1f overkill).", label, enemy.damageTaken(), enemy.overkill());
     }
+    play.writeTotals();
   }
 
   private void announceOpponent() {
@@ -196,7 +197,15 @@ public final class Arena {
     @Override
     public void drain(double hp) {
       actual.drain(hp);
-      if (!isTicking) {
+      if (isTicking) {
+        if (!isDeathConfirmed) {
+          totalDamage.remove(id);
+        }
+      }
+      else {
+        if (!isDeathConfirmed) {
+          totalDamage.put(id, hp);
+        }
         combatLog(newEffect(hp));
         checkPossibleDeath();
       }
@@ -208,6 +217,11 @@ public final class Arena {
       if (!isTicking) {
         combatLog(String.format("%s %s %.1f for %.0fs", newEffect(), id, magnitude, duration));
       }
+    }
+
+    public void writeTotals() {
+      writeTotals(totalDamage, "damage");
+      writeTotals(totalOverkill, "overkill");
     }
 
     public PlayByPlay() {
@@ -263,6 +277,17 @@ public final class Arena {
 
     private void combatLog(String text) {
       Write.line("%06.3f %s", duration, text);
+    }
+
+    private void writeTotals(Map<Effect.Id, Double> totals, String desc) {
+      if (!totals.isEmpty()) {
+        Write.line("Total %s by effect id:", desc);
+        totals.forEach(this::writeEffect);
+      }
+    }
+
+    private void writeEffect(Effect.Id id, double d) {
+      Write.line(String.format("%s: %.2f", id, d));
     }
   }
 

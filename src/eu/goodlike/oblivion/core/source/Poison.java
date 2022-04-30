@@ -52,7 +52,7 @@ public final class Poison implements Method, Source {
   private static final class PoisonBottle extends Carrier {
     @Override
     public Effect.Id toId(EffectText effect) {
-      return new AlwaysUnique();
+      return new AlwaysUnique(this, effect.getType(), ++useCount);
     }
 
     @Override
@@ -63,9 +63,30 @@ public final class Poison implements Method, Source {
     public PoisonBottle(String label, Iterable<EffectText> effects) {
       super(label, Source.POISON, Factor.POISON, effects);
     }
+
+    // exposed so AlwaysUnique can see it
+    protected String prefix() {
+      return super.prefix();
+    }
+
+    private int useCount = 0;
   }
 
   private static final class AlwaysUnique implements Effect.Id {
+    private AlwaysUnique(PoisonBottle poison, Effect.Type type, int use) {
+      this.poison = poison;
+      this.type = type;
+      this.use = use;
+    }
+
+    private final PoisonBottle poison;
+    private final Effect.Type type;
+    private final int use;
+
+    @Override
+    public String toString() {
+      return "(" + use + ")" + poison.prefix() + type;
+    }
   }
 
 }

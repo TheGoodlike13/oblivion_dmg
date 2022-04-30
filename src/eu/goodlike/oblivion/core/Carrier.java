@@ -96,7 +96,7 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
     return prefix() + getEffects();
   }
 
-  private String prefix() {
+  protected String prefix() {
     return "<" + source + getLabel() + "> ";
   }
 
