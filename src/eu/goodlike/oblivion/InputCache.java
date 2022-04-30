@@ -69,6 +69,14 @@ public final class InputCache<T> {
   }
 
   /**
+   * Removes value that is associated with given ref from this cache.
+   * If no such value exists, this does nothing.
+   */
+  public void remove(String ref) {
+    cache.remove(ref);
+  }
+
+  /**
    * Clears the cache and resets the dynamic reference counter.
    * Then parses all given files as resources containing prepared data.
    *

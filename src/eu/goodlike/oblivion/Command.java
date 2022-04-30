@@ -2,6 +2,7 @@ package eu.goodlike.oblivion;
 
 import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
 import eu.goodlike.oblivion.command.ItsAllOver;
+import eu.goodlike.oblivion.command.JustForget;
 import eu.goodlike.oblivion.command.LowerTheGates;
 import eu.goodlike.oblivion.command.RepeatHit;
 import eu.goodlike.oblivion.command.Reset;
@@ -17,6 +18,7 @@ public interface Command {
 
   enum Name {
     ENEMY(SetEnemy::new),
+    FORGET(JustForget::new),
     GO(LowerTheGates::new),
     HIT(RepeatHit::new),
     RESET(Reset::new),

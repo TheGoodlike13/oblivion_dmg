@@ -1,5 +1,6 @@
 package eu.goodlike.oblivion;
 
+import com.google.common.collect.ImmutableList;
 import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Hit;
@@ -10,6 +11,7 @@ import eu.goodlike.oblivion.parse.ParseEnemy;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 import java.util.function.Consumer;
 
@@ -49,6 +51,7 @@ public final class Global {
   public static final InputCache<Enemy> ENEMIES = new InputCache<>(ParseEnemy::new);
   public static final InputCache<Carrier> CARRIERS = new InputCache<>(ParseCarrier::new);
   public static final InputCache<Hit> HITS = new InputCache<>();
+  public static final List<InputCache<?>> CACHES = ImmutableList.of(ENEMIES, CARRIERS, HITS);
 
   /**
    * Flag which determines if the application should exit or not.

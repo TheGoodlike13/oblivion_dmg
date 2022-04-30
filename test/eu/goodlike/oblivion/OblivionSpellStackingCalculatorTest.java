@@ -388,6 +388,42 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     );
   }
 
+
+  @Test
+  void heGivethAndHeTakethAway() {
+    sendInput("enemy 100 @bad_idea", "+s 1m @bad_idea", "forget $bad_idea", "enemy $bad_idea", "$bad_idea");
+
+    assertOutput(
+      "You face the bad idea (100.0 hp).",
+      "[#1] Next hit: <SPELL$bad_idea> {MAGIC DMG 1 for 1s}",
+      "All references to <bad_idea> were removed from caches.",
+      "Bad input: Nothing matches <bad_idea>",
+      "Bad input: Nothing matches <bad_idea>"
+    );
+  }
+
+  @Test
+  void tryNotToForgetTooMuch() {
+    sendInput("forget", "forget what", "forget $what");
+
+    assertOutput(
+      // I guess the app... FORGOT... to print something when there are no args!
+      "All references to <what> were removed from caches.",
+      "All references to <what> were removed from caches."
+    );
+  }
+
+  @Test
+  void cantForgetByPrefix() {
+    sendInput("enemy 100 @good_idea", "forget $good", "enemy $good");
+
+    assertOutput(
+      "You face the good idea (100.0 hp).",
+      "All references to <good> were removed from caches.",
+      "You face the good idea (100.0 hp)."
+    );
+  }
+
   @Test
   void justCantBeDone() {
     sendInput("+m 1m +s 1m", "$1 +st 1m", "$1 +p 1m @1m $1m");
