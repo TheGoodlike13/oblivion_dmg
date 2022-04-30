@@ -18,7 +18,7 @@ import static eu.goodlike.oblivion.Global.Settings.TICK;
  * <p/>
  * Writes down all inputs and outcomes.
  */
-public final class Arena implements Enemy.Observer, Target {
+public final class Arena {
 
   public void setEnemy(NamedValue<Enemy> enemy) {
     this.label = enemy.getName().replace('_', ' ');
@@ -50,11 +50,8 @@ public final class Arena implements Enemy.Observer, Target {
   public void refresh() {
     Write.separator();
 
+    play = new PlayByPlay();
     hits = new ArrayList<>();
-    totalDamage.clear();
-    totalDamage2.clear();
-    totalDamageDead.clear();
-    nextDump = 0.25;
     if (enemy != null) {
       enemy.updateLevel();
       announceOpponent();
@@ -62,112 +59,20 @@ public final class Arena implements Enemy.Observer, Target {
   }
 
   public void reset() {
+    play = new PlayByPlay();
     hits = new ArrayList<>();
     label = null;
     enemy = null;
-    totalDamage.clear();
-    totalDamage2.clear();
-    totalDamageDead.clear();
-    nextDump = 0.25;
-  }
-
-  private Target actual;
-  private Effect.Id id;
-  private boolean isTicking;
-  private boolean isExpired;
-
-  private double nextDump = 0.25;
-
-  private final Map<Effect.Id, Double> totalDamage = new LinkedHashMap<>();
-  private final Map<Effect.Id, Double> totalDamage2 = new LinkedHashMap<>();
-  private final Map<Effect.Id, Double> totalDamageDead = new LinkedHashMap<>();
-
-
-  @Override
-  public Target observing(Target actual) {
-    this.isTicking = false;
-    this.actual = actual;
-    return this;
-  }
-
-  @Override
-  public void tick() {
-    this.isTicking = true;
-
-    if (duration >= nextDump) {
-      nextDump += 0.25;
-      dump();
-    }
-    duration += TICK;
-  }
-
-  private void dump() {
-    totalDamage.forEach((id, d) -> combatLog(String.format("Took %s %.2f", id, d)));
-    totalDamage.clear();
-  }
-
-  @Override
-  public void next(Effect.Id id) {
-    this.isExpired = false;
-    this.id = id;
-  }
-
-  @Override
-  public void markExpired() {
-    this.isExpired = true;
-    if (isTicking) {
-      combatLog("Expired " + id);
-    }
-  }
-
-  @Override
-  public void modifyResist(Factor factor, double percent) {
-    actual.modifyResist(factor, percent);
-    if (!isTicking) {
-      combatLog(String.format("%s %s %.2f", isExpired ? "Replaced" : "Added", id, percent));
-    }
-  }
-
-  @Override
-  public void damage(double dmg) {
-    if (enemy.isAlive()) {
-      totalDamage.merge(id, dmg, Double::sum);
-      totalDamage2.merge(id, dmg, Double::sum);
-    }
-    else {
-      totalDamageDead.merge(id, dmg, Double::sum);
-    }
-    actual.damage(dmg);
-    checkPossibleDeath();
-  }
-
-  @Override
-  public void drain(double hp) {
-    actual.drain(hp);
-    if (!isTicking) {
-      combatLog(String.format("%s %s %.2f", isExpired ? "Replaced" : "Added", id, hp));
-      checkPossibleDeath();
-    }
-  }
-
-  @Override
-  public void poke(double magnitude, double duration) {
-    actual.poke(magnitude, duration);
-    if (!isTicking) {
-      combatLog(String.format("%s %s %.1f for %.0fs", isExpired ? "Replaced" : "Added", id, magnitude, duration));
-    }
   }
 
   public Arena() {
     reset();
   }
 
+  private PlayByPlay play;
   private List<Hit> hits;
   private String label;
   private Enemy enemy;
-
-  private double duration;
-  private boolean isConfirmedDead;
 
   private boolean ready() {
     if (hits.isEmpty()) {
@@ -187,9 +92,6 @@ public final class Arena implements Enemy.Observer, Target {
   }
 
   private void fight() {
-    duration = 0;
-    isConfirmedDead = false;
-
     try {
       performHits();
       awaitEffectExpiration();
@@ -202,16 +104,16 @@ public final class Arena implements Enemy.Observer, Target {
 
   private void performHits() {
     for (Hit hit : hits) {
-      enemy.hit(hit, this);
+      enemy.hit(hit, play);
     }
   }
 
   private void awaitEffectExpiration() {
     while (enemy.isAlive() && enemy.isAffected()) {
-      enemy.tick(this);
+      enemy.tick(play);
     }
 
-    enemy.resolve(this);
+    enemy.resolve(play);
   }
 
   private void writeObituary() {
@@ -221,18 +123,6 @@ public final class Arena implements Enemy.Observer, Target {
     else {
       Write.line("The %s took a total of %.1f damage (%.1f overkill).", label, enemy.damageTaken(), enemy.overkill());
     }
-  }
-
-  private void checkPossibleDeath() {
-    if (!isConfirmedDead && !enemy.isAlive()) {
-      isConfirmedDead = true;
-      dump();
-      combatLog("The " + label + " has died.");
-    }
-  }
-
-  private void combatLog(String text) {
-    Write.line("%06.3f %s", duration, text);
   }
 
   private void announceOpponent() {
@@ -246,6 +136,133 @@ public final class Arena implements Enemy.Observer, Target {
       if (multiplier != 1) {
         Write.line("%-6s x%.2f", factor, multiplier);
       }
+    }
+  }
+
+  private final class PlayByPlay implements Enemy.Observer, Target {
+    @Override
+    public Target observing(Target actual) {
+      this.isTicking = false;
+      this.actual = actual;
+      return this;
+    }
+
+    @Override
+    public void tick() {
+      this.isTicking = true;
+
+      if (duration >= nextDump) {
+        nextDump += 0.25;
+        dumpNextChunkOfDamage();
+      }
+      duration += TICK;
+    }
+
+    @Override
+    public void next(Effect.Id id) {
+      this.isExpired = false;
+      this.id = id;
+    }
+
+    @Override
+    public void markExpired() {
+      this.isExpired = true;
+      if (isTicking) {
+        combatLog("Expired " + id);
+      }
+    }
+
+    @Override
+    public void modifyResist(Factor factor, double percent) {
+      actual.modifyResist(factor, percent);
+      if (!isTicking) {
+        combatLog(newEffect(percent));
+      }
+    }
+
+    @Override
+    public void damage(double dmg) {
+      if (enemy.isAlive()) {
+        liveDamage.merge(id, dmg, Double::sum);
+        totalDamage.merge(id, dmg, Double::sum);
+      }
+      else {
+        totalOverkill.merge(id, dmg, Double::sum);
+      }
+      actual.damage(dmg);
+      checkPossibleDeath();
+    }
+
+    @Override
+    public void drain(double hp) {
+      actual.drain(hp);
+      if (!isTicking) {
+        combatLog(newEffect(hp));
+        checkPossibleDeath();
+      }
+    }
+
+    @Override
+    public void poke(double magnitude, double duration) {
+      actual.poke(magnitude, duration);
+      if (!isTicking) {
+        combatLog(String.format("%s %s %.1f for %.0fs", newEffect(), id, magnitude, duration));
+      }
+    }
+
+    public PlayByPlay() {
+      this.isDeathConfirmed = false;
+
+      this.actual = null;
+      this.id = null;
+      this.isTicking = false;
+      this.isExpired = false;
+
+      this.duration = 0;
+      this.nextDump = 0.25;
+
+      this.liveDamage = new LinkedHashMap<>();
+      this.totalDamage = new LinkedHashMap<>();
+      this.totalOverkill = new LinkedHashMap<>();
+    }
+
+    private boolean isDeathConfirmed;
+
+    private Target actual;
+    private Effect.Id id;
+    private boolean isTicking;
+    private boolean isExpired;
+
+    private double duration;
+    private double nextDump;
+
+    private final Map<Effect.Id, Double> liveDamage;
+    private final Map<Effect.Id, Double> totalDamage;
+    private final Map<Effect.Id, Double> totalOverkill;
+
+    private void dumpNextChunkOfDamage() {
+      liveDamage.forEach((id, d) -> combatLog(String.format("Took %s %.2f", id, d)));
+      liveDamage.clear();
+    }
+
+    private void checkPossibleDeath() {
+      if (!isDeathConfirmed && !enemy.isAlive()) {
+        isDeathConfirmed = true;
+        dumpNextChunkOfDamage();
+        combatLog("The " + label + " has died.");
+      }
+    }
+
+    private String newEffect(double percent) {
+      return String.format("%s %s %.1f", newEffect(), id, percent);
+    }
+
+    private String newEffect() {
+      return isExpired ? "Replaced" : "Added";
+    }
+
+    private void combatLog(String text) {
+      Write.line("%06.3f %s", duration, text);
     }
   }
 
