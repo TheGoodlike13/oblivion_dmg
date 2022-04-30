@@ -4,6 +4,10 @@ import static eu.goodlike.oblivion.Global.WRITER;
 
 public final class Write {
 
+  public static void line(String format, Object... args) {
+    line(String.format(format, args));
+  }
+
   public static void line(String line) {
     WRITER.accept(line + System.lineSeparator());
   }

@@ -117,10 +117,10 @@ public final class Arena {
 
   private void writeObituary() {
     if (enemy.isAlive()) {
-      Write.line(String.format("The %s has survived %.1f damage (%.1f hp left).", label, enemy.damageTaken(), enemy.healthRemaining()));
+      Write.line("The %s has survived %.1f damage (%.1f hp left).", label, enemy.damageTaken(), enemy.healthRemaining());
     }
     else {
-      Write.line(String.format("The %s took a total of %.1f damage (%.1f overkill).", label, enemy.damageTaken(), enemy.overkill()));
+      Write.line("The %s took a total of %.1f damage (%.1f overkill).", label, enemy.damageTaken(), enemy.overkill());
     }
   }
 
@@ -131,7 +131,7 @@ public final class Arena {
   }
 
   private void combatLog(String text) {
-    Write.line(String.format("%06.3f " + text, duration));
+    Write.line("%06.3f %s", duration, text);
   }
 
   private void announceOpponent() {
@@ -143,7 +143,7 @@ public final class Arena {
     for (Factor factor : Factor.ALL) {
       double multiplier = enemy.getMultiplier(factor);
       if (multiplier != 1) {
-        Write.line(String.format("%-6s x%.2f", factor, multiplier));
+        Write.line("%-6s x%.2f", factor, multiplier);
       }
     }
   }
