@@ -36,4 +36,12 @@ public interface Target {
    */
   void drain(double hp);
 
+  /**
+   * Inform this target that an effect was applied with given magnitude & duration.
+   * Calling this implies the effect has no other effect upon application.
+   * Does nothing by default, but can be overridden to collect or print some information.
+   */
+  default void poke(double magnitude, double duration) {
+  }
+
 }

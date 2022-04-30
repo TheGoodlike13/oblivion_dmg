@@ -31,6 +31,7 @@ public final class Damage extends BaseEffect {
 
   @Override
   public void onApply(Target target) {
+    target.poke(magnitude, originalDuration);
   }
 
   @Override
@@ -44,6 +45,9 @@ public final class Damage extends BaseEffect {
 
   public Damage(double magnitude, double duration) {
     super(magnitude, duration);
+    this.originalDuration = duration;
   }
+
+  private final double originalDuration;
 
 }

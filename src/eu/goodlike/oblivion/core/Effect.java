@@ -27,7 +27,7 @@ public interface Effect {
   interface Type {
     /**
      * @param magnitude effective magnitude of the new effect, after all multipliers are taken into account
-     * @param duration full duration of the new effect
+     * @param duration full duration of the new effect in secs
      * @return an active effect of this type with full duration
      */
     Effect activate(double magnitude, double duration);

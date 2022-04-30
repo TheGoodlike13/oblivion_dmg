@@ -150,6 +150,14 @@ public final class Arena implements Enemy.Observer, Target {
     }
   }
 
+  @Override
+  public void poke(double magnitude, double duration) {
+    actual.poke(magnitude, duration);
+    if (!isTicking) {
+      combatLog(String.format("%s %s %.1f for %.0fs", isExpired ? "Replaced" : "Added", id, magnitude, duration));
+    }
+  }
+
   public Arena() {
     reset();
   }
@@ -181,7 +189,6 @@ public final class Arena implements Enemy.Observer, Target {
   private void fight() {
     duration = 0;
     isConfirmedDead = false;
-    Write.line("Lower the gates!");
 
     try {
       performHits();
