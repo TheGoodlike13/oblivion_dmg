@@ -3,10 +3,10 @@ package eu.goodlike.oblivion.core;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import eu.goodlike.oblivion.Global.Settings;
+import eu.goodlike.oblivion.Neaterator;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,19 +133,17 @@ public final class Enemy implements Target {
     Target target = observer.observing(this);
     observer.tick();
 
-    Iterator<Map.Entry<Effect.Id, Effect>> i = activeEffects.entrySet().iterator();
-    while (i.hasNext()) {
-      Map.Entry<Effect.Id, Effect> next = i.next();
-      Effect effect = next.getValue();
+    new Neaterator<>(activeEffects).forEach((i, id, effect) -> {
+      observer.next(id);
 
-      observer.next(next.getKey());
       effect.onTick(target);
+
       if (effect.hasExpired()) {
         i.remove();
         observer.markExpired();
         effect.onRemove(target);
       }
-    }
+    });
   }
 
   /**
