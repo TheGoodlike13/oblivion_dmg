@@ -212,7 +212,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void watchYourHitting() {
     sendInput("hit #1");
 
-    assertOutput("Bad input: Nothing with name <1>");
+    assertOutput("Bad input: Nothing matches <1>");
   }
 
   @Test
@@ -223,7 +223,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "You face the enemy (30.0 hp).",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "Bad input: Nothing with name <2>",
+      "Bad input: Nothing matches <2>",
       "00.000 You hit with <SPELL$1> {MAGIC DMG 10 for 1s}",
       "00.000 You hit with <SPELL$1> {MAGIC DMG 10 for 1s}",
       "01.000 All effects have expired."
@@ -246,7 +246,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void repeatWhat() {
     sendInput("hit x3");
 
-    assertOutput("Bad input: Nothing with name <>");
+    assertOutput("Bad input: Nothing matches <>");
   }
 
   @Test
@@ -351,7 +351,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void unknownName() {
     sendInput("$definitely_not_in_there");
 
-    assertOutput("Bad input: Nothing with name <definitely_not_in_there>");
+    assertOutput("Bad input: Nothing matches <definitely_not_in_there>");
   }
 
   @Test
@@ -400,6 +400,13 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "06.000 All effects have expired.",
       "The skeleton champion took a total of 524.0 damage (174.0 overkill)."
     );
+  }
+
+  @Test
+  void prefixesAreMagic() {
+    sendInput("$a");
+
+    assertOutput("[#1] Next hit: <MELEE$aetherius> {SHOCK DMG 18 for 1s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s}");
   }
 
   private void sendInput(String... lines) {

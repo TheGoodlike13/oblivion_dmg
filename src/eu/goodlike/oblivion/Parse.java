@@ -35,6 +35,19 @@ import static org.apache.commons.lang3.StringUtils.substringAfter;
 public final class Parse {
 
   /**
+   * Checks all the values in given order.
+   * The first value whose {@link #toString} has the given prefix is returned, if any.
+   */
+  public static <T> Optional<T> firstMatch(String prefix, Iterable<T> values) {
+    for (T value : values) {
+      if (startsWithIgnoreCase(value.toString(), prefix)) {
+        return Optional.of(value);
+      }
+    }
+    return Optional.empty();
+  }
+
+  /**
    * Parses a line of generic user input.
    * It is split on regions of any whitespace.
    */
@@ -43,17 +56,17 @@ public final class Parse {
   }
 
   public static Factor factor(String input) {
-    return matchFirst(input, Factor.ALL)
+    return firstMatch(input, Factor.ALL)
       .orElseThrow(() -> new StructureException("Unknown factor reference", input));
   }
 
   public static Element element(String input) {
-    return matchFirst(input, ELEMENTS)
+    return firstMatch(input, ELEMENTS)
       .orElseThrow(() -> new StructureException("Unknown element reference", input));
   }
 
   public static Source source(String input) {
-    return matchFirst(input, Source.ALL_IN_ORDER)
+    return firstMatch(input, Source.ALL_IN_ORDER)
       .orElseThrow(() -> new StructureException("Unknown source reference", input));
   }
 
@@ -98,15 +111,6 @@ public final class Parse {
   }
 
   private static final List<Element> ELEMENTS = ImmutableList.of(MAGIC, FIRE, FROST, SHOCK);
-
-  private static <T> Optional<T> matchFirst(String input, List<T> values) {
-    for (T value : values) {
-      if (startsWithIgnoreCase(value.toString(), input)) {
-        return Optional.of(value);
-      }
-    }
-    return Optional.empty();
-  }
 
   private static final class EffectParser {
     public EffectText parse() {

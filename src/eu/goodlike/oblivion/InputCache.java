@@ -7,8 +7,8 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
@@ -52,14 +52,16 @@ public final class InputCache<T> {
   }
 
   /**
-   * @return value for given reference as name
-   * @throws StructureException if no value for reference was found
+   * Returns value by matching the given prefix to all references in this cache.
+   * For multiple matches, the returned value is alphabetic.
+   *
+   * @throws StructureException if no ref matched the prefix
    */
-  public NamedValue<T> getCached(String ref) {
+  public NamedValue<T> getCached(String prefix) {
+    String ref = Parse.firstMatch(prefix, cache.keySet())
+      .orElseThrow(() -> new StructureException("Nothing matches", prefix));
+
     T value = cache.get(ref);
-    if (value == null) {
-      throw new StructureException("Nothing with name", ref);
-    }
     return new InputCache.Entry<>(ref, value);
   }
 
@@ -89,7 +91,7 @@ public final class InputCache<T> {
   public InputCache(Function<String, Parse.Input<T>> parserFactory) {
     this.parserFactory = parserFactory;
 
-    this.cache = new HashMap<>();
+    this.cache = new TreeMap<>();
     this.counter = new AtomicInteger(0);
   }
 
