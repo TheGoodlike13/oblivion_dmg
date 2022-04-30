@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNumeric;
@@ -79,6 +80,7 @@ public final class InputCache<T> {
   /**
    * Clears the cache and resets the dynamic reference counter.
    * Then parses all given files as resources containing prepared data.
+   * Blank filenames are ignored.
    *
    * @throws IllegalStateException if any files were given, but this cache has no parser factory
    */
@@ -86,9 +88,9 @@ public final class InputCache<T> {
     cache.clear();
     counter = 0;
 
-    for (String prepFile : prepFiles) {
-      parseResource(prepFile);
-    }
+    Stream.of(prepFiles)
+      .filter(StringUtils::isNotBlank)
+      .forEach(this::parseResource);
   }
 
   /**

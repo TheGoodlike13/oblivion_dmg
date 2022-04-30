@@ -6,13 +6,17 @@ import java.util.Scanner;
 import java.util.function.Supplier;
 
 import static eu.goodlike.oblivion.Global.ITS_ALL_OVER;
+import static eu.goodlike.oblivion.Global.Settings.DIFFICULTY;
+import static eu.goodlike.oblivion.Global.Settings.LEVEL;
 
 public final class OblivionSpellStackingCalculator {
 
   public static void main(String... args) {
+    Global.initializeEverything();
     try (Scanner scanner = new Scanner(System.in)) {
       OblivionSpellStackingCalculator calc = new OblivionSpellStackingCalculator(scanner::nextLine);
       calc.intro();
+      calc.settings();
       calc.run();
     }
   }
@@ -27,6 +31,13 @@ public final class OblivionSpellStackingCalculator {
     Write.line("Welcome to Oblivion spell stacking calculator!");
     Write.line("Please select an enemy, cast some spells or perform attacks and GO!");
     Write.line("You can quit any time ;)");
+    Write.separator();
+  }
+
+  public void settings() {
+    Write.line("Configurable settings:");
+    Write.line("Player level: " + LEVEL);
+    Write.line("Difficulty slider: " + DIFFICULTY);
     Write.separator();
   }
 

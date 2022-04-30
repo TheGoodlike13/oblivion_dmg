@@ -48,6 +48,18 @@ public final class StructureException extends RuntimeException {
     }
   }
 
+  public static double positiveOrThrow(String input, String description) {
+    double d = doubleOrThrow(input, description);
+    positiveOrThrow(d, description);
+    return d;
+  }
+
+  public static void positiveOrThrow(double d, String description) {
+    if (d <= 0) {
+      throw new StructureException("Expected positive " + description + ", but was <" + d + ">");
+    }
+  }
+
   public static int intOrThrow(String input, String description) {
     try {
       return Integer.parseInt(input);

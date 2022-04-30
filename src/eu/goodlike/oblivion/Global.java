@@ -119,7 +119,7 @@ public final class Global {
 
       LEVEL = StructureException.natOrThrow(properties.getProperty("level"), "player level");
       DIFFICULTY = StructureException.intOrThrow(properties.getProperty("difficulty"), "difficulty setting");
-      TICK = StructureException.doubleOrThrow(properties.getProperty("tick"), "tick setting");
+      TICK = StructureException.positiveOrThrow(properties.getProperty("tick"), "tick setting");
       PREPARED_ENEMIES = properties.getProperty("prepared.enemies");
       PREPARED_ITEMS = properties.getProperty("prepared.items");
       PREPARED_SPELLS = properties.getProperty("prepared.spells");
