@@ -272,7 +272,7 @@ public final class Enemy implements Target {
   }
 
   private String level() {
-    return level <= 0 ? "" : "[LVL " + level + "] ";
+    return confine(level) <= 0 ? "" : "[LVL " + confine(level) + "] ";
   }
 
   private String multipliers() {

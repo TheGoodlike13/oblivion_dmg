@@ -550,6 +550,17 @@ class EnemyTest {
     assertBadStructure(() -> target.setLeveled(1, 1, -1));
     assertBadStructure(() -> target.setLeveled(1, 1, 0));
     assertBadStructure(() -> target.setLeveled(1, 1, 1));
+
+    assertBadStructure(() -> target
+      .setLeveled(1, 1, 2)
+      .setLeveled(1, 1, 2));
+  }
+
+  @Test
+  void noLevels() {
+    target.updateLevel();
+
+    assertHealthRemaining(1000);
   }
 
   @SuppressWarnings("unused")
