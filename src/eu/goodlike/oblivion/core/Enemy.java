@@ -7,6 +7,7 @@ import eu.goodlike.oblivion.Global.Settings;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -88,29 +89,39 @@ public final class Enemy implements Target {
     hit(new Hit(byItself));
   }
 
+  public void hit(Hit hit) {
+    hit(hit, Observer.EMPTY);
+  }
+
   /**
    * Hits this target.
    * All the effects from all the carriers are applied at once, consistent with in-game logic.
    * If any of the carriers has hit this target before, may replace existing effects instead of stacking.
    */
-  public void hit(Hit hit) {
+  public void hit(Hit hit, Observer observer) {
     Dummy dummy = new Dummy();
+    Target target = observer.observing(dummy);
 
     for (Carrier carrier : hit) {
       for (EffectText e : carrier) {
         Effect.Id id = carrier.toId(e);
         Effect effect = e.activate(carrier.getMethod(), this);
 
+        observer.next(id);
         Effect original = activeEffects.put(id, effect);
         if (original != null) {
+          observer.markExpired();
           original.onRemove(this);
         }
-
-        effect.onApply(dummy);
+        effect.onApply(target);
       }
     }
 
-    dummy.applyTo(this);
+    dummy.applyResistModsAtOnce(this);
+  }
+
+  public void tick() {
+    tick(Observer.EMPTY);
   }
 
   /**
@@ -118,16 +129,21 @@ public final class Enemy implements Target {
    * If any of them expire as a result of this tick, they are removed.
    * Tick length is configured in {@link Settings#TICK}.
    */
-  public void tick() {
+  public void tick(Observer observer) {
+    Target target = observer.observing(this);
+    observer.tick();
+
     Iterator<Map.Entry<Effect.Id, Effect>> i = activeEffects.entrySet().iterator();
     while (i.hasNext()) {
       Map.Entry<Effect.Id, Effect> next = i.next();
       Effect effect = next.getValue();
 
-      effect.onTick(this);
+      observer.next(next.getKey());
+      effect.onTick(target);
       if (effect.hasExpired()) {
         i.remove();
-        effect.onRemove(this);
+        observer.markExpired();
+        effect.onRemove(target);
       }
     }
   }
@@ -150,9 +166,13 @@ public final class Enemy implements Target {
    * @return time it took for the remaining effects to expire, 0 if there were no such effects
    */
   public double resolve() {
+    return resolve(Observer.EMPTY);
+  }
+
+  public double resolve(Observer observer) {
     double total = 0;
     while (isAffected()) {
-      tick();
+      tick(observer);
       total += TICK;
     }
     return total;
@@ -235,7 +255,7 @@ public final class Enemy implements Target {
 
     this.weaknessPercent = new HashMap<>();
 
-    this.activeEffects = new HashMap<>();
+    this.activeEffects = new LinkedHashMap<>();
 
     for (EffectText effect : bonus) {
       effect.permanent().onApply(this);
@@ -289,7 +309,33 @@ public final class Enemy implements Target {
     return b.toString();
   }
 
-  private static final class Dummy implements Target {
+  public interface Observer {
+    Target observing(Target actual);
+    void tick();
+    void next(Effect.Id id);
+    void markExpired();
+
+    Observer EMPTY = new Observer() {
+      @Override
+      public Target observing(Target actual) {
+        return actual;
+      }
+
+      @Override
+      public void tick() {
+      }
+
+      @Override
+      public void next(Effect.Id id) {
+      }
+
+      @Override
+      public void markExpired() {
+      }
+    };
+  }
+
+  private final class Dummy implements Target {
     @Override
     public void modifyResist(Factor factor, double percent) {
       allMods.put(factor, percent);
@@ -297,23 +343,19 @@ public final class Enemy implements Target {
 
     @Override
     public void damage(double dmg) {
-      totalDmg += dmg;
+      Enemy.this.damage(dmg);
     }
 
     @Override
     public void drain(double hp) {
-      totalDrain += hp;
+      Enemy.this.drain(hp);
     }
 
-    public void applyTo(Target target) {
+    public void applyResistModsAtOnce(Target target) {
       allMods.forEach(target::modifyResist);
-      target.damage(totalDmg);
-      target.drain(totalDrain);
     }
 
     private final ListMultimap<Factor, Double> allMods = ArrayListMultimap.create();
-    private double totalDmg = 0;
-    private double totalDrain = 0;
   }
 
 }

@@ -1,7 +1,9 @@
 package eu.goodlike.oblivion;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -33,6 +35,11 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     if (!">> ".equals(s)) {
       output.add(s);
     }
+  }
+
+  @BeforeAll
+  static void initialize() {
+    Global.initializeEverything();
   }
 
   @BeforeEach
@@ -158,9 +165,13 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutputSegment(
       "You face the beeeetch (999.0 hp).",
       "[#1] Next hit: <SPELL$1> {SHOCK DMG 1000 for 1s}",
-      "00.000 You hit with <SPELL$1> {SHOCK DMG 1000 for 1s}",
+      "Lower the gates!",
+      "00.250 Took <SPELL$1> SHOCK DMG 250.00",
+      "00.500 Took <SPELL$1> SHOCK DMG 250.00",
+      "00.750 Took <SPELL$1> SHOCK DMG 250.00",
+      "00.999 Took <SPELL$1> SHOCK DMG 249.00",
       "00.999 The beeeetch has died.",
-      "01.000 All effects have expired."
+      "01.000 Expired <SPELL$1> SHOCK DMG"
     );
   }
 
@@ -171,9 +182,10 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutputSegment(
       "You face the enemy (99.0 hp).",
       "[#1] Next hit: <SPELL$1> {DRAIN LIFE 100 for 1s}",
-      "00.000 You hit with <SPELL$1> {DRAIN LIFE 100 for 1s}",
+      "Lower the gates!",
+      "00.000 Added <SPELL$1> DRAIN LIFE 100.00",
       "00.000 The enemy has died.",
-      "01.000 All effects have expired."
+      "01.000 Expired <SPELL$1> DRAIN LIFE"
     );
   }
 
@@ -184,8 +196,9 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutputSegment(
       "You face the enemy (100.0 hp).",
       "[#1] Next hit: <SPELL$1> {DRAIN LIFE 50 for 1s}",
-      "00.000 You hit with <SPELL$1> {DRAIN LIFE 50 for 1s}",
-      "01.000 All effects have expired.",
+      "Lower the gates!",
+      "00.000 Added <SPELL$1> DRAIN LIFE 50.00",
+      "01.000 Expired <SPELL$1> DRAIN LIFE",
       "The enemy has survived 0.0 damage (100.0 hp left)."
     );
   }
@@ -197,23 +210,35 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutputSegment(
       "You face the enemy (10.0 hp).",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "00.000 You hit with <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "Lower the gates!",
+      "00.250 Took <SPELL$1> MAGIC DMG 2.50",
+      "00.500 Took <SPELL$1> MAGIC DMG 2.50",
+      "00.750 Took <SPELL$1> MAGIC DMG 2.50",
+      "01.000 Took <SPELL$1> MAGIC DMG 2.50",
       "01.000 The enemy has died.",
-      "01.000 All effects have expired.",
+      "01.000 Expired <SPELL$1> MAGIC DMG",
       "The enemy took a total of 10.0 damage (0.0 overkill).",
       "-----",
       "You face the enemy (10.0 hp).",
       "[#2] Next hit: <SPELL$2> {MAGIC DMG 10 for 1s}",
-      "00.000 You hit with <SPELL$2> {MAGIC DMG 10 for 1s}",
+      "Lower the gates!",
+      "00.250 Took <SPELL$2> MAGIC DMG 2.50",
+      "00.500 Took <SPELL$2> MAGIC DMG 2.50",
+      "00.750 Took <SPELL$2> MAGIC DMG 2.50",
+      "01.000 Took <SPELL$2> MAGIC DMG 2.50",
       "01.000 The enemy has died.",
-      "01.000 All effects have expired.",
+      "01.000 Expired <SPELL$2> MAGIC DMG",
       "The enemy took a total of 10.0 damage (0.0 overkill).",
       "-----",
       "You face the enemy (10.0 hp).",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "00.000 You hit with <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "Lower the gates!",
+      "00.250 Took <SPELL$1> MAGIC DMG 2.50",
+      "00.500 Took <SPELL$1> MAGIC DMG 2.50",
+      "00.750 Took <SPELL$1> MAGIC DMG 2.50",
+      "01.000 Took <SPELL$1> MAGIC DMG 2.50",
       "01.000 The enemy has died.",
-      "01.000 All effects have expired.",
+      "01.000 Expired <SPELL$1> MAGIC DMG",
       "The enemy took a total of 10.0 damage (0.0 overkill)."
     );
   }
@@ -226,6 +251,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
+  @Disabled  // TODO: notify about spell cast somehow
   void thisAintNoDatabaseBoy() {
     sendInput("enemy 30", "+s 10m", "hit #1 #2", "go");
 
@@ -450,13 +476,35 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "[#1] Next hit: <SPELL$divine_justice_apprentice> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
       "[#2] Next hit: <SPELL$divine_justice_expert> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
       "[#3] Next hit: <MELEE$aetherius> {SHOCK DMG 18 for 1s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s}",
-      "00.000 You hit with <SPELL$divine_justice_apprentice> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
-      "00.000 You hit with <SPELL$divine_justice_expert> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
-      "00.000 You hit with <SPELL$divine_justice_apprentice> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
-      "00.000 You hit with <SPELL$divine_justice_expert> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
-      "00.000 You hit with <MELEE$aetherius> {SHOCK DMG 18 for 1s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s}",
+      "Lower the gates!",
+      "00.000 Added <SPELL$divine_justice_apprentice> RESIST MAGIC -100.00",
+      "00.000 Added <SPELL$divine_justice_apprentice> RESIST SHOCK -100.00",
+      "00.000 Added <SPELL$divine_justice_apprentice> RESIST POISON -100.00",
+      "00.000 Added <SPELL$divine_justice_expert> RESIST MAGIC -200.00",
+      "00.000 Added <SPELL$divine_justice_expert> RESIST SHOCK -200.00",
+      "00.000 Added <SPELL$divine_justice_expert> RESIST POISON -200.00",
+      "00.000 Replaced <SPELL$divine_justice_apprentice> RESIST MAGIC -400.00",
+      "00.000 Replaced <SPELL$divine_justice_apprentice> RESIST SHOCK -300.00",
+      "00.000 Replaced <SPELL$divine_justice_apprentice> RESIST POISON -300.00",
+      "00.000 Replaced <SPELL$divine_justice_expert> RESIST MAGIC -700.00",
+      "00.000 Replaced <SPELL$divine_justice_expert> RESIST SHOCK -500.00",
+      "00.000 Replaced <SPELL$divine_justice_expert> RESIST POISON -500.00",
+      "00.000 Added <MELEE$aetherius> DRAIN LIFE 200.00",
+      "00.000 Added <MELEE$aetherius> RESIST MAGIC -1200.00",
+      "00.000 Added <MELEE$aetherius> RESIST SHOCK -1200.00",
+      "00.250 Took <MELEE$aetherius> SHOCK DMG 81.00",
+      "00.463 Took <MELEE$aetherius> SHOCK DMG 69.01",
       "00.463 The skeleton champion has died.",
-      "06.000 All effects have expired.",
+      "01.000 Expired <MELEE$aetherius> SHOCK DMG",
+      "01.000 Expired <MELEE$aetherius> DRAIN LIFE",
+      "01.000 Expired <MELEE$aetherius> RESIST MAGIC",
+      "01.000 Expired <MELEE$aetherius> RESIST SHOCK",
+      "06.000 Expired <SPELL$divine_justice_apprentice> RESIST MAGIC",
+      "06.000 Expired <SPELL$divine_justice_apprentice> RESIST SHOCK",
+      "06.000 Expired <SPELL$divine_justice_apprentice> RESIST POISON",
+      "06.000 Expired <SPELL$divine_justice_expert> RESIST MAGIC",
+      "06.000 Expired <SPELL$divine_justice_expert> RESIST SHOCK",
+      "06.000 Expired <SPELL$divine_justice_expert> RESIST POISON",
       "The skeleton champion took a total of 524.0 damage (174.0 overkill)."
     );
   }

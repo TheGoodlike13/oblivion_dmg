@@ -93,7 +93,11 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
   @Override
   public String toString() {
-    return "<" + source + getLabel() + "> " + getEffects();
+    return prefix() + getEffects();
+  }
+
+  private String prefix() {
+    return "<" + source + getLabel() + "> ";
   }
 
   private String getLabel() {
@@ -120,6 +124,11 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
     private final Carrier carrier;
     private final Effect.Type effectType;
+
+    @Override
+    public String toString() {
+      return carrier.prefix() + effectType;
+    }
 
     @Override
     public boolean equals(Object o) {

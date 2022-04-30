@@ -1,11 +1,15 @@
 package eu.goodlike.oblivion;
 
+import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Factor;
 import eu.goodlike.oblivion.core.Hit;
+import eu.goodlike.oblivion.core.Target;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static eu.goodlike.oblivion.Global.Settings.TICK;
 
@@ -14,7 +18,7 @@ import static eu.goodlike.oblivion.Global.Settings.TICK;
  * <p/>
  * Writes down all inputs and outcomes.
  */
-public final class Arena {
+public final class Arena implements Enemy.Observer, Target {
 
   public void setEnemy(NamedValue<Enemy> enemy) {
     this.label = enemy.getName().replace('_', ' ');
@@ -47,6 +51,10 @@ public final class Arena {
     Write.separator();
 
     hits = new ArrayList<>();
+    totalDamage.clear();
+    totalDamage2.clear();
+    totalDamageDead.clear();
+    nextDump = 0.25;
     if (enemy != null) {
       enemy.updateLevel();
       announceOpponent();
@@ -57,6 +65,89 @@ public final class Arena {
     hits = new ArrayList<>();
     label = null;
     enemy = null;
+    totalDamage.clear();
+    totalDamage2.clear();
+    totalDamageDead.clear();
+    nextDump = 0.25;
+  }
+
+  private Target actual;
+  private Effect.Id id;
+  private boolean isTicking;
+  private boolean isExpired;
+
+  private double nextDump = 0.25;
+
+  private final Map<Effect.Id, Double> totalDamage = new LinkedHashMap<>();
+  private final Map<Effect.Id, Double> totalDamage2 = new LinkedHashMap<>();
+  private final Map<Effect.Id, Double> totalDamageDead = new LinkedHashMap<>();
+
+
+  @Override
+  public Target observing(Target actual) {
+    this.isTicking = false;
+    this.actual = actual;
+    return this;
+  }
+
+  @Override
+  public void tick() {
+    this.isTicking = true;
+
+    if (duration >= nextDump) {
+      nextDump += 0.25;
+      dump();
+    }
+    duration += TICK;
+  }
+
+  private void dump() {
+    totalDamage.forEach((id, d) -> combatLog(String.format("Took %s %.2f", id, d)));
+    totalDamage.clear();
+  }
+
+  @Override
+  public void next(Effect.Id id) {
+    this.isExpired = false;
+    this.id = id;
+  }
+
+  @Override
+  public void markExpired() {
+    this.isExpired = true;
+    if (isTicking) {
+      combatLog("Expired " + id);
+    }
+  }
+
+  @Override
+  public void modifyResist(Factor factor, double percent) {
+    actual.modifyResist(factor, percent);
+    if (!isTicking) {
+      combatLog(String.format("%s %s %.2f", isExpired ? "Replaced" : "Added", id, percent));
+    }
+  }
+
+  @Override
+  public void damage(double dmg) {
+    if (enemy.isAlive()) {
+      totalDamage.merge(id, dmg, Double::sum);
+      totalDamage2.merge(id, dmg, Double::sum);
+    }
+    else {
+      totalDamageDead.merge(id, dmg, Double::sum);
+    }
+    actual.damage(dmg);
+    checkPossibleDeath();
+  }
+
+  @Override
+  public void drain(double hp) {
+    actual.drain(hp);
+    if (!isTicking) {
+      combatLog(String.format("%s %s %.2f", isExpired ? "Replaced" : "Added", id, hp));
+      checkPossibleDeath();
+    }
   }
 
   public Arena() {
@@ -68,6 +159,7 @@ public final class Arena {
   private Enemy enemy;
 
   private double duration;
+  private boolean isConfirmedDead;
 
   private boolean ready() {
     if (hits.isEmpty()) {
@@ -87,8 +179,11 @@ public final class Arena {
   }
 
   private void fight() {
+    duration = 0;
+    isConfirmedDead = false;
+    Write.line("Lower the gates!");
+
     try {
-      duration = 0;
       performHits();
       awaitEffectExpiration();
       writeObituary();
@@ -100,23 +195,16 @@ public final class Arena {
 
   private void performHits() {
     for (Hit hit : hits) {
-      enemy.hit(hit);
-      combatLog("You hit with " + hit);
-
-      checkEnemyStatus();
+      enemy.hit(hit, this);
     }
   }
 
   private void awaitEffectExpiration() {
     while (enemy.isAlive() && enemy.isAffected()) {
-      enemy.tick();
-      duration += TICK;
-
-      checkEnemyStatus();
+      enemy.tick(this);
     }
 
-    duration += enemy.resolve();
-    combatLog("All effects have expired.");
+    enemy.resolve(this);
   }
 
   private void writeObituary() {
@@ -128,8 +216,10 @@ public final class Arena {
     }
   }
 
-  private void checkEnemyStatus() {
-    if (!enemy.isAlive()) {
+  private void checkPossibleDeath() {
+    if (!isConfirmedDead && !enemy.isAlive()) {
+      isConfirmedDead = true;
+      dump();
       combatLog("The " + label + " has died.");
     }
   }
