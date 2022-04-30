@@ -28,12 +28,12 @@ public final class SetHit extends BaseCommand {
 
   private void parseCarriers() {
     while (++cursor < inputs.length) {
-      identifyInput(inputs[cursor]);
+      identify(inputs[cursor]);
     }
     parseNextCarrierIfAny();
   }
 
-  private void identifyInput(String input) {
+  private void identify(String input) {
     if (input.startsWith("$")) {
       parseNextCarrierIfAny();
       parseNextReference(input.substring(1));
