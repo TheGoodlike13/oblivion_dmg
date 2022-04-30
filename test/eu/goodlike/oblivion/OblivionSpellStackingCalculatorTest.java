@@ -106,7 +106,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void whoIsTheRealEnemy() {
-    sendInput("enemy 100 @enemy", "enemy $enemy");
+    sendInput("enemy 100 :enemy", "enemy $enemy");
 
     assertOutput(
       "You face the enemy (100.0 hp).",
@@ -153,7 +153,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void letsKillDaHo() {
-    sendInput("enemy @beeeetch 999", "+s 1000s", "go");
+    sendInput("enemy :beeeetch 999", "+s 1000s", "go");
 
     assertOutputSegment(
       "You face the beeeetch (999.0 hp).",
@@ -339,7 +339,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void nameIsTheNameOfTheGame() {
-    sendInput("+b 100d10s +a 10f5s @fire_arrow +p 10m", "$1 $fire_arrow +p 10s");
+    sendInput("+b 100d10s +a 10f5s :fire_arrow +p 10m", "$1 $fire_arrow +p 10s");
 
     assertOutput(
       "[#1] Next hit: <BOW$1> {DRAIN LIFE 100 for 10s} + <ARROW$fire_arrow> {FIRE DMG 10 for 5s} + <POISON$2> {MAGIC DMG 10 for 1s}",
@@ -349,7 +349,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void numericNamesAreWeird() {
-    sendInput("+s 1m @1", "+s 3m @3", "+s 4m", "+s 2m @2", "$2");
+    sendInput("+s 1m :1", "+s 3m :3", "+s 4m", "+s 2m :2", "$2");
 
     assertOutput(
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 1 for 1s}",
@@ -362,7 +362,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void duplicateNamesNotAllowed() {
-    sendInput("+m 1m @magic_1 +p 1m @magic_1", "$magic_1");
+    sendInput("+m 1m :magic_1 +p 1m :magic_1", "$magic_1");
 
     assertOutput(
       "Bad input: Name already in use <magic_1>",
@@ -379,11 +379,11 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void gettingALittleWildHere() {
-    sendInput("+s 1m @seed", "$seed @not_seed", "$seed 1f");
+    sendInput("+s 1m :seed", "$seed :not_seed", "$seed 1f");
 
     assertOutput(
       "[#1] Next hit: <SPELL$seed> {MAGIC DMG 1 for 1s}",
-      "Bad input: Dangling hit param <@not_seed>",
+      "Bad input: Dangling hit param <:not_seed>",
       "Bad input: Dangling hit param <1f>"
     );
   }
@@ -391,7 +391,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void heGivethAndHeTakethAway() {
-    sendInput("enemy 100 @bad_idea", "+s 1m @bad_idea", "forget $bad_idea", "enemy $bad_idea", "$bad_idea");
+    sendInput("enemy 100 :bad_idea", "+s 1m :bad_idea", "forget $bad_idea", "enemy $bad_idea", "$bad_idea");
 
     assertOutput(
       "You face the bad idea (100.0 hp).",
@@ -415,7 +415,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void cantForgetByPrefix() {
-    sendInput("enemy 100 @good_idea", "forget $good", "enemy $good");
+    sendInput("enemy 100 :good_idea", "forget $good", "enemy $good");
 
     assertOutput(
       "You face the good idea (100.0 hp).",
@@ -426,7 +426,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void justCantBeDone() {
-    sendInput("+m 1m +s 1m", "$1 +st 1m", "$1 +p 1m @1m $1m");
+    sendInput("+m 1m +s 1m", "$1 +st 1m", "$1 +p 1m :1m $1m");
 
     assertOutput(
       "Bad input: Invalid hit: MELEE + SPELL; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, BOW + ARROW, BOW + ARROW + POISON]",

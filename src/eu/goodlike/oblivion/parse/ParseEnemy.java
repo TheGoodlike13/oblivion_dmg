@@ -18,7 +18,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * Ignores "enemy" command input if present.
  * Accepts any amount of inputs.
  * <p/>
- * Inputs with '@' prefix are treated as labels.
+ * Inputs with ':' prefix are treated as labels.
  * Only last label is considered, others ignored.
  * If it is missing, the enemy is given the default label 'enemy'.
  * <p/>
@@ -63,7 +63,7 @@ public final class ParseEnemy extends BaseParseInput<Enemy> {
   private final List<String> effects = new ArrayList<>();
 
   private void identify(String input) {
-    if (input.startsWith("@")) {
+    if (input.startsWith(":")) {
       label = input.substring(1);
     }
     else if (isBlank(hp)) {

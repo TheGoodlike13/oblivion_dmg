@@ -19,7 +19,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * Accepts any amount of inputs.
  * Treats them as a single carrier.
  * <p/>
- * Inputs with '@' prefix are treated as labels.
+ * Inputs with ':' prefix are treated as labels.
  * Only last label is considered, others ignored.
  * This input is optional.
  * <p/>
@@ -73,7 +73,7 @@ public final class ParseCarrier extends BaseParseInput<Carrier> {
     if (input.startsWith("+")) {
       source = input.substring(1);
     }
-    else if (input.startsWith("@")) {
+    else if (input.startsWith(":")) {
       label = input.substring(1);
     }
     else {
