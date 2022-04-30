@@ -87,11 +87,15 @@ public final class Arena {
   }
 
   private void fight() {
-    duration = 0;
-    performHits();
-    awaitEffectExpiration();
-    writeObituary();
-    refresh();
+    try {
+      duration = 0;
+      performHits();
+      awaitEffectExpiration();
+      writeObituary();
+    }
+    finally {
+      refresh();
+    }
   }
 
   private void performHits() {
