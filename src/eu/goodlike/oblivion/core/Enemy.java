@@ -160,22 +160,17 @@ public final class Enemy implements Target {
     }
   }
 
-  /**
-   * Ticks until all active effects have expired.
-   *
-   * @return time it took for the remaining effects to expire, 0 if there were no such effects
-   */
-  public double resolve() {
-    return resolve(Observer.NONE);
+  public void resolve() {
+    resolve(Observer.NONE);
   }
 
-  public double resolve(Observer observer) {
-    double total = 0;
+  /**
+   * Ticks until all active effects have expired.
+   */
+  public void resolve(Observer observer) {
     while (isAffected()) {
       tick(observer);
-      total += TICK;
     }
-    return total;
   }
 
   /**
