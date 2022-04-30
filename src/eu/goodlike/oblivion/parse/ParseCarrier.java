@@ -70,11 +70,11 @@ public final class ParseCarrier extends BaseParseInput<Carrier> {
   private final List<String> effects = new ArrayList<>();
 
   private void identify(String input) {
-    if (input.startsWith("+")) {
-      source = input.substring(1);
-    }
-    else if (input.startsWith(":")) {
+    if (input.startsWith(":")) {
       label = input.substring(1);
+    }
+    else if (input.startsWith("+")) {
+      source = input.substring(1);
     }
     else {
       effects.add(input);
