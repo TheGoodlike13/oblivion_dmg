@@ -13,6 +13,14 @@ import static eu.goodlike.oblivion.Global.CARRIERS;
 import static eu.goodlike.oblivion.Global.HITS;
 import static eu.goodlike.oblivion.Global.THE_ARENA;
 
+/**
+ * Sets the next hit for the next calculation.
+ * All the inputs are parsed as a list of carriers.
+ * Args that start with '$' are treated as references to carriers in cache.
+ * Args that start with '+' indicate a new carrier.
+ * All args following that will be parsed as a carrier until the next one is indicated.
+ * For details, see {@link ParseCarrier}.
+ */
 public final class SetHit extends BaseCommand {
 
   @Override

@@ -4,6 +4,14 @@ import eu.goodlike.oblivion.Write;
 
 import static eu.goodlike.oblivion.Global.CACHES;
 
+/**
+ * Clears all references in args from all caches.
+ * <p/>
+ * This is an administrative command to help correct mistakes.
+ * It shouldn't break anything, but may cause unexpected effects,
+ * e.g. if numeric references are removed.
+ * It's your responsibility to use it wisely!
+ */
 public final class JustForget extends BaseCommand {
 
   @Override

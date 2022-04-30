@@ -6,6 +6,10 @@ import eu.goodlike.oblivion.core.StructureException;
 
 import java.util.stream.Stream;
 
+/**
+ * Handles common logic for executing a command.
+ * Also provides convenient access to input params.
+ */
 public abstract class BaseCommand implements Command {
 
   protected abstract void performTask();

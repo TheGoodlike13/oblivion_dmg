@@ -3,6 +3,12 @@ package eu.goodlike.oblivion.command;
 import eu.goodlike.oblivion.Global;
 import eu.goodlike.oblivion.Write;
 
+/**
+ * Resets fucking everything.
+ * <p/>
+ * Use this command when you done fucked up.
+ * Equivalent to restarting the application.
+ */
 public final class Reset extends BaseCommand {
 
   @Override
