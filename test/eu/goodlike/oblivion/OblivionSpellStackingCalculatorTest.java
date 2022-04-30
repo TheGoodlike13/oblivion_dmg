@@ -182,6 +182,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "You face the enemy (99 hp).",
       "[#1] Next hit: <SPELL$1> {DRAIN LIFE 100 for 1s}",
       "00.000 Added <SPELL$1> DRAIN LIFE 100.0",
+      "00.000 Health drained: -1.0/99",
       "00.000 The enemy has died.",
       "01.000 Expired <SPELL$1> DRAIN LIFE"
     );
@@ -195,7 +196,9 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "You face the enemy (100 hp).",
       "[#1] Next hit: <SPELL$1> {DRAIN LIFE 50 for 1s}",
       "00.000 Added <SPELL$1> DRAIN LIFE 50.0",
+      "00.000 Health drained: 50.0/100",
       "01.000 Expired <SPELL$1> DRAIN LIFE",
+      "01.000 Health restored: 100.0/100",
       "The enemy has survived 0.0 damage (100.0 hp left).",
       "-----"
     );
@@ -503,6 +506,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "00.000 Effect: MAGIC  x12.00, SHOCK  x9.00, POISON x8.00",
       "00.000 Added <MELEE$aetherius> SHOCK DMG 324.0 for 1s",
       "00.000 Added <MELEE$aetherius> DRAIN LIFE 200.0",
+      "00.000 Health drained: 150.0/350",
       "00.000 Added <MELEE$aetherius> RESIST MAGIC -1200.0",
       "00.000 Added <MELEE$aetherius> RESIST SHOCK -1200.0",
       "00.000 Effect: MAGIC  x24.00, SHOCK  x21.00",
@@ -581,6 +585,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "[#1] Next hit: <SPELL$1> {DRAIN LIFE 100 for 1s}",
       "[#2] Next hit: <SPELL$2> {DRAIN LIFE 100 for 1s}",
       "00.000 Added <SPELL$1> DRAIN LIFE 100.0",
+      "00.000 Health drained: -90.0/10",
       "00.000 The enemy has died.",
       "00.000 Added <SPELL$2> DRAIN LIFE 100.0",
       "01.000 Expired <SPELL$1> DRAIN LIFE",
@@ -600,6 +605,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "You face the enemy (10 hp).",
       "[#1] Next hit: <BOW$1> {DRAIN LIFE 100 for 1s} + <ARROW> {NO EFFECTS} + <POISON$2> {DRAIN LIFE 100 for 1s}",
       "00.000 Added <BOW$1> DRAIN LIFE 100.0",
+      "00.000 Health drained: -90.0/10",
       "00.000 The enemy has died.",
       "00.000 Added (1)<POISON$2> DRAIN LIFE 100.0",
       "01.000 Expired <BOW$1> DRAIN LIFE",

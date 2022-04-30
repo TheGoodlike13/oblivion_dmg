@@ -229,6 +229,13 @@ public final class Enemy implements Target {
     }
   }
 
+  /**
+   * @return current health over max health
+   */
+  public String healthStatus() {
+    return String.format("%.1f/%d", health, maxHealth);
+  }
+
   public Enemy(int maxHealth, EffectText... bonus) {
     this(maxHealth, Arrays.asList(bonus));
   }
@@ -281,7 +288,7 @@ public final class Enemy implements Target {
 
   @Override
   public String toString() {
-    return String.format("%s%.1f/%d%s", level(), health, maxHealth, multipliers());
+    return level() + healthStatus() + multipliers();
   }
 
   private String level() {

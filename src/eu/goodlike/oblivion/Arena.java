@@ -213,16 +213,22 @@ public final class Arena {
       actual.drain(hp);
       if (isTicking) {
         if (!isDeathConfirmed) {
+          printEnemyHp("restored");
           totalDamage.remove(id);
         }
       }
       else {
+        combatLog(newEffect(hp));
         if (!isDeathConfirmed) {
+          printEnemyHp("drained");
           totalDamage.put(id, hp);
         }
-        combatLog(newEffect(hp));
         checkPossibleDeath();
       }
+    }
+
+    private void printEnemyHp(String status) {
+      combatLog(String.format("Health %s: %s", status, enemy.healthStatus()));
     }
 
     @Override
