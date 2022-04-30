@@ -5,13 +5,16 @@ import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Factor;
 import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.Target;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static eu.goodlike.oblivion.Global.Settings.TICK;
+import static java.util.stream.Collectors.joining;
 
 /**
  * The calculator for using spells/attacks on an enemy.
@@ -132,17 +135,27 @@ public final class Arena {
   }
 
   private void writeResists() {
-    for (Factor factor : Factor.ALL) {
-      double multiplier = enemy.getMultiplier(factor);
-      if (multiplier != 1) {
-        Write.line("%-6s x%.2f", factor, multiplier);
-      }
-    }
+    factorMods(Factor.ALL, false).forEach(Write::line);
+  }
+
+  private Stream<String> factorMods(List<Factor> factors, boolean includeAll) {
+    return factors.stream()
+      .map(factor -> factorMod(factor, includeAll))
+      .filter(StringUtils::isNotBlank);
+  }
+
+  private String factorMod(Factor factor, boolean includeAll) {
+    double multiplier = enemy.getMultiplier(factor);
+    return !includeAll && multiplier == 1
+      ? ""
+      : String.format("%-6s x%.2f", factor, multiplier);
   }
 
   private final class PlayByPlay implements Enemy.Observer, Target {
     @Override
     public Target observing(Target actual) {
+      dumpModifiedFactors();
+
       this.isTicking = false;
       this.actual = actual;
       return this;
@@ -179,6 +192,7 @@ public final class Arena {
       if (!isTicking) {
         combatLog(newEffect(percent));
       }
+      modifiedFactors.add(factor);
     }
 
     @Override
@@ -219,6 +233,14 @@ public final class Arena {
       }
     }
 
+    public void dumpModifiedFactors() {
+      if (!modifiedFactors.isEmpty()) {
+        String factorMods = factorMods(modifiedFactors, true).collect(joining(", "));
+        combatLog("Effect: " + factorMods);
+        modifiedFactors.clear();
+      }
+    }
+
     public void writeTotals() {
       writeTotals(totalDamage, "damage");
       writeTotals(totalOverkill, "overkill");
@@ -238,6 +260,8 @@ public final class Arena {
       this.liveDamage = new LinkedHashMap<>();
       this.totalDamage = new LinkedHashMap<>();
       this.totalOverkill = new LinkedHashMap<>();
+
+      this.modifiedFactors = new ArrayList<>();
     }
 
     private boolean isDeathConfirmed;
@@ -253,6 +277,8 @@ public final class Arena {
     private final Map<Effect.Id, Double> liveDamage;
     private final Map<Effect.Id, Double> totalDamage;
     private final Map<Effect.Id, Double> totalOverkill;
+
+    private final List<Factor> modifiedFactors;
 
     private void dumpNextChunkOfDamage() {
       liveDamage.forEach((id, d) -> combatLog(String.format("Took %s %.2f", id, d)));
