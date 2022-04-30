@@ -497,6 +497,13 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     );
   }
 
+  @Test
+  void thatIsQuiteTheGoblin() {
+    sendInput("enemy :goblin 50 <5 >25 *10");
+
+    assertOutput("You face the goblin (250.0 hp).");
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);
