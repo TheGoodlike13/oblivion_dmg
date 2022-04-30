@@ -62,11 +62,18 @@ public final class Global {
    * Configurable values for the application.
    * Default values provided for reference, but they are immediately overwritten by {@link #load}.
    * See settings.properties for actual values.
+   * Commands can allow modifying some on them on the fly.
    */
   public static final class Settings {
     static {
       load();
     }
+
+    /**
+     * Player level.
+     * Modifies hit points for leveled enemies.
+     */
+    public static int LEVEL = 30;
 
     /**
      * Value of the difficulty slider in Oblivion in-game options.
@@ -110,6 +117,7 @@ public final class Global {
         throw new IllegalStateException("File '" + SETTINGS_FILE + "' could not be read as properties!");
       }
 
+      LEVEL = StructureException.natOrThrow(properties.getProperty("level"), "player level");
       DIFFICULTY = StructureException.intOrThrow(properties.getProperty("difficulty"), "difficulty setting");
       TICK = StructureException.doubleOrThrow(properties.getProperty("tick"), "tick setting");
       PREPARED_ENEMIES = properties.getProperty("prepared.enemies");

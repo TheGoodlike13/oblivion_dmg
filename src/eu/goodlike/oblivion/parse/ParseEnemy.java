@@ -36,7 +36,15 @@ public final class ParseEnemy extends BaseParseInput<Enemy> {
   protected Enemy parse() {
     double hp = StructureException.doubleOrThrow(this.hp, "enemy hp");
     List<EffectText> effects = Parse.effects(this.effects);
-    return new Enemy(hp, effects);
+    Enemy enemy = new Enemy(hp, effects);
+    if (isBlank(levelMultiplier)) {
+      return enemy;
+    }
+
+    int levelMultiplier = StructureException.intOrThrow(this.levelMultiplier, "level multiplier");
+    int minLevel = StructureException.intOrThrow(this.minLevel, "min level");
+    int maxLevel = StructureException.intOrThrow(this.maxLevel, "max level");
+    return enemy.setLeveled(levelMultiplier, minLevel, maxLevel);
   }
 
   @Override
@@ -60,11 +68,23 @@ public final class ParseEnemy extends BaseParseInput<Enemy> {
   }
 
   private String hp = "";
+  private String levelMultiplier = "";
+  private String minLevel = "1";
+  private String maxLevel = String.valueOf(Integer.MAX_VALUE);
   private final List<String> effects = new ArrayList<>();
 
   private void identify(String input) {
     if (input.startsWith(":")) {
       label = input.substring(1);
+    }
+    else if (input.startsWith("*")) {
+      levelMultiplier = input.substring(1);
+    }
+    else if (input.startsWith("<")) {
+      minLevel = input.substring(1);
+    }
+    else if (input.startsWith(">")) {
+      maxLevel = input.substring(1);
     }
     else if (isBlank(hp)) {
       hp = input;

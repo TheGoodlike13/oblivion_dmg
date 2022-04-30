@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static eu.goodlike.oblivion.Global.Settings.LEVEL;
 import static eu.goodlike.oblivion.Global.Settings.TICK;
 import static eu.goodlike.oblivion.core.Source.SPELL;
 
@@ -165,6 +166,33 @@ public final class Enemy implements Target {
     this.health = maxHealth;
   }
 
+  public Enemy setLeveled(int levelMultiplier, int minLevel, int maxLevel) {
+    if (level > 0) {
+      throw new StructureException("Enemy is already leveled: " + this);
+    }
+    StructureException.natOrThrow(levelMultiplier, "level multiplier");
+    StructureException.natOrThrow(minLevel, "level multiplier");
+    if (maxLevel <= minLevel) {
+      throw new StructureException("Max must be higher than min, but was: <" + maxLevel + " <= " + minLevel + ">");
+    }
+
+    this.levelMultiplier = levelMultiplier;
+    this.minLevel = Math.max(1, minLevel);
+    this.maxLevel = Math.max(minLevel, maxLevel);
+
+    this.level = minLevel;
+    updateLevel();
+    return this;
+  }
+
+  public void updateLevel() {
+    int diff = confine(LEVEL) - confine(level);
+
+    level = LEVEL;
+    maxHealth = maxHealth + diff * levelMultiplier;
+    resurrect();
+  }
+
   @Override
   public double getMultiplier(Factor factor) {
     return Math.max(0, getWeakness(factor) / 100);
@@ -221,8 +249,18 @@ public final class Enemy implements Target {
 
   private final Map<Effect.Id, Effect> activeEffects;
 
+  private int levelMultiplier;
+  private int minLevel;
+  private int maxLevel;
+
+  private int level;
+
   private double getWeakness(Factor factor) {
     return weaknessPercent.computeIfAbsent(factor, any -> NO_WEAKNESS);
+  }
+
+  private int confine(int level) {
+    return Math.max(minLevel, Math.min(level, maxLevel));
   }
 
   private static final double NO_WEAKNESS = 100;
@@ -230,7 +268,11 @@ public final class Enemy implements Target {
 
   @Override
   public String toString() {
-    return String.format("%.1f/%.1f%s", health, maxHealth, multipliers());
+    return String.format("%s%.1f/%.1f%s", level(), health, maxHealth, multipliers());
+  }
+
+  private String level() {
+    return level <= 0 ? "" : "[LVL " + level + "] ";
   }
 
   private String multipliers() {

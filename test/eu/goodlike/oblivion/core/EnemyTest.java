@@ -1,11 +1,13 @@
 package eu.goodlike.oblivion.core;
 
 import eu.goodlike.oblivion.Global;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static eu.goodlike.oblivion.Global.Settings.DIFFICULTY;
+import static eu.goodlike.oblivion.Global.Settings.LEVEL;
 import static eu.goodlike.oblivion.core.Factor.FIRE;
 import static eu.goodlike.oblivion.core.Factor.FROST;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
@@ -49,9 +51,9 @@ class EnemyTest {
 
   @Test
   void alreadyDeadNotAllowed() {
-    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> new Enemy(0));
-    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> new Enemy(-1));
-    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> new Enemy(0.004));
+    assertBadStructure(() -> new Enemy(0));
+    assertBadStructure(() -> new Enemy(-1));
+    assertBadStructure(() -> new Enemy(0.004));
   }
 
   @Test
@@ -66,8 +68,7 @@ class EnemyTest {
 
   @Test
   void healingNotAllowed() {
-    assertThatExceptionOfType(StructureException.class)
-      .isThrownBy(() -> MAGIC.damage(-1));
+    assertBadStructure(() -> MAGIC.damage(-1));
   }
 
   @Test
@@ -518,6 +519,39 @@ class EnemyTest {
     assertDamageTaken(0);
   }
 
+  @Test
+  void levels() {
+    target.setLeveled(10, 20, 30);
+    assertHealthRemaining(1100);
+
+    LEVEL = 25;
+    assertHealthRemaining(1100);
+
+    target.updateLevel();
+    assertHealthRemaining(1050);
+
+    LEVEL = 1;
+    target.updateLevel();
+    assertHealthRemaining(1000);
+
+    LEVEL = 50;
+    target.updateLevel();
+    assertHealthRemaining(1100);
+  }
+
+  @Test
+  void badLevels() {
+    assertBadStructure(() -> target.setLeveled(-1, 1, 2));
+    assertBadStructure(() -> target.setLeveled(0, 1, 2));
+
+    assertBadStructure(() -> target.setLeveled(1, -1, 2));
+    assertBadStructure(() -> target.setLeveled(1, 0, 2));
+
+    assertBadStructure(() -> target.setLeveled(1, 1, -1));
+    assertBadStructure(() -> target.setLeveled(1, 1, 0));
+    assertBadStructure(() -> target.setLeveled(1, 1, 1));
+  }
+
   @SuppressWarnings("unused")
   private void resurrect(String description, EffectText... baseEffects) {
     target = new Enemy(1000, baseEffects);
@@ -536,6 +570,10 @@ class EnemyTest {
   private void assertOverkill(double expected) {
     target.resolve();
     assertThat(target.overkill()).isEqualTo(expected, within(0.005));
+  }
+
+  private void assertBadStructure(ThrowingCallable throwingCallable) {
+    assertThatExceptionOfType(StructureException.class).isThrownBy(throwingCallable);
   }
 
 }

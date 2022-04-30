@@ -43,6 +43,16 @@ public final class Arena {
     }
   }
 
+  public void refresh() {
+    Write.separator();
+
+    hits = new ArrayList<>();
+    if (enemy != null) {
+      enemy.updateLevel();
+      announceOpponent();
+    }
+  }
+
   public void reset() {
     hits = new ArrayList<>();
     label = null;
@@ -122,14 +132,6 @@ public final class Arena {
 
   private void combatLog(String text) {
     Write.line(String.format("%06.3f " + text, duration));
-  }
-
-  private void refresh() {
-    Write.separator();
-
-    hits = new ArrayList<>();
-    enemy.resurrect();
-    announceOpponent();
   }
 
   private void announceOpponent() {

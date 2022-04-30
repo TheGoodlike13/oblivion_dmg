@@ -4,10 +4,13 @@ import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
 import eu.goodlike.oblivion.command.ItsAllOver;
 import eu.goodlike.oblivion.command.JustForget;
 import eu.goodlike.oblivion.command.LowerTheGates;
+import eu.goodlike.oblivion.command.Refresh;
 import eu.goodlike.oblivion.command.RepeatHit;
 import eu.goodlike.oblivion.command.Reset;
+import eu.goodlike.oblivion.command.SetDifficulty;
 import eu.goodlike.oblivion.command.SetEnemy;
 import eu.goodlike.oblivion.command.SetHit;
+import eu.goodlike.oblivion.command.SetLevel;
 import eu.goodlike.oblivion.command.UndoLastHit;
 
 import java.util.function.Supplier;
@@ -29,10 +32,13 @@ public interface Command {
    * Only {@link SetHit} has no name, as it is recognized differently and parsed in its entirety as arguments.
    */
   enum Name {
+    DIFFICULTY(SetDifficulty::new),
     ENEMY(SetEnemy::new),
     FORGET(JustForget::new),
     GO(LowerTheGates::new),
     HIT(RepeatHit::new),
+    LEVEL(SetLevel::new),
+    REFRESH(Refresh::new),
     RESET(Reset::new),
     QUIT(ItsAllOver::new),
     UNDO(UndoLastHit::new),

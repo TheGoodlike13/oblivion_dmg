@@ -468,6 +468,35 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutput("[#1] Next hit: <MELEE$aetherius> {SHOCK DMG 18 for 1s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s}");
   }
 
+  @Test
+  void whenTheSettingsJustAreNotEnough() {
+    sendInput("difficulty 100", "difficulty xxx", "difficulty");
+
+    assertOutput(
+      "Difficulty slider has been set to <100.0>.",
+      "Bad input: Cannot parse difficulty setting <xxx>",
+      "Bad input: Cannot parse difficulty setting <>"
+    );
+
+    assertThat(DIFFICULTY).isEqualTo(100);
+  }
+
+  @Test
+  void ding() {
+    sendInput("enemy $xivilai", "level 31", "refresh");
+
+    assertOutput(
+      "You face the xivilai (336.0 hp).",
+      "FIRE   x0.67",
+      "SHOCK  x1.20",
+      "Player level has been set to <31>.",
+      "-----",
+      "You face the xivilai (348.0 hp).",
+      "FIRE   x0.67",
+      "SHOCK  x1.20"
+    );
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);
