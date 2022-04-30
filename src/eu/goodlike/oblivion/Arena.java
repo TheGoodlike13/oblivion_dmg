@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static eu.goodlike.oblivion.Global.Settings.DUMPS;
 import static eu.goodlike.oblivion.Global.Settings.TICK;
 import static java.util.stream.Collectors.joining;
 
@@ -166,7 +167,7 @@ public final class Arena {
       this.isTicking = true;
 
       if (duration >= nextDump) {
-        nextDump += 0.25;
+        nextDump += 1d / DUMPS;
         dumpNextChunkOfDamage();
       }
       duration += TICK;
@@ -261,7 +262,7 @@ public final class Arena {
       this.isExpired = false;
 
       this.duration = 0;
-      this.nextDump = 0.25;
+      this.nextDump = 1d / DUMPS;
 
       this.liveDamage = new LinkedHashMap<>();
       this.totalDamage = new LinkedHashMap<>();
