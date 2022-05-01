@@ -26,6 +26,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * {@link #equals)} is NOT consistent with this ordering!
  * Avoid {@link SortedSet} and similar!
  * <p/>
+ * Two carriers should only be equal if they represent the exactly same item or spell.
+ * Usually object identity is sufficient to achieve this.
+ * <p/>
  * This class can be overridden to provide different strategies for uniquely identifying effects.
  * In such cases, {@link #copy(String)} should also be overridden!
  */

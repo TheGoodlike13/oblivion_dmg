@@ -3,11 +3,11 @@ package eu.goodlike.oblivion.core.source;
 import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.EffectText;
-import eu.goodlike.oblivion.core.Factor;
 import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.effect.Resist;
 
+import java.util.Collections;
 import java.util.List;
 
 public final class Poison implements Method, Source {
@@ -15,6 +15,11 @@ public final class Poison implements Method, Source {
   @Override
   public EffectText resist(int pc) {
     return new EffectText(MAGIC, resistPoison, pc);
+  }
+
+  @Override
+  public Carrier withNoEffect() {
+    return NAME_POISON;
   }
 
   @Override
@@ -48,6 +53,7 @@ public final class Poison implements Method, Source {
   }
 
   private static Poison INSTANCE;
+  private static final Carrier NAME_POISON = new PoisonBottle(null, Collections.emptyList());
 
   private static final class PoisonBottle extends Carrier {
     @Override
@@ -61,7 +67,7 @@ public final class Poison implements Method, Source {
     }
 
     public PoisonBottle(String label, Iterable<EffectText> effects) {
-      super(label, Source.POISON, Factor.POISON, effects);
+      super(label, getInstance(), getInstance(), effects);
     }
 
     // exposed so AlwaysUnique can see it

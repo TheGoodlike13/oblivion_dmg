@@ -26,6 +26,9 @@ public interface Source extends Comparable<Source> {
 
   List<Source> ALL_IN_ORDER = ImmutableList.of(MELEE, BOW, ARROW, POISON, SPELL, STAFF);
 
+  /**
+   * @return equivalent to {@link #create} with no params, but always returns the same instance
+   */
   default Carrier withNoEffect() {
     return create();
   }

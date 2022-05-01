@@ -16,6 +16,11 @@ public final class Magic extends Element implements Method, Source {
   }
 
   @Override
+  public Carrier withNoEffect() {
+    return noEffect;
+  }
+
+  @Override
   public Carrier create(String label, List<EffectText> effects) {
     return new Carrier(label, this, MAGIC, effects);
   }
@@ -23,5 +28,7 @@ public final class Magic extends Element implements Method, Source {
   public Magic(String name) {
     super(name);
   }
+
+  private final Carrier noEffect = create();
 
 }
