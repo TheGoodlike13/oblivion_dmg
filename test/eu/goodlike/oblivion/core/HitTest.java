@@ -90,6 +90,45 @@ class HitTest {
     assertThat(hit(STAFF).requiresSwap(STAFF.withNoEffect())).isEmpty();
   }
 
+  @Test
+  void alwaysRequireCooldownWhenSwappingWeapons() {
+    for (Source source : ImmutableList.of(MELEE, BOW, STAFF)) {
+      assertThat(hit(source).requiresCooldown(new Hit(source.create()))).isTrue();
+    }
+
+    assertThat(hit(MELEE).requiresCooldown(hit(BOW))).isTrue();
+    assertThat(hit(MELEE).requiresCooldown(hit(STAFF))).isTrue();
+
+    assertThat(hit(BOW).requiresCooldown(hit(MELEE))).isTrue();
+    assertThat(hit(BOW).requiresCooldown(hit(STAFF))).isTrue();
+
+    assertThat(hit(STAFF).requiresCooldown(hit(MELEE))).isTrue();
+    assertThat(hit(STAFF).requiresCooldown(hit(BOW))).isTrue();
+  }
+
+  @Test
+  void alwaysRequireCooldownWhenCastingASpell() {
+    assertThat(hit(MELEE).requiresCooldown(hit(SPELL))).isTrue();
+    assertThat(hit(BOW).requiresCooldown(hit(SPELL))).isTrue();
+    assertThat(hit(STAFF).requiresCooldown(hit(SPELL))).isTrue();
+    assertThat(hit(SPELL).requiresCooldown(hit(SPELL))).isTrue();
+  }
+
+  @Test
+  void attacksAlwaysIgnoreSpellCooldown() {
+    assertThat(hit(SPELL).requiresCooldown(hit(MELEE))).isFalse();
+    assertThat(hit(SPELL).requiresCooldown(hit(BOW))).isFalse();
+    assertThat(hit(SPELL).requiresCooldown(hit(STAFF))).isFalse();
+  }
+
+  @Test
+  void physicalWeaponCombosIgnoreCooldown() {
+    assertThat(hit(MELEE).requiresCooldown(hit(MELEE))).isFalse();
+    assertThat(hit(BOW).requiresCooldown(hit(BOW))).isFalse();
+
+    assertThat(hit(STAFF).requiresCooldown(hit(STAFF))).isTrue();
+  }
+
   private void assertHit(Source... sources) {
     assertThatNoException().isThrownBy(() -> new Hit(dummyCarriers(sources)));
   }

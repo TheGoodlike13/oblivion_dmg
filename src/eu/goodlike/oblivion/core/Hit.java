@@ -13,6 +13,7 @@ import static eu.goodlike.oblivion.core.Source.ARROW;
 import static eu.goodlike.oblivion.core.Source.BOW;
 import static eu.goodlike.oblivion.core.Source.MELEE;
 import static eu.goodlike.oblivion.core.Source.POISON;
+import static eu.goodlike.oblivion.core.Source.STAFF;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -35,6 +36,12 @@ public final class Hit implements Iterable<Carrier> {
   public Optional<Carrier> requiresSwap(Carrier oldWeapon) {
     return getWeapon()
       .filter(newWeapon -> !newWeapon.equals(oldWeapon));
+  }
+
+  public boolean requiresCooldown(Hit next) {
+    return getWeapon().flatMap(next::requiresSwap).isPresent()
+      || !next.getWeapon().isPresent()
+      || getWeapon().map(Carrier::getSource).filter(STAFF::equals).isPresent();
   }
 
   @Override
