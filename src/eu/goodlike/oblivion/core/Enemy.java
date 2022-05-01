@@ -238,7 +238,7 @@ public final class Enemy implements Target {
    * @return current health over max health
    */
   public String healthStatus() {
-    return String.format("%.1f/%d", health, maxHealth);
+    return String.format("[%.1f/%d]", health, maxHealth);
   }
 
   public Enemy(int maxHealth, EffectText... bonus) {

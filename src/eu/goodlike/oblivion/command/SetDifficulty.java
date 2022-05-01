@@ -11,7 +11,7 @@ public final class SetDifficulty extends BaseCommand {
   protected void performTask() {
     double difficulty = StructureException.doubleOrThrow(input(1), "difficulty setting");
     DIFFICULTY = difficulty;
-    Write.line("Difficulty slider has been set to <" + difficulty + ">.");
+    Write.line("Difficulty slider has been set to <" + difficulty + ">");
   }
 
 }

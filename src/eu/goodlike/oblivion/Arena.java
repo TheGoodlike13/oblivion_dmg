@@ -49,7 +49,12 @@ public final class Arena {
 
   public void lowerTheGates() {
     if (ready()) {
-      fight();
+      try {
+        fight();
+      }
+      finally {
+        refresh();
+      }
     }
   }
 
@@ -98,20 +103,15 @@ public final class Arena {
   }
 
   private void fight() {
-    try {
-      equipFirstWeapon();
+    equipFirstWeapon();
 
-      for (Hit hit : hits) {
-        play.next(hit);
-      }
-
-      enemy.resolve(play);
-
-      writeObituary();
+    for (Hit hit : hits) {
+      play.next(hit);
     }
-    finally {
-      refresh();
-    }
+
+    enemy.resolve(play);
+
+    play.writeObituary();
   }
 
   private void equipFirstWeapon() {
@@ -123,18 +123,8 @@ public final class Arena {
       .ifPresent(play::setInitialWeapon);
   }
 
-  private void writeObituary() {
-    if (enemy.isAlive()) {
-      Write.line("The %s has survived %.1f damage (%.1f hp left).", label, enemy.damageTaken(), enemy.healthRemaining());
-    }
-    else {
-      Write.line("The %s took a total of %.1f damage (%.1f overkill).", label, enemy.damageTaken(), enemy.overkill());
-    }
-    play.writeTotals();
-  }
-
   private void announceOpponent() {
-    Write.line("You face the %s (%.0f hp).", label, enemy.healthRemaining());
+    Write.line("You face the %s (%.0f hp)", label, enemy.healthRemaining());
     writeResists();
   }
 
@@ -184,7 +174,7 @@ public final class Arena {
       play.combatLog("You " + hit.toPerformString());
       enemy.tick(hit.timeToHit(combo), play);
 
-//      play.combatLog("You hit with " + hit.toLabelString());
+      play.combatLog("You hit with " + hit.toLabelString());
       enemy.hit(hit, play);
       play.dumpModifiedFactors();
 
@@ -234,14 +224,8 @@ public final class Arena {
 
     @Override
     public void damage(double dmg) {
-      if (enemy.isAlive()) {
-        liveDamage.merge(id, dmg, Double::sum);
-        totalDamage.merge(id, dmg, Double::sum);
-      }
-      else {
-        totalOverkill.merge(id, dmg, Double::sum);
-      }
       actual.damage(dmg);
+      totalDamage.merge(id, dmg, Double::sum);
       checkPossibleDeath();
     }
 
@@ -268,21 +252,27 @@ public final class Arena {
     public void poke(double magnitude, double duration) {
       actual.poke(magnitude, duration);
       if (!isTicking) {
-        combatLog(String.format("%s %s %.1f for %.0fs", newEffect(), id, magnitude, duration));
+        combatLog(String.format("%s %s %.1f for %.0fs", newEffect(), id.toShortString(), magnitude, duration));
+      }
+    }
+
+    public void writeObituary() {
+      if (enemy.isAlive()) {
+        Write.line("The %s has survived %.1f damage (%.1f hp left).", label, enemy.damageTaken(), enemy.healthRemaining());
+        writeTotal("damage");
+      }
+      else {
+        Write.line("The %s took a total of %.1f damage (%.1f overkill).", label, enemy.damageTaken(), enemy.overkill());
+        writeTotal("overkill");
       }
     }
 
     public void dumpModifiedFactors() {
       if (!modifiedFactors.isEmpty()) {
         String factorMods = factorMods(modifiedFactors, true).collect(joining(", "));
-        combatLog("Affected multipliers: " + factorMods);
+        combatLog("Resulting multipliers: " + factorMods);
         modifiedFactors.clear();
       }
-    }
-
-    public void writeTotals() {
-      writeTotals(totalDamage, "damage");
-      writeTotals(totalOverkill, "overkill");
     }
 
     public PlayByPlay() {
@@ -300,11 +290,11 @@ public final class Arena {
       this.isExpired = false;
 
       this.duration = 0;
+      this.lastLog = -1;
       this.nextDump = 1d / DUMPS;
 
       this.liveDamage = new LinkedHashMap<>();
       this.totalDamage = new LinkedHashMap<>();
-      this.totalOverkill = new LinkedHashMap<>();
 
       this.modifiedFactors = new ArrayList<>();
     }
@@ -323,11 +313,11 @@ public final class Arena {
     private boolean isExpired;
 
     private double duration;
+    private double lastLog;
     private double nextDump;
 
     private final Map<Effect.Id, Double> liveDamage;
     private final Map<Effect.Id, Double> totalDamage;
-    private final Map<Effect.Id, Double> totalOverkill;
 
     private final List<Factor> modifiedFactors;
 
@@ -339,36 +329,43 @@ public final class Arena {
     private void checkPossibleDeath() {
       if (!isDeathConfirmed && !enemy.isAlive()) {
         isDeathConfirmed = true;
-        dumpNextChunkOfDamage();
         combatLog("The " + label + " has died.");
+        writeTotal("damage");
       }
     }
 
     private String newEffect(double percent) {
-      return String.format("%s %s %.1f", newEffect(), id, percent);
+      return String.format("%s %s %.1f", newEffect(), id.toShortString(), percent);
     }
 
     private String newEffect() {
-      return isExpired ? "Replaced" : "Added";
+      return isExpired ? "Replaced" : "Applied";
     }
 
     private void combatLog(String text) {
-      Write.line("%06.3f %s", duration, text);
-    }
-
-    private void writeEnemyHp(String status) {
-      combatLog(String.format("Enemy health %s: %s", status, enemy.healthStatus()));
-    }
-
-    private void writeTotals(Map<Effect.Id, Double> totals, String desc) {
-      if (!totals.isEmpty()) {
-        Write.line("Total %s by effect id:", desc);
-        totals.forEach(this::writeEffect);
+      if (lastLog == duration) {
+        Write.line("       %s", text);
+      }
+      else {
+        lastLog = duration;
+        Write.line("%06.3f %s", duration, text);
       }
     }
 
+    private void writeEnemyHp(String status) {
+      combatLog(String.format("The " + label + " hp %s %s", status, enemy.healthStatus()));
+    }
+
+    private void writeTotal(String desc) {
+      if (!totalDamage.isEmpty()) {
+        combatLog("Total " + desc + " by effect id:");
+        totalDamage.forEach(this::writeEffect);
+      }
+      totalDamage.clear();
+    }
+
     private void writeEffect(Effect.Id id, double d) {
-      Write.line(String.format("%s: %.2f", id, d));
+      combatLog(String.format("%s: %.2f", id, d));
     }
   }
 

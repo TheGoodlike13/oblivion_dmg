@@ -17,6 +17,7 @@ public interface Effect {
    * Ensures effects from the same carrier (e.g. spell) do not stack.
    */
   interface Id {
+    String toShortString();
   }
 
   /**

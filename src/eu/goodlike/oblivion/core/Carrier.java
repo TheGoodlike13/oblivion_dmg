@@ -120,17 +120,22 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
   private static final Comparator<Carrier> ORDER = Comparator.comparing(Carrier::getSource);
 
   private static final class UniquePerType implements Effect.Id {
-    public UniquePerType(Carrier carrier, Effect.Type effectType) {
+    @Override
+    public String toShortString() {
+      return type.toString();
+    }
+
+    public UniquePerType(Carrier carrier, Effect.Type type) {
       this.carrier = carrier;
-      this.effectType = effectType;
+      this.type = type;
     }
 
     private final Carrier carrier;
-    private final Effect.Type effectType;
+    private final Effect.Type type;
 
     @Override
     public String toString() {
-      return carrier.getLabel() + " " + effectType;
+      return carrier.getLabel() + " " + toShortString();
     }
 
     @Override
@@ -139,12 +144,12 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
       if (o == null || getClass() != o.getClass()) return false;
       UniquePerType other = (UniquePerType)o;
       return Objects.equals(carrier, other.carrier)
-        && Objects.equals(effectType, other.effectType);
+        && Objects.equals(type, other.type);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(carrier, effectType);
+      return Objects.hash(carrier, type);
     }
   }
 

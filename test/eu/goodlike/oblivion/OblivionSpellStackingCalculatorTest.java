@@ -79,7 +79,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void newEnemy() {
     sendInput("enemy 1000");
 
-    assertOutput("You face the enemy (1000 hp).");
+    assertOutput("You face the enemy (1000 hp)");
   }
 
   @Test
@@ -93,14 +93,14 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void spaceMan() {
     sendInput("enemy        1000");
 
-    assertOutput("You face the enemy (1000 hp).");
+    assertOutput("You face the enemy (1000 hp)");
   }
 
   @Test
   void iAintAfraidOfNoTabs() {
     sendInput("enemy\t\t\t1000");
 
-    assertOutput("You face the enemy (1000 hp).");
+    assertOutput("You face the enemy (1000 hp)");
   }
 
   @Test
@@ -115,7 +115,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 100 :enemy", "enemy $enemy");
 
     assertOutput(
-      "You face the enemy (100 hp).",
+      "You face the enemy (100 hp)",
       "Bad input: Nothing matches <enemy>"
     );
   }
@@ -162,17 +162,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy :beeeetch 999", "+s 1000s", "go");
 
     assertOutputSegment(
-      "You face the beeeetch (999 hp).",
+      "You face the beeeetch (999 hp)",
       "[#1] Next hit: <SPELL$1> {SHOCK DMG 1000 for 1s}",
       "00.000 You cast <SPELL$1>",
-      "00.410 Added <SPELL$1> SHOCK DMG 1000.0 for 1s",
-      "00.500 Took <SPELL$1> SHOCK DMG 90.00",
-      "00.750 Took <SPELL$1> SHOCK DMG 250.00",
-      "01.000 Took <SPELL$1> SHOCK DMG 250.00",
-      "01.251 Took <SPELL$1> SHOCK DMG 251.00",
-      "01.409 Took <SPELL$1> SHOCK DMG 158.00",
-      "01.409 The beeeetch has died.",
-      "01.410 Expired <SPELL$1> SHOCK DMG"
+      "00.410 You hit with <SPELL$1>",
+      "       Applied SHOCK DMG 1000.0 for 1s",
+      "01.409 The beeeetch has died."
     );
   }
 
@@ -181,12 +176,13 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 99", "+s 100d", "go");
 
     assertOutputSegment(
-      "You face the enemy (99 hp).",
+      "You face the enemy (99 hp)",
       "[#1] Next hit: <SPELL$1> {DRAIN LIFE 100 for 1s}",
       "00.000 You cast <SPELL$1>",
-      "00.410 Added <SPELL$1> DRAIN LIFE 100.0",
-      "00.410 Enemy health drained: -1.0/99",
-      "00.410 The enemy has died."
+      "00.410 You hit with <SPELL$1>",
+      "       Applied DRAIN LIFE 100.0",
+      "       The enemy hp drained [-1.0/99]",
+      "       The enemy has died."
     );
   }
 
@@ -195,13 +191,14 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 100", "+s 50d", "go");
 
     assertOutputSegment(
-      "You face the enemy (100 hp).",
+      "You face the enemy (100 hp)",
       "[#1] Next hit: <SPELL$1> {DRAIN LIFE 50 for 1s}",
       "00.000 You cast <SPELL$1>",
-      "00.410 Added <SPELL$1> DRAIN LIFE 50.0",
-      "00.410 Enemy health drained: 50.0/100",
+      "00.410 You hit with <SPELL$1>",
+      "       Applied DRAIN LIFE 50.0",
+      "       The enemy hp drained [50.0/100]",
       "01.410 Expired <SPELL$1> DRAIN LIFE",
-      "01.410 Enemy health restored: 100.0/100",
+      "       The enemy hp restored [100.0/100]",
       "The enemy has survived 0.0 damage (100.0 hp left).",
       "-----"
     );
@@ -212,50 +209,38 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 10", "+s 10m", "go", "+s 10m", "go", "hit #1", "go");
 
     assertOutputSegment(
-      "You face the enemy (10 hp).",
+      "You face the enemy (10 hp)",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "00.000 You cast <SPELL$1>",
-      "00.410 Added <SPELL$1> MAGIC DMG 10.0 for 1s",
-      "00.500 Took <SPELL$1> MAGIC DMG 0.90",
-      "00.750 Took <SPELL$1> MAGIC DMG 2.50",
-      "01.000 Took <SPELL$1> MAGIC DMG 2.50",
-      "01.251 Took <SPELL$1> MAGIC DMG 2.51",
-      "01.410 Took <SPELL$1> MAGIC DMG 1.59",
+      "00.410 You hit with <SPELL$1>",
+      "       Applied MAGIC DMG 10.0 for 1s",
       "01.410 The enemy has died.",
-      "01.410 Expired <SPELL$1> MAGIC DMG",
+      "       Total damage by effect id:",
+      "       <SPELL$1> MAGIC DMG: 10.00",
+      "       Expired <SPELL$1> MAGIC DMG",
       "The enemy took a total of 10.0 damage (0.0 overkill).",
-      "Total damage by effect id:",
-      "<SPELL$1> MAGIC DMG: 10.00",
       "-----",
-      "You face the enemy (10 hp).",
+      "You face the enemy (10 hp)",
       "[#2] Next hit: <SPELL$2> {MAGIC DMG 10 for 1s}",
       "00.000 You cast <SPELL$2>",
-      "00.410 Added <SPELL$2> MAGIC DMG 10.0 for 1s",
-      "00.500 Took <SPELL$2> MAGIC DMG 0.90",
-      "00.750 Took <SPELL$2> MAGIC DMG 2.50",
-      "01.000 Took <SPELL$2> MAGIC DMG 2.50",
-      "01.251 Took <SPELL$2> MAGIC DMG 2.51",
-      "01.410 Took <SPELL$2> MAGIC DMG 1.59",
+      "00.410 You hit with <SPELL$2>",
+      "       Applied MAGIC DMG 10.0 for 1s",
       "01.410 The enemy has died.",
-      "01.410 Expired <SPELL$2> MAGIC DMG",
+      "       Total damage by effect id:",
+      "       <SPELL$2> MAGIC DMG: 10.00",
+      "       Expired <SPELL$2> MAGIC DMG",
       "The enemy took a total of 10.0 damage (0.0 overkill).",
-      "Total damage by effect id:",
-      "<SPELL$2> MAGIC DMG: 10.00",
       "-----",
-      "You face the enemy (10 hp).",
+      "You face the enemy (10 hp)",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "00.000 You cast <SPELL$1>",
-      "00.410 Added <SPELL$1> MAGIC DMG 10.0 for 1s",
-      "00.500 Took <SPELL$1> MAGIC DMG 0.90",
-      "00.750 Took <SPELL$1> MAGIC DMG 2.50",
-      "01.000 Took <SPELL$1> MAGIC DMG 2.50",
-      "01.251 Took <SPELL$1> MAGIC DMG 2.51",
-      "01.410 Took <SPELL$1> MAGIC DMG 1.59",
+      "00.410 You hit with <SPELL$1>",
+      "       Applied MAGIC DMG 10.0 for 1s",
       "01.410 The enemy has died.",
-      "01.410 Expired <SPELL$1> MAGIC DMG",
-      "The enemy took a total of 10.0 damage (0.0 overkill).",
-      "Total damage by effect id:",
-      "<SPELL$1> MAGIC DMG: 10.00"
+      "       Total damage by effect id:",
+      "       <SPELL$1> MAGIC DMG: 10.00",
+      "       Expired <SPELL$1> MAGIC DMG",
+      "The enemy took a total of 10.0 damage (0.0 overkill)."
     );
   }
 
@@ -271,28 +256,21 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 30", "+s 10m", "hit #1 #2", "go");
 
     assertOutputSegment(
-      "You face the enemy (30 hp).",
+      "You face the enemy (30 hp)",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "Bad input: Nothing matches <2>",
       "00.000 You cast <SPELL$1>",
-      "00.410 Added <SPELL$1> MAGIC DMG 10.0 for 1s",
-      "00.500 Took <SPELL$1> MAGIC DMG 0.90",
-      "00.750 Took <SPELL$1> MAGIC DMG 2.50",
-      "01.000 Took <SPELL$1> MAGIC DMG 2.50",
+      "00.410 You hit with <SPELL$1>",
+      "       Applied MAGIC DMG 10.0 for 1s",
       "01.140 You cast <SPELL$1>",
-      "01.251 Took <SPELL$1> MAGIC DMG 2.51",
       "01.410 Expired <SPELL$1> MAGIC DMG",
-      "01.501 Took <SPELL$1> MAGIC DMG 1.59",  // TODO: should be printed at expiration
-      "01.550 Added <SPELL$1> MAGIC DMG 10.0 for 1s",
-      "01.751 Took <SPELL$1> MAGIC DMG 2.01",
-      "02.001 Took <SPELL$1> MAGIC DMG 2.50",
-      "02.251 Took <SPELL$1> MAGIC DMG 2.50",
-      "02.501 Took <SPELL$1> MAGIC DMG 2.50",
-      "02.550 Expired <SPELL$1> MAGIC DMG",  // TODO: missing remaining tick
+      "01.550 You hit with <SPELL$1>",
+      "       Applied MAGIC DMG 10.0 for 1s",
+      "02.550 Expired <SPELL$1> MAGIC DMG",
       "The enemy has survived 20.0 damage (10.0 hp left).",
-      "Total damage by effect id:",
-      "<SPELL$1> MAGIC DMG: 20.00",
+      "       Total damage by effect id:",
+      "       <SPELL$1> MAGIC DMG: 20.00",
       "-----"
     );
   }
@@ -336,7 +314,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "Good job.",
       "How about picking an enemy?",
       "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "You face the enemy (10 hp).",
+      "You face the enemy (10 hp)",
       "You stare at the enemy.",
       "The enemy stares at you.",
       "How about casting some spells?"
@@ -451,7 +429,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 100 :bad_idea", "+s 1m :bad_idea", "forget $bad_idea", "enemy $bad_idea", "$bad_idea");
 
     assertOutput(
-      "You face the bad idea (100 hp).",
+      "You face the bad idea (100 hp)",
       "[#1] Next hit: <SPELL$bad_idea> {MAGIC DMG 1 for 1s}",
       "All references to <bad_idea> were removed from caches.",
       "Bad input: Nothing matches <bad_idea>",
@@ -475,9 +453,9 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 100 :good_idea", "forget $good", "enemy $good");
 
     assertOutput(
-      "You face the good idea (100 hp).",
+      "You face the good idea (100 hp)",
       "All references to <good> were removed from caches.",
-      "You face the good idea (100 hp)."
+      "You face the good idea (100 hp)"
     );
   }
 
@@ -505,8 +483,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     );
 
     assertOutputSegment(
-      "Difficulty slider has been set to <100.0>.",
-      "You face the skeleton champion (350 hp).",
+      "Difficulty slider has been set to <100.0>",
+      "You face the skeleton champion (350 hp)",
       "POISON x0.00",
       "FROST  x0.30",
       "[#1] Next hit: <SPELL$divine_justice_apprentice> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
@@ -515,53 +493,55 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "[#2] Next hit: <SPELL$divine_justice_expert> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
       "[#3] Next hit: <MELEE$aetherius> {SHOCK DMG 18 for 1s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s}",
       "00.000 You begin equipped with <MELEE$aetherius>",
-      "00.000 You cast <SPELL$divine_justice_apprentice>",
-      "00.410 Added <SPELL$divine_justice_apprentice> RESIST MAGIC -100.0",
-      "00.410 Added <SPELL$divine_justice_apprentice> RESIST SHOCK -100.0",
-      "00.410 Added <SPELL$divine_justice_apprentice> RESIST POISON -100.0",
-      "00.410 Affected multipliers: MAGIC  x2.00, SHOCK  x2.00, POISON x1.00",
+      "       You cast <SPELL$divine_justice_apprentice>",
+      "00.410 You hit with <SPELL$divine_justice_apprentice>",
+      "       Applied RESIST MAGIC -100.0",
+      "       Applied RESIST SHOCK -100.0",
+      "       Applied RESIST POISON -100.0",
+      "       Resulting multipliers: MAGIC  x2.00, SHOCK  x2.00, POISON x1.00",
       "01.140 You cast <SPELL$divine_justice_expert>",
-      "01.550 Added <SPELL$divine_justice_expert> RESIST MAGIC -200.0",
-      "01.550 Added <SPELL$divine_justice_expert> RESIST SHOCK -200.0",
-      "01.550 Added <SPELL$divine_justice_expert> RESIST POISON -200.0",
-      "01.550 Affected multipliers: MAGIC  x4.00, SHOCK  x4.00, POISON x3.00",
+      "01.550 You hit with <SPELL$divine_justice_expert>",
+      "       Applied RESIST MAGIC -200.0",
+      "       Applied RESIST SHOCK -200.0",
+      "       Applied RESIST POISON -200.0",
+      "       Resulting multipliers: MAGIC  x4.00, SHOCK  x4.00, POISON x3.00",
       "02.280 You cast <SPELL$divine_justice_apprentice>",
-      "02.690 Replaced <SPELL$divine_justice_apprentice> RESIST MAGIC -400.0",
-      "02.690 Replaced <SPELL$divine_justice_apprentice> RESIST SHOCK -300.0",
-      "02.690 Replaced <SPELL$divine_justice_apprentice> RESIST POISON -300.0",
-      "02.690 Affected multipliers: MAGIC  x7.00, SHOCK  x6.00, POISON x5.00",
+      "02.690 You hit with <SPELL$divine_justice_apprentice>",
+      "       Replaced RESIST MAGIC -400.0",
+      "       Replaced RESIST SHOCK -300.0",
+      "       Replaced RESIST POISON -300.0",
+      "       Resulting multipliers: MAGIC  x7.00, SHOCK  x6.00, POISON x5.00",
       "03.420 You cast <SPELL$divine_justice_expert>",
-      "03.830 Replaced <SPELL$divine_justice_expert> RESIST MAGIC -700.0",
-      "03.830 Replaced <SPELL$divine_justice_expert> RESIST SHOCK -500.0",
-      "03.830 Replaced <SPELL$divine_justice_expert> RESIST POISON -500.0",
-      "03.830 Affected multipliers: MAGIC  x12.00, SHOCK  x9.00, POISON x8.00",
-      "03.830 You swing <MELEE$aetherius>",
-      "04.230 Added <MELEE$aetherius> SHOCK DMG 324.0 for 1s",
-      "04.230 Added <MELEE$aetherius> DRAIN LIFE 200.0",
-      "04.230 Enemy health drained: 150.0/350",
-      "04.230 Added <MELEE$aetherius> RESIST MAGIC -1200.0",
-      "04.230 Added <MELEE$aetherius> RESIST SHOCK -1200.0",
-      "04.230 Affected multipliers: MAGIC  x24.00, SHOCK  x21.00",
-      "04.251 Took <MELEE$aetherius> SHOCK DMG 6.80",
-      "04.501 Took <MELEE$aetherius> SHOCK DMG 81.00",
-      "04.693 Took <MELEE$aetherius> SHOCK DMG 62.21",
+      "03.830 You hit with <SPELL$divine_justice_expert>",
+      "       Replaced RESIST MAGIC -700.0",
+      "       Replaced RESIST SHOCK -500.0",
+      "       Replaced RESIST POISON -500.0",
+      "       Resulting multipliers: MAGIC  x12.00, SHOCK  x9.00, POISON x8.00",
+      "       You swing <MELEE$aetherius>",
+      "04.230 You hit with <MELEE$aetherius>",
+      "       Applied SHOCK DMG 324.0 for 1s",
+      "       Applied DRAIN LIFE 200.0",
+      "       The skeleton champion hp drained [150.0/350]",
+      "       Applied RESIST MAGIC -1200.0",
+      "       Applied RESIST SHOCK -1200.0",
+      "       Resulting multipliers: MAGIC  x24.00, SHOCK  x21.00",
       "04.693 The skeleton champion has died.",
+      "       Total damage by effect id:",
+      "       <MELEE$aetherius> DRAIN LIFE: 200.00",
+      "       <MELEE$aetherius> SHOCK DMG: 150.01",
       "05.230 Expired <MELEE$aetherius> SHOCK DMG",
-      "05.230 Expired <MELEE$aetherius> DRAIN LIFE",
-      "05.230 Expired <MELEE$aetherius> RESIST MAGIC",
-      "05.230 Expired <MELEE$aetherius> RESIST SHOCK",
+      "       Expired <MELEE$aetherius> DRAIN LIFE",
+      "       Expired <MELEE$aetherius> RESIST MAGIC",
+      "       Expired <MELEE$aetherius> RESIST SHOCK",
       "08.690 Expired <SPELL$divine_justice_apprentice> RESIST MAGIC",
-      "08.690 Expired <SPELL$divine_justice_apprentice> RESIST SHOCK",
-      "08.690 Expired <SPELL$divine_justice_apprentice> RESIST POISON",
+      "       Expired <SPELL$divine_justice_apprentice> RESIST SHOCK",
+      "       Expired <SPELL$divine_justice_apprentice> RESIST POISON",
       "09.830 Expired <SPELL$divine_justice_expert> RESIST MAGIC",
-      "09.830 Expired <SPELL$divine_justice_expert> RESIST SHOCK",
-      "09.830 Expired <SPELL$divine_justice_expert> RESIST POISON",
+      "       Expired <SPELL$divine_justice_expert> RESIST SHOCK",
+      "       Expired <SPELL$divine_justice_expert> RESIST POISON",
       "The skeleton champion took a total of 524.0 damage (174.0 overkill).",
-      "Total damage by effect id:",
-      "<MELEE$aetherius> DRAIN LIFE: 200.00",
-      "<MELEE$aetherius> SHOCK DMG: 150.01",
-      "Total overkill by effect id:",
-      "<MELEE$aetherius> SHOCK DMG: 173.99"
+      "       Total overkill by effect id:",
+      "       <MELEE$aetherius> SHOCK DMG: 173.99"
     );
   }
 
@@ -577,7 +557,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("difficulty 100", "difficulty xxx", "difficulty");
 
     assertOutput(
-      "Difficulty slider has been set to <100.0>.",
+      "Difficulty slider has been set to <100.0>",
       "Bad input: Cannot parse difficulty setting <xxx>",
       "Bad input: Cannot parse difficulty setting <>"
     );
@@ -590,12 +570,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy $xivilai", "level 31", "refresh");
 
     assertOutput(
-      "You face the xivilai (336 hp).",
+      "You face the xivilai (336 hp)",
       "FIRE   x0.67",
       "SHOCK  x1.20",
       "Player level has been set to <31>.",
       "-----",
-      "You face the xivilai (348 hp).",
+      "You face the xivilai (348 hp)",
       "FIRE   x0.67",
       "SHOCK  x1.20"
     );
@@ -605,7 +585,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   void thatIsQuiteTheGoblin() {
     sendInput("enemy :goblin 50 [5 25] *10");
 
-    assertOutput("You face the goblin (250 hp).");
+    assertOutput("You face the goblin (250 hp)");
   }
 
   @Test
@@ -613,20 +593,22 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 10", "+s 100d", "+s 100d", "go");
 
     assertOutputSegment(
-      "You face the enemy (10 hp).",
+      "You face the enemy (10 hp)",
       "[#1] Next hit: <SPELL$1> {DRAIN LIFE 100 for 1s}",
       "[#2] Next hit: <SPELL$2> {DRAIN LIFE 100 for 1s}",
       "00.000 You cast <SPELL$1>",
-      "00.410 Added <SPELL$1> DRAIN LIFE 100.0",
-      "00.410 Enemy health drained: -90.0/10",
-      "00.410 The enemy has died.",
+      "00.410 You hit with <SPELL$1>",
+      "       Applied DRAIN LIFE 100.0",
+      "       The enemy hp drained [-90.0/10]",
+      "       The enemy has died.",
+      "       Total damage by effect id:",
+      "       <SPELL$1> DRAIN LIFE: 100.00",
       "01.140 You cast <SPELL$2>",
       "01.410 Expired <SPELL$1> DRAIN LIFE",
-      "01.550 Added <SPELL$2> DRAIN LIFE 100.0",
+      "01.550 You hit with <SPELL$2>",
+      "       Applied DRAIN LIFE 100.0",
       "02.550 Expired <SPELL$2> DRAIN LIFE",
       "The enemy took a total of 100.0 damage (90.0 overkill).",
-      "Total damage by effect id:",
-      "<SPELL$1> DRAIN LIFE: 100.00",
       "-----"
     );
   }
@@ -636,19 +618,20 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 10", "+b 100d +p 100d", "go");
 
     assertOutputSegment(
-      "You face the enemy (10 hp).",
+      "You face the enemy (10 hp)",
       "[#1] Next hit: <ARROW> {NO EFFECTS} + <BOW$1> {DRAIN LIFE 100 for 1s} + <POISON$2> {DRAIN LIFE 100 for 1s}",
       "00.000 You begin equipped with <BOW$1>",
-      "00.000 You aim <ARROW> + <BOW$1> + <POISON$2>",
-      "01.581 Added <BOW$1> DRAIN LIFE 100.0",
-      "01.581 Enemy health drained: -90.0/10",
-      "01.581 The enemy has died.",
-      "01.581 Added (1)<POISON$2> DRAIN LIFE 100.0",
+      "       You aim <ARROW> + <BOW$1> + <POISON$2>",
+      "01.581 You hit with <ARROW> + <BOW$1> + <POISON$2>",
+      "       Applied DRAIN LIFE 100.0",
+      "       The enemy hp drained [-90.0/10]",
+      "       The enemy has died.",
+      "       Total damage by effect id:",
+      "       <BOW$1> DRAIN LIFE: 100.00",
+      "       Applied DRAIN LIFE 100.0",
       "02.581 Expired <BOW$1> DRAIN LIFE",
-      "02.581 Expired (1)<POISON$2> DRAIN LIFE",
+      "       Expired (1)<POISON$2> DRAIN LIFE",
       "The enemy took a total of 100.0 damage (90.0 overkill).",
-      "Total damage by effect id:",
-      "<BOW$1> DRAIN LIFE: 100.00",
       "-----"
     );
   }
@@ -658,59 +641,40 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("enemy 10", "+p 1m", "$1", "$1", "+p 2m", "$2", "go");
 
     assertOutputSegment(
-      "You face the enemy (10 hp).",
+      "You face the enemy (10 hp)",
       "[#1] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 1 for 1s}",
       "[#2] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 1 for 1s}",
       "[#3] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 1 for 1s}",
       "[#4] Next hit: <MELEE> {NO EFFECTS} + <POISON$2> {MAGIC DMG 2 for 1s}",
       "[#5] Next hit: <MELEE> {NO EFFECTS} + <POISON$2> {MAGIC DMG 2 for 1s}",
       "00.000 You begin equipped with <MELEE>",
-      "00.000 You swing <MELEE> + <POISON$1>",
-      "00.400 Added (1)<POISON$1> MAGIC DMG 1.0 for 1s",
-      "00.400 You swing <MELEE> + <POISON$1>",
-      "00.500 Took (1)<POISON$1> MAGIC DMG 0.10",
-      "00.680 Added (2)<POISON$1> MAGIC DMG 1.0 for 1s",
-      "00.680 You swing <MELEE> + <POISON$1>",
-      "00.750 Took (1)<POISON$1> MAGIC DMG 0.25",
-      "00.750 Took (2)<POISON$1> MAGIC DMG 0.07",
-      "01.000 Took (1)<POISON$1> MAGIC DMG 0.25",
-      "01.000 Took (2)<POISON$1> MAGIC DMG 0.25",
-      "01.080 Added (3)<POISON$1> MAGIC DMG 1.0 for 1s",
-      "01.080 You swing <MELEE> + <POISON$2>",
-      "01.251 Took (1)<POISON$1> MAGIC DMG 0.25",
-      "01.251 Took (2)<POISON$1> MAGIC DMG 0.25",
-      "01.251 Took (3)<POISON$1> MAGIC DMG 0.17",
-      "01.360 Added (1)<POISON$2> MAGIC DMG 2.0 for 1s",
-      "01.360 You swing <MELEE> + <POISON$2>",
+      "       You swing <MELEE> + <POISON$1>",
+      "00.400 You hit with <MELEE> + <POISON$1>",
+      "       Applied MAGIC DMG 1.0 for 1s",
+      "       You swing <MELEE> + <POISON$1>",
+      "00.680 You hit with <MELEE> + <POISON$1>",
+      "       Applied MAGIC DMG 1.0 for 1s",
+      "       You swing <MELEE> + <POISON$1>",
+      "01.080 You hit with <MELEE> + <POISON$1>",
+      "       Applied MAGIC DMG 1.0 for 1s",
+      "       You swing <MELEE> + <POISON$2>",
+      "01.360 You hit with <MELEE> + <POISON$2>",
+      "       Applied MAGIC DMG 2.0 for 1s",
+      "       You swing <MELEE> + <POISON$2>",
       "01.400 Expired (1)<POISON$1> MAGIC DMG",
-      "01.501 Took (1)<POISON$1> MAGIC DMG 0.15",
-      "01.501 Took (2)<POISON$1> MAGIC DMG 0.25",
-      "01.501 Took (3)<POISON$1> MAGIC DMG 0.25",
-      "01.501 Took (1)<POISON$2> MAGIC DMG 0.28",
       "01.680 Expired (2)<POISON$1> MAGIC DMG",
-      "01.751 Took (2)<POISON$1> MAGIC DMG 0.18",
-      "01.751 Took (3)<POISON$1> MAGIC DMG 0.25",
-      "01.751 Took (1)<POISON$2> MAGIC DMG 0.50",
-      "01.760 Added (2)<POISON$2> MAGIC DMG 2.0 for 1s",
-      "02.001 Took (3)<POISON$1> MAGIC DMG 0.25",
-      "02.001 Took (1)<POISON$2> MAGIC DMG 0.50",
-      "02.001 Took (2)<POISON$2> MAGIC DMG 0.48",
+      "01.760 You hit with <MELEE> + <POISON$2>",
+      "       Applied MAGIC DMG 2.0 for 1s",
       "02.080 Expired (3)<POISON$1> MAGIC DMG",
-      "02.251 Took (3)<POISON$1> MAGIC DMG 0.08",
-      "02.251 Took (1)<POISON$2> MAGIC DMG 0.50",
-      "02.251 Took (2)<POISON$2> MAGIC DMG 0.50",
       "02.360 Expired (1)<POISON$2> MAGIC DMG",
-      "02.501 Took (1)<POISON$2> MAGIC DMG 0.22",
-      "02.501 Took (2)<POISON$2> MAGIC DMG 0.50",
-      "02.751 Took (2)<POISON$2> MAGIC DMG 0.50",
       "02.760 Expired (2)<POISON$2> MAGIC DMG",
       "The enemy has survived 7.0 damage (3.0 hp left).",
-      "Total damage by effect id:",
-      "(1)<POISON$1> MAGIC DMG: 1.00",
-      "(2)<POISON$1> MAGIC DMG: 1.00",
-      "(3)<POISON$1> MAGIC DMG: 1.00",
-      "(1)<POISON$2> MAGIC DMG: 2.00",
-      "(2)<POISON$2> MAGIC DMG: 2.00"
+      "       Total damage by effect id:",
+      "       (1)<POISON$1> MAGIC DMG: 1.00",
+      "       (2)<POISON$1> MAGIC DMG: 1.00",
+      "       (3)<POISON$1> MAGIC DMG: 1.00",
+      "       (1)<POISON$2> MAGIC DMG: 2.00",
+      "       (2)<POISON$2> MAGIC DMG: 2.00"
     );
   }
 
