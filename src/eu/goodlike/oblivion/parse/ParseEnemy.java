@@ -29,12 +29,12 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * The HP value for the enemy will be treated as lowest possible level HP.
  * If it is missing, the enemy is not considered leveled and other level related inputs are ignored.
  * <p/>
- * Inputs with '<' prefix are treated as minimum level.
+ * Inputs with '[' prefix are treated as minimum level.
  * Only positive numbers are allowed.
  * It's only considered if level multiplier is also present.
  * If it is missing in that case, the enemy is given the default minimum level of 1.
  * <p/>
- * Inputs with '>' suffix are treated as maximum level.
+ * Inputs with ']' suffix are treated as maximum level.
  * Only levels higher than the minimum are allowed.
  * It's only considered if level multiplier is also present.
  * If it is missing in that case, the enemy is given the default maximum level of 2^31-1.
@@ -98,10 +98,10 @@ public final class ParseEnemy extends BaseParseInput<Enemy> {
     else if (input.startsWith("*")) {
       levelMultiplier = input.substring(1);
     }
-    else if (input.startsWith("<")) {
+    else if (input.startsWith("[")) {
       minLevel = input.substring(1);
     }
-    else if (input.endsWith(">")) {
+    else if (input.endsWith("]")) {
       maxLevel = input.substring(0, input.length() - 1);
     }
     else if (isBlank(hp)) {
