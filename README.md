@@ -77,21 +77,13 @@ Damage effects are ignored.
 While possible, they are not applicable to combat situations, and would only
 add to code complexity.
 
-### Caveats
+### Untested assumptions (requires modding)
 
 Anything that this application allows that is outside of the bounds of the base
 game should be considered extra.
-As a result, there are a few assumptions that I have no way of testing
-without modding the game:
+
 1) I've added a magic factor to weakness/resist effects.
 To verify, I'd need a poison with such an effect.
 Under the assumption, it is affected by magic resistance.
 For reference, "drain life" did have this factor as a poison.
 Elemental damage did not.
-2) I assume a hit is processed in order of bow -> arrow -> poison.
-This seems like a logical order, but it's possible arrow and poison are switched.
-To verify, I'd need an arrow with a weakness/resist effect.
-Poison would not do, because it always stacks.
-Under the assumption, this arrow has no effect on the poison because
-just like the bow, it refreshes itself, removing the previous effect
-before it has a chance to affect the poison.

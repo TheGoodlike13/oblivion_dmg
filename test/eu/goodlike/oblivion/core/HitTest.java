@@ -176,12 +176,12 @@ class HitTest {
   @Test
   void performString() {
     assertThat(hit(MELEE).toPerformString()).isEqualTo("swing <MELEE>");
-    assertThat(hit(BOW).toPerformString()).isEqualTo("aim <BOW> + <ARROW>");
+    assertThat(hit(BOW).toPerformString()).isEqualTo("aim <ARROW> + <BOW>");
     assertThat(hit(SPELL).toPerformString()).isEqualTo("cast <SPELL>");
     assertThat(hit(STAFF).toPerformString()).isEqualTo("ready <STAFF>");
 
     // implicit
-    assertThat(hit(ARROW).toPerformString()).isEqualTo("aim <BOW> + <ARROW>");
+    assertThat(hit(ARROW).toPerformString()).isEqualTo("aim <ARROW> + <BOW>");
     assertThat(hit(POISON).toPerformString()).isEqualTo("swing <MELEE> + <POISON>");
   }
 

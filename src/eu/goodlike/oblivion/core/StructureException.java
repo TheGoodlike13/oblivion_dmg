@@ -102,8 +102,8 @@ public final class StructureException extends RuntimeException {
     "STAFF",
     "MELEE",
     "MELEE + POISON",
-    "BOW + ARROW",
-    "BOW + ARROW + POISON"
+    "ARROW + BOW",
+    "ARROW + BOW + POISON"
   );
 
 }

@@ -132,8 +132,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("+p 9999m 9999f 9999s +a 9999fr +b 9999m");
 
     assertOutput("[#1] Next hit: " +
-      "<BOW$3> {MAGIC DMG 9999 for 1s} + " +
       "<ARROW$2> {FROST DMG 9999 for 1s} + " +
+      "<BOW$3> {MAGIC DMG 9999 for 1s} + " +
       "<POISON$1> {MAGIC DMG 9999 for 1s + FIRE DMG 9999 for 1s + SHOCK DMG 9999 for 1s}");
   }
 
@@ -399,8 +399,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("+b 100d10s +a 10f5s :fire_arrow +p 10m", "$1 $fire_arrow +p 10s");
 
     assertOutput(
-      "[#1] Next hit: <BOW$1> {DRAIN LIFE 100 for 10s} + <ARROW$fire_arrow> {FIRE DMG 10 for 5s} + <POISON$2> {MAGIC DMG 10 for 1s}",
-      "[#2] Next hit: <BOW$1> {DRAIN LIFE 100 for 10s} + <ARROW$fire_arrow> {FIRE DMG 10 for 5s} + <POISON$3> {SHOCK DMG 10 for 1s}"
+      "[#1] Next hit: <ARROW$fire_arrow> {FIRE DMG 10 for 5s} + <BOW$1> {DRAIN LIFE 100 for 10s} + <POISON$2> {MAGIC DMG 10 for 1s}",
+      "[#2] Next hit: <ARROW$fire_arrow> {FIRE DMG 10 for 5s} + <BOW$1> {DRAIN LIFE 100 for 10s} + <POISON$3> {SHOCK DMG 10 for 1s}"
     );
   }
 
@@ -486,9 +486,9 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("+m 1m +s 1m", "$1 +st 1m", "$1 +p 1m :1m $1m");
 
     assertOutput(
-      "Bad input: Invalid hit: MELEE + SPELL; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, BOW + ARROW, BOW + ARROW + POISON]",
-      "Bad input: Invalid hit: MELEE + STAFF; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, BOW + ARROW, BOW + ARROW + POISON]",
-      "Bad input: Invalid hit: MELEE + POISON + POISON; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, BOW + ARROW, BOW + ARROW + POISON]"
+      "Bad input: Invalid hit: MELEE + SPELL; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, ARROW + BOW, ARROW + BOW + POISON]",
+      "Bad input: Invalid hit: MELEE + STAFF; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, ARROW + BOW, ARROW + BOW + POISON]",
+      "Bad input: Invalid hit: MELEE + POISON + POISON; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, ARROW + BOW, ARROW + BOW + POISON]"
     );
   }
 
@@ -637,9 +637,9 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
     assertOutputSegment(
       "You face the enemy (10 hp).",
-      "[#1] Next hit: <BOW$1> {DRAIN LIFE 100 for 1s} + <ARROW> {NO EFFECTS} + <POISON$2> {DRAIN LIFE 100 for 1s}",
+      "[#1] Next hit: <ARROW> {NO EFFECTS} + <BOW$1> {DRAIN LIFE 100 for 1s} + <POISON$2> {DRAIN LIFE 100 for 1s}",
       "00.000 You begin equipped with <BOW$1>",
-      "00.000 You aim <BOW$1> + <ARROW> + <POISON$2>",
+      "00.000 You aim <ARROW> + <BOW$1> + <POISON$2>",
       "01.581 Added <BOW$1> DRAIN LIFE 100.0",
       "01.581 Enemy health drained: -90.0/10",
       "01.581 The enemy has died.",
