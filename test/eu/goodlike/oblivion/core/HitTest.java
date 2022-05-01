@@ -59,13 +59,27 @@ class HitTest {
   }
 
   @Test
+  void delivery() {
+    assertThat(hit(MELEE).getDeliveryMechanism()).isEqualTo(MELEE);
+    assertThat(hit(BOW).getDeliveryMechanism()).isEqualTo(BOW);
+    assertThat(hit(SPELL).getDeliveryMechanism()).isEqualTo(SPELL);
+    assertThat(hit(STAFF).getDeliveryMechanism()).isEqualTo(STAFF);
+
+    // implicits
+    assertThat(hit(ARROW).getDeliveryMechanism()).isEqualTo(BOW);
+    assertThat(hit(POISON).getDeliveryMechanism()).isEqualTo(MELEE);
+  }
+
+  @Test
   void weapons() {
     assertThat(hit(MELEE).getWeapon()).contains(MELEE.withNoEffect());
     assertThat(hit(BOW).getWeapon()).contains(BOW.withNoEffect());
-    assertThat(hit(ARROW).getWeapon()).contains(BOW.withNoEffect());     // implicit
-    assertThat(hit(POISON).getWeapon()).contains(MELEE.withNoEffect());  // implicit
     assertThat(hit(SPELL).getWeapon()).isEmpty();
     assertThat(hit(STAFF).getWeapon()).contains(STAFF.withNoEffect());
+
+    // implicits
+    assertThat(hit(ARROW).getWeapon()).contains(BOW.withNoEffect());
+    assertThat(hit(POISON).getWeapon()).contains(MELEE.withNoEffect());
   }
 
   @Test

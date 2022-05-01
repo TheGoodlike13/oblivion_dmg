@@ -1,7 +1,6 @@
 package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ImmutableList;
-import eu.goodlike.oblivion.core.source.Equipment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +24,10 @@ import static java.util.stream.Collectors.joining;
  * The order of carriers in this hit is consistent with their natural ordering.
  */
 public final class Hit implements Iterable<Carrier> {
+
+  public Source getDeliveryMechanism() {
+    return getWeapon().orElse(carriers.get(0)).getSource();
+  }
 
   public Optional<Carrier> getWeapon() {
     return carriers.stream()
