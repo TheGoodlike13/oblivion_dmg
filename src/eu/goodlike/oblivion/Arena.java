@@ -253,8 +253,7 @@ public final class Arena {
     public void poke(double magnitude, double duration) {
       actual.poke(magnitude, duration);
       if (!isTicking) {
-        Object effect = lastHit.hasMultipleChunks() ? id : id.getType();
-        combatLog(String.format("%s %s %.1f for %.0fs", newEffect(), effect, magnitude, duration));
+        combatLog(String.format("%s %s %.1f for %.0fs", newEffectChange(), newEffectId(), magnitude, duration));
       }
     }
 
@@ -337,12 +336,15 @@ public final class Arena {
     }
 
     private String newEffect(double percent) {
-      Object effect = lastHit.hasMultipleChunks() ? id : id.getType();
-      return String.format("%s %s %.1f", newEffect(), effect, percent);
+      return String.format("%s %s %.1f", newEffectChange(), newEffectId(), percent);
     }
 
-    private String newEffect() {
+    private String newEffectChange() {
       return isExpired ? "Replaced" : "Applied";
+    }
+
+    private Object newEffectId() {
+      return lastHit.hasMultipleChunks() ? id : id.getType();
     }
 
     private void combatLog(String text) {
