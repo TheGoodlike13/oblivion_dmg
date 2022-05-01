@@ -1,11 +1,13 @@
 package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ImmutableList;
+import eu.goodlike.oblivion.core.source.Equipment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import static eu.goodlike.oblivion.core.Source.ARROW;
 import static eu.goodlike.oblivion.core.Source.BOW;
@@ -22,6 +24,18 @@ import static java.util.stream.Collectors.joining;
  * The order of carriers in this hit is consistent with their natural ordering.
  */
 public final class Hit implements Iterable<Carrier> {
+
+  public Optional<Carrier> getWeapon() {
+    return carriers.stream()
+      .filter(c -> c.getSource() instanceof Equipment)
+      .filter(c -> !c.getSource().equals(ARROW))
+      .findFirst();
+  }
+
+  public Optional<Carrier> requiresSwap(Carrier oldWeapon) {
+    return getWeapon()
+      .filter(newWeapon -> !newWeapon.equals(oldWeapon));
+  }
 
   @Override
   public Iterator<Carrier> iterator() {

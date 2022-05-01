@@ -1,5 +1,6 @@
 package eu.goodlike.oblivion.core;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -57,6 +58,38 @@ class HitTest {
     assertInvalid(BOW, ARROW, ARROW);
   }
 
+  @Test
+  void weapons() {
+    assertThat(hit(MELEE).getWeapon()).contains(MELEE.withNoEffect());
+    assertThat(hit(BOW).getWeapon()).contains(BOW.withNoEffect());
+    assertThat(hit(ARROW).getWeapon()).contains(BOW.withNoEffect());     // implicit
+    assertThat(hit(POISON).getWeapon()).contains(MELEE.withNoEffect());  // implicit
+    assertThat(hit(SPELL).getWeapon()).isEmpty();
+    assertThat(hit(STAFF).getWeapon()).contains(STAFF.withNoEffect());
+  }
+
+  @Test
+  void alwaysSwapDifferentWeaponOfSameType() {
+    for (Source source : ImmutableList.of(MELEE, BOW, STAFF)) {
+      assertThat(hit(source).requiresSwap(source.create())).contains(source.withNoEffect());
+    }
+  }
+
+  @Test
+  void alwaysSwapBetweenWeaponTypes() {
+    assertThat(hit(MELEE).requiresSwap(MELEE.withNoEffect())).isEmpty();
+    assertThat(hit(MELEE).requiresSwap(BOW.withNoEffect())).contains(MELEE.withNoEffect());
+    assertThat(hit(MELEE).requiresSwap(STAFF.withNoEffect())).contains(MELEE.withNoEffect());
+
+    assertThat(hit(BOW).requiresSwap(MELEE.withNoEffect())).contains(BOW.withNoEffect());
+    assertThat(hit(BOW).requiresSwap(BOW.withNoEffect())).isEmpty();
+    assertThat(hit(BOW).requiresSwap(STAFF.withNoEffect())).contains(BOW.withNoEffect());
+
+    assertThat(hit(STAFF).requiresSwap(MELEE.withNoEffect())).contains(STAFF.withNoEffect());
+    assertThat(hit(STAFF).requiresSwap(BOW.withNoEffect())).contains(STAFF.withNoEffect());
+    assertThat(hit(STAFF).requiresSwap(STAFF.withNoEffect())).isEmpty();
+  }
+
   private void assertHit(Source... sources) {
     assertThatNoException().isThrownBy(() -> new Hit(dummyCarriers(sources)));
   }
@@ -68,6 +101,10 @@ class HitTest {
 
   private void assertInvalid(Source... sources) {
     assertThatExceptionOfType(StructureException.class).isThrownBy(() -> new Hit(dummyCarriers(sources)));
+  }
+
+  private Hit hit(Source... sources) {
+    return new Hit(dummyCarriers(sources));
   }
 
   private List<Carrier> dummyCarriers(Source... sources) {
