@@ -214,22 +214,18 @@ public final class Arena {
       actual.drain(hp);
       if (isTicking) {
         if (!isDeathConfirmed) {
-          printEnemyHp("restored");
+          writeEnemyHp("restored");
           totalDamage.remove(id);
         }
       }
       else {
         combatLog(newEffect(hp));
         if (!isDeathConfirmed) {
-          printEnemyHp("drained");
+          writeEnemyHp("drained");
           totalDamage.put(id, hp);
         }
         checkPossibleDeath();
       }
-    }
-
-    private void printEnemyHp(String status) {
-      combatLog(String.format("Health %s: %s", status, enemy.healthStatus()));
     }
 
     @Override
@@ -243,7 +239,7 @@ public final class Arena {
     public void dumpModifiedFactors() {
       if (!modifiedFactors.isEmpty()) {
         String factorMods = factorMods(modifiedFactors, true).collect(joining(", "));
-        combatLog("Effect: " + factorMods);
+        combatLog("Affected multipliers: " + factorMods);
         modifiedFactors.clear();
       }
     }
@@ -310,6 +306,10 @@ public final class Arena {
 
     private void combatLog(String text) {
       Write.line("%06.3f %s", duration, text);
+    }
+
+    private void writeEnemyHp(String status) {
+      combatLog(String.format("Health %s: %s", status, enemy.healthStatus()));
     }
 
     private void writeTotals(Map<Effect.Id, Double> totals, String desc) {
