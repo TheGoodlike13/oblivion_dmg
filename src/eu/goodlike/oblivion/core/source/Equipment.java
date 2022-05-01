@@ -2,7 +2,7 @@ package eu.goodlike.oblivion.core.source;
 
 import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.EffectText;
-import eu.goodlike.oblivion.core.Hit;
+import eu.goodlike.oblivion.core.HitPattern;
 import eu.goodlike.oblivion.core.Source;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public final class Equipment implements Source {
     this(type, "", null, 0, true);
   }
 
-  public Equipment(String type, String action, Hit.Pattern pattern, double timeToSwap, boolean isPhysical) {
+  public Equipment(String type, String action, HitPattern pattern, double timeToSwap, boolean isPhysical) {
     this.type = type;
     this.action = action;
     this.pattern = pattern;
@@ -60,7 +60,7 @@ public final class Equipment implements Source {
 
   private final String type;
   private final String action;
-  private final Hit.Pattern pattern;
+  private final HitPattern pattern;
   private final double timeToSwap;
   private final boolean isPhysical;
 

@@ -22,7 +22,7 @@ import static eu.goodlike.oblivion.Global.Settings.SWAP_STAFF;
  * <p/>
  * Sources have a natural ordering which defines how they should be processed as part of a single {@link Hit}.
  */
-public interface Source extends Hit.Pattern, Comparable<Source> {
+public interface Source extends HitPattern, Comparable<Source> {
 
   Source MELEE = new Equipment("MELEE", "swing", STRIKE, SWAP_MELEE, true);
   Source BOW = new Equipment("BOW", "aim", SHOOT, SWAP_BOW, true);

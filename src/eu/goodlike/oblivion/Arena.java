@@ -108,55 +108,21 @@ public final class Arena {
     }
   }
 
-  private Carrier equipped = null;
-  private boolean needsSwap = false;
+  private void performHits() {
+    equipFirstWeapon();
 
-  private Hit last = null;
-  private int repeatCount = 0;
-
-  private void equip(Carrier carrier) {
-    equipped = carrier;
-    play.combatLog("You begin equipped with " + carrier.getLabel());
+    for (Hit hit : hits) {
+      play.next(hit);
+    }
   }
 
-  private void performHits() {
+  private void equipFirstWeapon() {
     hits.stream()
       .map(Hit::getWeapon)
       .filter(Optional::isPresent)
       .map(Optional::get)
       .findFirst()
-      .ifPresent(this::equip);
-
-    for (Hit hit : hits) {
-      needsSwap = false;
-      repeatCount = hit.isCombo(last) ? repeatCount + 1 : 0;
-
-      hit.requiresSwap(equipped).ifPresent(newWeapon -> {
-        needsSwap = true;
-        equipped = newWeapon;
-      });
-
-      if (needsSwap || hit.requiresCooldownAfter(last)) {
-        enemy.tick(hit.getDeliveryMechanism().cooldown(repeatCount), play);
-      }
-
-      if (needsSwap) {
-        play.combatLog("You begin to swap your weapon.");
-        enemy.tick(equipped.getSource().timeToSwap(), play);
-        play.combatLog("You equip " + equipped.getLabel());
-      }
-
-      play.combatLog("You " + hit.toPerformString());
-      enemy.tick(hit.getDeliveryMechanism().timeToHit(repeatCount), play);
-      enemy.hit(hit, play);
-
-      play.dumpModifiedFactors();
-      last = hit;
-    }
-
-    equipped = null;
-    last = null;
-    repeatCount = 0;
+      .ifPresent(play::setInitialWeapon);
   }
 
   private void awaitEffectExpiration() {
@@ -200,6 +166,41 @@ public final class Arena {
   }
 
   private final class PlayByPlay implements Enemy.Observer, Target {
+    public void setInitialWeapon(Carrier initialWeapon) {
+      equippedWeapon = initialWeapon;
+      play.combatLog("You begin equipped with " + initialWeapon.getLabel());
+    }
+
+    public void next(Hit hit) {
+      needsSwap = false;
+      combo = hit.isCombo(lastHit) ? combo + 1 : 0;
+
+      hit.requiresSwap(equippedWeapon).ifPresent(newWeapon -> {
+        needsSwap = true;
+        equippedWeapon = newWeapon;
+      });
+
+      if (needsSwap || hit.requiresCooldownAfter(lastHit)) {
+        enemy.tick(hit.cooldown(combo), play);
+      }
+
+      if (needsSwap) {
+        play.combatLog("You begin to swap your weapon.");
+        double timeToSwap = equippedWeapon.getSource().timeToSwap();
+        enemy.tick(timeToSwap, play);
+        play.combatLog("You equip " + equippedWeapon.getLabel());
+      }
+
+      play.combatLog("You " + hit.toPerformString());
+      enemy.tick(hit.timeToHit(combo), play);
+
+//      play.combatLog("You hit with " + hit.toLabelString());
+      enemy.hit(hit, play);
+      play.dumpModifiedFactors();
+
+      lastHit = hit;
+    }
+
     @Override
     public Target observing(Target actual) {
       this.isTicking = false;
@@ -295,6 +296,12 @@ public final class Arena {
     }
 
     public PlayByPlay() {
+      this.equippedWeapon = null;
+      this.needsSwap = false;
+
+      this.lastHit = null;
+      this.combo = 0;
+
       this.isDeathConfirmed = false;
 
       this.actual = null;
@@ -311,6 +318,12 @@ public final class Arena {
 
       this.modifiedFactors = new ArrayList<>();
     }
+
+    private Carrier equippedWeapon;
+    private boolean needsSwap;
+
+    private Hit lastHit;
+    private int combo;
 
     private boolean isDeathConfirmed;
 

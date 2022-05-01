@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Hit;
+import eu.goodlike.oblivion.core.HitPattern;
 import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.StructureException;
 import eu.goodlike.oblivion.parse.ParseCarrier;
@@ -113,10 +114,10 @@ public final class Global {
     public static String PREPARED_ITEMS = "prepared_items.txt";
     public static String PREPARED_SPELLS = "prepared_spells.txt";
 
-    public static Hit.Pattern STRIKE = new Hit.Combo(0.4, 0.58).combo(0.28, 0.4);
-    public static Hit.Pattern SHOOT = new Hit.Combo(1.58, 0.66);
-    public static Hit.Pattern EMIT = new Hit.Combo(0.53, 0.63);
-    public static Hit.Pattern CAST = new Hit.Combo(0.41, 0.73);
+    public static HitPattern STRIKE = new Hit.Combo(0.4, 0.58).combo(0.28, 0.4);
+    public static HitPattern SHOOT = new Hit.Combo(1.58, 0.66);
+    public static HitPattern EMIT = new Hit.Combo(0.53, 0.63);
+    public static HitPattern CAST = new Hit.Combo(0.41, 0.73);
 
     public static double SWAP_MELEE = 0.7;
     public static double SWAP_BOW = 1.06;

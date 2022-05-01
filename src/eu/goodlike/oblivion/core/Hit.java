@@ -22,12 +22,7 @@ import static java.util.stream.Collectors.joining;
  * <p/>
  * The order of carriers in this hit is consistent with their natural ordering.
  */
-public final class Hit implements Iterable<Carrier> {
-
-  public interface Pattern {
-    double timeToHit(int combo);
-    double cooldown(int combo);
-  }
+public final class Hit implements Iterable<Carrier>, HitPattern {
 
   public Source getDeliveryMechanism() {
     return getWeapon().orElse(carriers.get(0)).getSource();
@@ -56,6 +51,16 @@ public final class Hit implements Iterable<Carrier> {
   @Override
   public Iterator<Carrier> iterator() {
     return carriers.iterator();
+  }
+
+  @Override
+  public double timeToHit(int combo) {
+    return getDeliveryMechanism().timeToHit(combo);
+  }
+
+  @Override
+  public double cooldown(int combo) {
+    return getDeliveryMechanism().cooldown(combo);
   }
 
   public Hit(Carrier... carriers) {
@@ -129,16 +134,16 @@ public final class Hit implements Iterable<Carrier> {
   }
 
   public String toPerformString() {
-    return getDeliveryMechanism().describeAction() + " " + getLabels();
+    return getDeliveryMechanism().describeAction() + " " + toLabelString();
   }
 
-  private String getLabels() {
+  public String toLabelString() {
     return carriers.stream()
       .map(Carrier::getLabel)
       .collect(joining(" + "));
   }
 
-  public static final class Combo implements Pattern {
+  public static final class Combo implements HitPattern {
     @Override
     public double timeToHit(int combo) {
       int index = combo % fullCombo.size();
