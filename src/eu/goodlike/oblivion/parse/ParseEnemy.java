@@ -18,7 +18,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * Ignores "enemy" command input if present.
  * Accepts any amount of inputs.
  * <p/>
- * For inputs with prefixes, only the last one is considered, rest are ignored.
+ * For inputs with prefixes or suffixes, only the last one is considered, rest are ignored.
  * <p/>
  * Inputs with ':' prefix are treated as labels.
  * If it is missing, the enemy is given the default label 'enemy'.
@@ -34,7 +34,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * It's only considered if level multiplier is also present.
  * If it is missing in that case, the enemy is given the default minimum level of 1.
  * <p/>
- * Inputs with '>' prefix are treated as maximum level.
+ * Inputs with '>' suffix are treated as maximum level.
  * Only levels higher than the minimum are allowed.
  * It's only considered if level multiplier is also present.
  * If it is missing in that case, the enemy is given the default maximum level of 2^31-1.
@@ -101,8 +101,8 @@ public final class ParseEnemy extends BaseParseInput<Enemy> {
     else if (input.startsWith("<")) {
       minLevel = input.substring(1);
     }
-    else if (input.startsWith(">")) {
-      maxLevel = input.substring(1);
+    else if (input.endsWith(">")) {
+      maxLevel = input.substring(0, input.length() - 1);
     }
     else if (isBlank(hp)) {
       hp = input;
