@@ -146,14 +146,18 @@ public final class Enemy implements Target {
     });
   }
 
+  public void tick(double seconds) {
+    tick(seconds, Observer.NONE);
+  }
+
   /**
    * Performs ticks for an equivalent of given amount of seconds.
    * Tick length is configured in {@link Settings#TICK}.
    */
-  public void tick(double seconds) {
+  public void tick(double seconds, Observer observer) {
     double total = 0;
     while (total < seconds) {
-      tick();
+      tick(observer);
       total += TICK;
     }
   }
