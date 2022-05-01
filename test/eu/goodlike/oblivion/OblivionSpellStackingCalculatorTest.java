@@ -618,12 +618,31 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "00.000 You begin equipped with <BOW$1>",
       "       You aim <ARROW> + <BOW$1> + <POISON$2>",
       "01.581 You hit with <ARROW> + <BOW$1> + <POISON$2>",
+      "       Applied <BOW$1> DRAIN LIFE 100.0",
+      "       The enemy has died. Breakdown:",
+      "           <BOW$1> DRAIN LIFE: 100.00",
+      "       Applied (1)<POISON$2> DRAIN LIFE 100.0",
+      "02.581 Expired <BOW$1> DRAIN LIFE",
+      "       Expired (1)<POISON$2> DRAIN LIFE",
+      "The enemy took a total of 100.0 damage (90.0 overkill).",
+      "-----"
+    );
+  }
+
+  @Test
+  void noEffectNoWorry() {
+    sendInput("enemy 10", "+b 100d", "go");
+
+    assertOutputSegment(
+      "You face the enemy (10 hp)",
+      "[#1] Next hit: <ARROW> {NO EFFECTS} + <BOW$1> {DRAIN LIFE 100 for 1s}",
+      "00.000 You begin equipped with <BOW$1>",
+      "       You aim <ARROW> + <BOW$1>",
+      "01.581 You hit with <ARROW> + <BOW$1>",
       "       Applied DRAIN LIFE 100.0",
       "       The enemy has died. Breakdown:",
       "           <BOW$1> DRAIN LIFE: 100.00",
-      "       Applied DRAIN LIFE 100.0",
       "02.581 Expired <BOW$1> DRAIN LIFE",
-      "       Expired (1)<POISON$2> DRAIN LIFE",
       "The enemy took a total of 100.0 damage (90.0 overkill).",
       "-----"
     );

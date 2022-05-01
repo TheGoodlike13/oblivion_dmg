@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static eu.goodlike.oblivion.core.Factor.MAGIC;
 import static eu.goodlike.oblivion.core.Source.ARROW;
 import static eu.goodlike.oblivion.core.Source.BOW;
 import static eu.goodlike.oblivion.core.Source.MELEE;
@@ -183,6 +184,29 @@ class HitTest {
     // implicit
     assertThat(hit(ARROW).toPerformString()).isEqualTo("aim <ARROW> + <BOW>");
     assertThat(hit(POISON).toPerformString()).isEqualTo("swing <MELEE> + <POISON>");
+  }
+
+  @Test
+  void chunky() {
+    Carrier melee = MELEE.create(MAGIC.damage(10));
+    Carrier melee2Effects = MELEE.create(MAGIC.damage(10), MAGIC.weakness(100));
+    Carrier meleeExplicitEmpty = MELEE.create();
+    Carrier poison = POISON.create(MAGIC.damage(10));
+
+    Hit oneChunk = new Hit(melee);
+    assertThat(oneChunk.hasMultipleChunks()).isFalse();
+
+    Hit stillOneChunk = new Hit(melee2Effects);
+    assertThat(stillOneChunk.hasMultipleChunks()).isFalse();
+
+    Hit twoChunks = new Hit(melee, poison);
+    assertThat(twoChunks.hasMultipleChunks()).isTrue();
+
+    Hit oneChunkDueToImplicit = new Hit(poison);
+    assertThat(oneChunkDueToImplicit.hasMultipleChunks()).isFalse();
+
+    Hit twoChunksDueToExplicit = new Hit(meleeExplicitEmpty, poison);
+    assertThat(twoChunksDueToExplicit.hasMultipleChunks()).isTrue();
   }
 
   private void assertHit(Source... sources) {

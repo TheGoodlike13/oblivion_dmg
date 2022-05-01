@@ -48,6 +48,10 @@ public final class Hit implements Iterable<Carrier>, HitPattern {
       && getWeapon().equals(last.getWeapon());
   }
 
+  public boolean hasMultipleChunks() {
+    return carriers.stream().filter(this::isExplicit).count() > 1;
+  }
+
   @Override
   public Iterator<Carrier> iterator() {
     return carriers.iterator();
@@ -117,6 +121,11 @@ public final class Hit implements Iterable<Carrier>, HitPattern {
       .map(Carrier::getSource)
       .filter(source -> !source.isPhysical())
       .isPresent();
+  }
+
+  private boolean isExplicit(Carrier carrier) {
+    Carrier implicit = carrier.getSource().withNoEffect();
+    return !carrier.equals(implicit);
   }
 
   private String hitTrace() {

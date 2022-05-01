@@ -161,24 +161,23 @@ public final class Arena {
       });
 
       if (needsSwap || hit.requiresCooldownAfter(lastHit)) {
-        enemy.tick(hit.cooldown(combo), play);
+        enemy.tick(hit.cooldown(combo), this);
       }
 
       if (needsSwap) {
-        play.combatLog("You begin to swap your weapon.");
+        combatLog("You begin to swap your weapon.");
         double timeToSwap = equippedWeapon.getSource().timeToSwap();
-        enemy.tick(timeToSwap, play);
-        play.combatLog("You equip " + equippedWeapon.getLabel());
+        enemy.tick(timeToSwap, this);
+        combatLog("You equip " + equippedWeapon.getLabel());
       }
 
-      play.combatLog("You " + hit.toPerformString());
-      enemy.tick(hit.timeToHit(combo), play);
+      combatLog("You " + hit.toPerformString());
+      enemy.tick(hit.timeToHit(combo), this);
 
-      play.combatLog("You hit with " + hit.toLabelString());
-      enemy.hit(hit, play);
-      play.dumpModifiedFactors();
-
+      combatLog("You hit with " + hit.toLabelString());
       lastHit = hit;
+      enemy.hit(hit, this);
+      dumpModifiedFactors();
     }
 
     @Override
@@ -254,7 +253,8 @@ public final class Arena {
     public void poke(double magnitude, double duration) {
       actual.poke(magnitude, duration);
       if (!isTicking) {
-        combatLog(String.format("%s %s %.1f for %.0fs", newEffect(), id.toShortString(), magnitude, duration));
+        Object effect = lastHit.hasMultipleChunks() ? id : id.getType();
+        combatLog(String.format("%s %s %.1f for %.0fs", newEffect(), effect, magnitude, duration));
       }
     }
 
@@ -337,7 +337,8 @@ public final class Arena {
     }
 
     private String newEffect(double percent) {
-      return String.format("%s %s %.1f", newEffect(), id.toShortString(), percent);
+      Object effect = lastHit.hasMultipleChunks() ? id : id.getType();
+      return String.format("%s %s %.1f", newEffect(), effect, percent);
     }
 
     private String newEffect() {

@@ -121,8 +121,8 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
   private static final class UniquePerType implements Effect.Id {
     @Override
-    public String toShortString() {
-      return type.toString();
+    public Effect.Type getType() {
+      return type;
     }
 
     public UniquePerType(Carrier carrier, Effect.Type type) {
@@ -135,7 +135,7 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
     @Override
     public String toString() {
-      return carrier.getLabel() + " " + toShortString();
+      return carrier.getLabel() + " " + getType();
     }
 
     @Override

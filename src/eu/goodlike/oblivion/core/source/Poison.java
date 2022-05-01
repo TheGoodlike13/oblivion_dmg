@@ -75,8 +75,8 @@ public final class Poison implements Method, Source {
 
   private static final class AlwaysUnique implements Effect.Id {
     @Override
-    public String toShortString() {
-      return type.toString();
+    public Effect.Type getType() {
+      return type;
     }
 
     private AlwaysUnique(PoisonBottle poison, Effect.Type type, int use) {
@@ -91,7 +91,7 @@ public final class Poison implements Method, Source {
 
     @Override
     public String toString() {
-      return "(" + use + ")" + poison.getLabel() + " " + toShortString();
+      return "(" + use + ")" + poison.getLabel() + " " + getType();
     }
   }
 
