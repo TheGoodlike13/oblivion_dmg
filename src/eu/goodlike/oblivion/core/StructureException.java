@@ -50,14 +50,14 @@ public final class StructureException extends RuntimeException {
 
   public static double positiveOrThrow(String input, String description) {
     double d = doubleOrThrow(input, description);
-    positiveOrThrow(d, description);
-    return d;
+    return positiveOrThrow(d, description);
   }
 
-  public static void positiveOrThrow(double d, String description) {
+  public static double positiveOrThrow(double d, String description) {
     if (d <= 0) {
       throw new StructureException("Expected positive " + description + ", but was <" + d + ">");
     }
+    return d;
   }
 
   public static int intOrThrow(String input, String description) {
@@ -71,14 +71,14 @@ public final class StructureException extends RuntimeException {
 
   public static int natOrThrow(String input, String description) {
     int i = intOrThrow(input, description);
-    natOrThrow(i, description);
-    return i;
+    return natOrThrow(i, description);
   }
 
-  public static void natOrThrow(int i, String description) {
+  public static int natOrThrow(int i, String description) {
     if (i < 1) {
       throw new StructureException("Expected positive " + description + ", but was <" + i + ">");
     }
+    return i;
   }
 
   public StructureException(String message) {

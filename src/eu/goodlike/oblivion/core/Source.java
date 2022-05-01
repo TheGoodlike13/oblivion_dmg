@@ -8,6 +8,13 @@ import eu.goodlike.oblivion.core.source.Poison;
 import java.util.Arrays;
 import java.util.List;
 
+import static eu.goodlike.oblivion.Global.Settings.EMIT;
+import static eu.goodlike.oblivion.Global.Settings.SHOOT;
+import static eu.goodlike.oblivion.Global.Settings.STRIKE;
+import static eu.goodlike.oblivion.Global.Settings.SWAP_BOW;
+import static eu.goodlike.oblivion.Global.Settings.SWAP_MELEE;
+import static eu.goodlike.oblivion.Global.Settings.SWAP_STAFF;
+
 /**
  * Unique way to carry effects.
  * Only some of these ways are compatible with each other for creating a real {@link Hit}.
@@ -15,14 +22,14 @@ import java.util.List;
  * <p/>
  * Sources have a natural ordering which defines how they should be processed as part of a single {@link Hit}.
  */
-public interface Source extends Comparable<Source> {
+public interface Source extends Hit.Pattern, Comparable<Source> {
 
-  Source MELEE = new Equipment("MELEE");
-  Source BOW = new Equipment("BOW");
+  Source MELEE = new Equipment("MELEE", "swing", STRIKE, SWAP_MELEE);
+  Source BOW = new Equipment("BOW", "aim", SHOOT, SWAP_BOW);
   Source ARROW = new Equipment("ARROW");
   Source POISON = Poison.getInstance();
   Source SPELL = new Magic("SPELL");
-  Source STAFF = new Equipment("STAFF");
+  Source STAFF = new Equipment("STAFF", "ready", EMIT, SWAP_STAFF);
 
   List<Source> ALL_IN_ORDER = ImmutableList.of(MELEE, BOW, ARROW, POISON, SPELL, STAFF);
 
@@ -52,11 +59,37 @@ public interface Source extends Comparable<Source> {
    */
   Carrier create(String label, List<EffectText> effects);
 
+  default boolean isWeapon() {
+    return false;
+  }
+
+  default boolean isPhysical() {
+    return false;
+  }
+
+  default double timeToSwap() {
+    return 0;
+  }
+
+  @Override
+  default double timeToHit(int combo) {
+    return 0;
+  }
+
+  @Override
+  default double cooldown(int combo) {
+    return 0;
+  }
+
   /**
    * @return unique name of the source; can be used to identify it, but need not match variable name
    */
   @Override
   String toString();
+
+  default String describeAction() {
+    return "";
+  }
 
   @Override
   default int compareTo(Source other) {

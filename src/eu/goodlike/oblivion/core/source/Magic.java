@@ -9,6 +9,8 @@ import eu.goodlike.oblivion.core.effect.Drain;
 
 import java.util.List;
 
+import static eu.goodlike.oblivion.Global.Settings.CAST;
+
 public final class Magic extends Element implements Method, Source {
 
   public EffectText drain(int hp) {
@@ -25,10 +27,25 @@ public final class Magic extends Element implements Method, Source {
     return new Carrier(label, this, MAGIC, effects);
   }
 
+  @Override
+  public double timeToHit(int combo) {
+    return CAST.timeToHit(combo);
+  }
+
+  @Override
+  public double cooldown(int combo) {
+    return CAST.cooldown(combo);
+  }
+
   public Magic(String name) {
     super(name);
   }
 
   private final Carrier noEffect = create();
+
+  @Override
+  public String describeAction() {
+    return "cast";
+  }
 
 }

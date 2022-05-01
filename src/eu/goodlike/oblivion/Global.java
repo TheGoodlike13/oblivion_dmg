@@ -113,6 +113,15 @@ public final class Global {
     public static String PREPARED_ITEMS = "prepared_items.txt";
     public static String PREPARED_SPELLS = "prepared_spells.txt";
 
+    public static Hit.Pattern STRIKE = new Hit.Combo(0.4, 0.58).combo(0.28, 0.4);
+    public static Hit.Pattern SHOOT = new Hit.Combo(1.58, 0.66);
+    public static Hit.Pattern EMIT = new Hit.Combo(0.53, 0.63);
+    public static Hit.Pattern CAST = new Hit.Combo(0.41, 0.73);
+
+    public static double SWAP_MELEE = 0.7;
+    public static double SWAP_BOW = 1.06;
+    public static double SWAP_STAFF = 1.17;
+
     /**
      * Loads the settings from the settings.properties file.
      * Repeated calls will act like a reset, unless the file has changed.

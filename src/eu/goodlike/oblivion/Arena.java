@@ -1,5 +1,6 @@
 package eu.goodlike.oblivion;
 
+import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Factor;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static eu.goodlike.oblivion.Global.Settings.DUMPS;
@@ -106,10 +108,55 @@ public final class Arena {
     }
   }
 
+  private Carrier equipped = null;
+  private boolean needsSwap = false;
+
+  private Hit last = null;
+  private int repeatCount = 0;
+
+  private void equip(Carrier carrier) {
+    equipped = carrier;
+    play.combatLog("You begin equipped with " + carrier.getLabel());
+  }
+
   private void performHits() {
+    hits.stream()
+      .map(Hit::getWeapon)
+      .filter(Optional::isPresent)
+      .map(Optional::get)
+      .findFirst()
+      .ifPresent(this::equip);
+
     for (Hit hit : hits) {
+      needsSwap = false;
+      repeatCount = hit.isCombo(last) ? repeatCount + 1 : 0;
+
+      hit.requiresSwap(equipped).ifPresent(newWeapon -> {
+        needsSwap = true;
+        equipped = newWeapon;
+      });
+
+      if (needsSwap || hit.requiresCooldownAfter(last)) {
+        enemy.tick(hit.getDeliveryMechanism().cooldown(repeatCount), play);
+      }
+
+      if (needsSwap) {
+        play.combatLog("You begin to swap your weapon.");
+        enemy.tick(equipped.getSource().timeToSwap(), play);
+        play.combatLog("You equip " + equipped.getLabel());
+      }
+
+      play.combatLog("You " + hit.toPerformString());
+      enemy.tick(hit.getDeliveryMechanism().timeToHit(repeatCount), play);
       enemy.hit(hit, play);
+
+      play.dumpModifiedFactors();
+      last = hit;
     }
+
+    equipped = null;
+    last = null;
+    repeatCount = 0;
   }
 
   private void awaitEffectExpiration() {
@@ -155,8 +202,6 @@ public final class Arena {
   private final class PlayByPlay implements Enemy.Observer, Target {
     @Override
     public Target observing(Target actual) {
-      dumpModifiedFactors();
-
       this.isTicking = false;
       this.actual = actual;
       return this;
@@ -309,7 +354,7 @@ public final class Arena {
     }
 
     private void writeEnemyHp(String status) {
-      combatLog(String.format("Health %s: %s", status, enemy.healthStatus()));
+      combatLog(String.format("Enemy health %s: %s", status, enemy.healthStatus()));
     }
 
     private void writeTotals(Map<Effect.Id, Double> totals, String desc) {

@@ -70,11 +70,6 @@ public final class Poison implements Method, Source {
       super(label, getInstance(), getInstance(), effects);
     }
 
-    // exposed so AlwaysUnique can see it
-    protected String prefix() {
-      return super.prefix();
-    }
-
     private int useCount = 0;
   }
 
@@ -91,7 +86,7 @@ public final class Poison implements Method, Source {
 
     @Override
     public String toString() {
-      return "(" + use + ")" + poison.prefix() + type;
+      return "(" + use + ")" + poison.getLabel() + " " + type;
     }
   }
 

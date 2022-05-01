@@ -25,14 +25,18 @@ import static java.util.stream.Collectors.joining;
  */
 public final class Hit implements Iterable<Carrier> {
 
+  public interface Pattern {
+    double timeToHit(int combo);
+    double cooldown(int combo);
+  }
+
   public Source getDeliveryMechanism() {
     return getWeapon().orElse(carriers.get(0)).getSource();
   }
 
   public Optional<Carrier> getWeapon() {
     return carriers.stream()
-      .filter(c -> c.getSource() instanceof Equipment)
-      .filter(c -> !c.getSource().equals(ARROW))
+      .filter(c -> c.getSource().isWeapon())
       .findFirst();
   }
 
@@ -41,10 +45,17 @@ public final class Hit implements Iterable<Carrier> {
       .filter(newWeapon -> !newWeapon.equals(oldWeapon));
   }
 
-  public boolean requiresCooldown(Hit next) {
-    return getWeapon().flatMap(next::requiresSwap).isPresent()
-      || !next.getWeapon().isPresent()
-      || getWeapon().map(Carrier::getSource).filter(STAFF::equals).isPresent();
+  public boolean requiresCooldownAfter(Hit last) {
+    return last != null
+      && (getWeapon().flatMap(last::requiresSwap).isPresent()
+      || !getWeapon().isPresent()
+      || last.getWeapon().map(Carrier::getSource).filter(STAFF::equals).isPresent());
+  }
+
+  public boolean isCombo(Hit last) {
+    return last != null
+      && getWeapon().isPresent()
+      && getWeapon().equals(last.getWeapon());
   }
 
   @Override
@@ -109,6 +120,51 @@ public final class Hit implements Iterable<Carrier> {
     return carriers.stream()
       .map(Carrier::toString)
       .collect(joining(" + "));
+  }
+
+  public String toPerformString() {
+    return getDeliveryMechanism().describeAction() + " " + getLabels();
+  }
+
+  private String getLabels() {
+    return carriers.stream()
+      .map(Carrier::getLabel)
+      .collect(joining(" + "));
+  }
+
+  public static final class Combo implements Pattern {
+    @Override
+    public double timeToHit(int combo) {
+      int index = combo % fullCombo.size();
+      Combo actual = fullCombo.get(index);
+      return actual.timeToHit;
+    }
+
+    @Override
+    public double cooldown(int combo) {
+      int index = combo % fullCombo.size();
+      Combo actual = fullCombo.get(index);
+      return actual.cooldown;
+    }
+
+    public Combo combo(double nextTimeToHit, double nextCooldown) {
+      return new Combo(nextTimeToHit, nextCooldown, fullCombo);
+    }
+
+    public Combo(double timeToHit, double cooldown) {
+      this(timeToHit, cooldown, new ArrayList<>());
+    }
+
+    private Combo(double timeToHit, double cooldown, List<Combo> fullCombo) {
+      this.timeToHit = StructureException.positiveOrThrow(timeToHit, "time to hit");
+      this.cooldown = StructureException.positiveOrThrow(cooldown, "cooldown");
+      this.fullCombo = fullCombo;
+      fullCombo.add(this);
+    }
+
+    private final double timeToHit;
+    private final double cooldown;
+    private final List<Combo> fullCombo;
   }
 
 }

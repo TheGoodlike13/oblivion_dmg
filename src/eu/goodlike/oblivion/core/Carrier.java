@@ -67,6 +67,10 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
     return new Carrier(label, source, method, effects);
   }
 
+  public String getLabel() {
+    return "<" + source + getRef() + ">";
+  }
+
   @Override
   public final Iterator<EffectText> iterator() {
     return effects.iterator();
@@ -96,14 +100,10 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
   @Override
   public String toString() {
-    return prefix() + getEffects();
+    return getLabel() + " " + getEffects();
   }
 
-  protected String prefix() {
-    return "<" + source + getLabel() + "> ";
-  }
-
-  private String getLabel() {
+  private String getRef() {
     return isBlank(label) ? "" : "$" + label;
   }
 
@@ -130,7 +130,7 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
 
     @Override
     public String toString() {
-      return carrier.prefix() + effectType;
+      return carrier.getLabel() + " " + effectType;
     }
 
     @Override

@@ -83,6 +83,13 @@ class HitTest {
   }
 
   @Test
+  void alwaysSwapWhenNoWeapon() {
+    for (Source source : ImmutableList.of(MELEE, BOW, STAFF)) {
+      assertThat(hit(source).requiresSwap(null)).contains(source.withNoEffect());
+    }
+  }
+
+  @Test
   void alwaysSwapDifferentWeaponOfSameType() {
     for (Source source : ImmutableList.of(MELEE, BOW, STAFF)) {
       assertThat(hit(source).requiresSwap(source.create())).contains(source.withNoEffect());
@@ -105,42 +112,77 @@ class HitTest {
   }
 
   @Test
+  void neverRequireCooldownForFirstHit() {
+    for (Source source : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
+      assertThat(hit(source).requiresCooldownAfter(null)).isFalse();
+    }
+  }
+
+  @Test
   void alwaysRequireCooldownWhenSwappingWeapons() {
     for (Source source : ImmutableList.of(MELEE, BOW, STAFF)) {
-      assertThat(hit(source).requiresCooldown(new Hit(source.create()))).isTrue();
+      assertThat(new Hit(source.create()).requiresCooldownAfter(hit(source))).isTrue();
     }
 
-    assertThat(hit(MELEE).requiresCooldown(hit(BOW))).isTrue();
-    assertThat(hit(MELEE).requiresCooldown(hit(STAFF))).isTrue();
+    assertThat(hit(BOW).requiresCooldownAfter(hit(MELEE))).isTrue();
+    assertThat(hit(STAFF).requiresCooldownAfter(hit(MELEE))).isTrue();
 
-    assertThat(hit(BOW).requiresCooldown(hit(MELEE))).isTrue();
-    assertThat(hit(BOW).requiresCooldown(hit(STAFF))).isTrue();
+    assertThat(hit(MELEE).requiresCooldownAfter(hit(BOW))).isTrue();
+    assertThat(hit(STAFF).requiresCooldownAfter(hit(BOW))).isTrue();
 
-    assertThat(hit(STAFF).requiresCooldown(hit(MELEE))).isTrue();
-    assertThat(hit(STAFF).requiresCooldown(hit(BOW))).isTrue();
+    assertThat(hit(MELEE).requiresCooldownAfter(hit(STAFF))).isTrue();
+    assertThat(hit(BOW).requiresCooldownAfter(hit(STAFF))).isTrue();
   }
 
   @Test
   void alwaysRequireCooldownWhenCastingASpell() {
-    assertThat(hit(MELEE).requiresCooldown(hit(SPELL))).isTrue();
-    assertThat(hit(BOW).requiresCooldown(hit(SPELL))).isTrue();
-    assertThat(hit(STAFF).requiresCooldown(hit(SPELL))).isTrue();
-    assertThat(hit(SPELL).requiresCooldown(hit(SPELL))).isTrue();
+    assertThat(hit(SPELL).requiresCooldownAfter(hit(MELEE))).isTrue();
+    assertThat(hit(SPELL).requiresCooldownAfter(hit(BOW))).isTrue();
+    assertThat(hit(SPELL).requiresCooldownAfter(hit(STAFF))).isTrue();
+    assertThat(hit(SPELL).requiresCooldownAfter(hit(SPELL))).isTrue();
   }
 
   @Test
   void attacksAlwaysIgnoreSpellCooldown() {
-    assertThat(hit(SPELL).requiresCooldown(hit(MELEE))).isFalse();
-    assertThat(hit(SPELL).requiresCooldown(hit(BOW))).isFalse();
-    assertThat(hit(SPELL).requiresCooldown(hit(STAFF))).isFalse();
+    assertThat(hit(MELEE).requiresCooldownAfter(hit(SPELL))).isFalse();
+    assertThat(hit(BOW).requiresCooldownAfter(hit(SPELL))).isFalse();
+    assertThat(hit(STAFF).requiresCooldownAfter(hit(SPELL))).isFalse();
   }
 
   @Test
   void physicalWeaponCombosIgnoreCooldown() {
-    assertThat(hit(MELEE).requiresCooldown(hit(MELEE))).isFalse();
-    assertThat(hit(BOW).requiresCooldown(hit(BOW))).isFalse();
+    assertThat(hit(MELEE).requiresCooldownAfter(hit(MELEE))).isFalse();
+    assertThat(hit(BOW).requiresCooldownAfter(hit(BOW))).isFalse();
 
-    assertThat(hit(STAFF).requiresCooldown(hit(STAFF))).isTrue();
+    assertThat(hit(STAFF).requiresCooldownAfter(hit(STAFF))).isTrue();
+  }
+
+  @Test
+  void isCombo() {
+    assertThat(hit(MELEE).isCombo(hit(MELEE))).isTrue();
+    assertThat(hit(BOW).isCombo(hit(BOW))).isTrue();
+    assertThat(hit(STAFF).isCombo(hit(STAFF))).isTrue();
+  }
+
+  @Test
+  void isNotCombo() {
+    for (Source source : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
+      assertThat(hit(source).isCombo(null)).isFalse();
+      assertThat(hit(source).isCombo(hit(SPELL))).isFalse();
+      assertThat(hit(SPELL).isCombo(hit(source))).isFalse();
+    }
+  }
+
+  @Test
+  void performString() {
+    assertThat(hit(MELEE).toPerformString()).isEqualTo("swing <MELEE>");
+    assertThat(hit(BOW).toPerformString()).isEqualTo("aim <BOW> + <ARROW>");
+    assertThat(hit(SPELL).toPerformString()).isEqualTo("cast <SPELL>");
+    assertThat(hit(STAFF).toPerformString()).isEqualTo("ready <STAFF>");
+
+    // implicit
+    assertThat(hit(ARROW).toPerformString()).isEqualTo("aim <BOW> + <ARROW>");
+    assertThat(hit(POISON).toPerformString()).isEqualTo("swing <MELEE> + <POISON>");
   }
 
   private void assertHit(Source... sources) {

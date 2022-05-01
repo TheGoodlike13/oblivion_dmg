@@ -187,14 +187,15 @@ public final class Enemy implements Target {
     if (level > 0) {
       throw new StructureException("Enemy is already leveled: " + this);
     }
-    StructureException.natOrThrow(levelMultiplier, "level multiplier");
-    StructureException.natOrThrow(minLevel, "level multiplier");
-    if (maxLevel <= minLevel) {
-      throw new StructureException("Max must be higher than min, but was: <" + maxLevel + " <= " + minLevel + ">");
-    }
 
-    this.levelMultiplier = levelMultiplier;
+    this.levelMultiplier = StructureException.natOrThrow(levelMultiplier, "level multiplier");
+
+    StructureException.natOrThrow(minLevel, "min level");
     this.minLevel = Math.max(1, minLevel);
+
+    if (maxLevel <= minLevel) {
+      throw new StructureException("Max level must exceed min level: min=<" + minLevel + "> max=<" + maxLevel + ">");
+    }
     this.maxLevel = Math.max(minLevel, maxLevel);
 
     this.level = minLevel;
