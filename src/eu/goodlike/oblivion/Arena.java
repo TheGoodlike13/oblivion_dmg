@@ -241,10 +241,12 @@ public final class Arena {
       else {
         combatLog(newEffect(hp));
         if (!isDeathConfirmed) {
-          writeEnemyHp("drained");
           totalDamage.put(id, hp);
         }
         checkPossibleDeath();
+        if (!isDeathConfirmed) {
+          writeEnemyHp("drained");
+        }
       }
     }
 
@@ -259,11 +261,11 @@ public final class Arena {
     public void writeObituary() {
       if (enemy.isAlive()) {
         Write.line("The %s has survived %.1f damage (%.1f hp left).", label, enemy.damageTaken(), enemy.healthRemaining());
-        writeTotal("damage");
+        writeFinalBreakdown("Damage");
       }
       else {
         Write.line("The %s took a total of %.1f damage (%.1f overkill).", label, enemy.damageTaken(), enemy.overkill());
-        writeTotal("overkill");
+        writeFinalBreakdown("Overkill");
       }
     }
 
@@ -329,8 +331,8 @@ public final class Arena {
     private void checkPossibleDeath() {
       if (!isDeathConfirmed && !enemy.isAlive()) {
         isDeathConfirmed = true;
-        combatLog("The " + label + " has died.");
-        writeTotal("damage");
+        combatLog("The " + label + " has died. Breakdown:");
+        writeBreakdown();
       }
     }
 
@@ -356,16 +358,20 @@ public final class Arena {
       combatLog(String.format("The " + label + " hp %s %s", status, enemy.healthStatus()));
     }
 
-    private void writeTotal(String desc) {
+    private void writeFinalBreakdown(String desc) {
       if (!totalDamage.isEmpty()) {
-        combatLog("Total " + desc + " by effect id:");
-        totalDamage.forEach(this::writeEffect);
+        combatLog(desc + " by effect:");
       }
+      writeBreakdown();
+    }
+
+    private void writeBreakdown() {
+      totalDamage.forEach(this::writeEffect);
       totalDamage.clear();
     }
 
     private void writeEffect(Effect.Id id, double d) {
-      combatLog(String.format("%s: %.2f", id, d));
+      combatLog(String.format("    %s: %.2f", id, d));
     }
   }
 

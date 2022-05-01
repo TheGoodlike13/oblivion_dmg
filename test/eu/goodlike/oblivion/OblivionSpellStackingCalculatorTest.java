@@ -167,7 +167,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "00.000 You cast <SPELL$1>",
       "00.410 You hit with <SPELL$1>",
       "       Applied SHOCK DMG 1000.0 for 1s",
-      "01.409 The beeeetch has died."
+      "01.409 The beeeetch has died. Breakdown:",
+      "           <SPELL$1> SHOCK DMG: 999.00"
     );
   }
 
@@ -181,8 +182,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "00.000 You cast <SPELL$1>",
       "00.410 You hit with <SPELL$1>",
       "       Applied DRAIN LIFE 100.0",
-      "       The enemy hp drained [-1.0/99]",
-      "       The enemy has died."
+      "       The enemy has died. Breakdown:",
+      "           <SPELL$1> DRAIN LIFE: 100.00"
     );
   }
 
@@ -214,9 +215,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "00.000 You cast <SPELL$1>",
       "00.410 You hit with <SPELL$1>",
       "       Applied MAGIC DMG 10.0 for 1s",
-      "01.410 The enemy has died.",
-      "       Total damage by effect id:",
-      "       <SPELL$1> MAGIC DMG: 10.00",
+      "01.410 The enemy has died. Breakdown:",
+      "           <SPELL$1> MAGIC DMG: 10.00",
       "       Expired <SPELL$1> MAGIC DMG",
       "The enemy took a total of 10.0 damage (0.0 overkill).",
       "-----",
@@ -225,9 +225,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "00.000 You cast <SPELL$2>",
       "00.410 You hit with <SPELL$2>",
       "       Applied MAGIC DMG 10.0 for 1s",
-      "01.410 The enemy has died.",
-      "       Total damage by effect id:",
-      "       <SPELL$2> MAGIC DMG: 10.00",
+      "01.410 The enemy has died. Breakdown:",
+      "           <SPELL$2> MAGIC DMG: 10.00",
       "       Expired <SPELL$2> MAGIC DMG",
       "The enemy took a total of 10.0 damage (0.0 overkill).",
       "-----",
@@ -236,9 +235,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "00.000 You cast <SPELL$1>",
       "00.410 You hit with <SPELL$1>",
       "       Applied MAGIC DMG 10.0 for 1s",
-      "01.410 The enemy has died.",
-      "       Total damage by effect id:",
-      "       <SPELL$1> MAGIC DMG: 10.00",
+      "01.410 The enemy has died. Breakdown:",
+      "           <SPELL$1> MAGIC DMG: 10.00",
       "       Expired <SPELL$1> MAGIC DMG",
       "The enemy took a total of 10.0 damage (0.0 overkill)."
     );
@@ -269,8 +267,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "       Applied MAGIC DMG 10.0 for 1s",
       "02.550 Expired <SPELL$1> MAGIC DMG",
       "The enemy has survived 20.0 damage (10.0 hp left).",
-      "       Total damage by effect id:",
-      "       <SPELL$1> MAGIC DMG: 20.00",
+      "       Damage by effect:",
+      "           <SPELL$1> MAGIC DMG: 20.00",
       "-----"
     );
   }
@@ -525,10 +523,9 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "       Applied RESIST MAGIC -1200.0",
       "       Applied RESIST SHOCK -1200.0",
       "       Resulting multipliers: MAGIC  x24.00, SHOCK  x21.00",
-      "04.693 The skeleton champion has died.",
-      "       Total damage by effect id:",
-      "       <MELEE$aetherius> DRAIN LIFE: 200.00",
-      "       <MELEE$aetherius> SHOCK DMG: 150.01",
+      "04.693 The skeleton champion has died. Breakdown:",
+      "           <MELEE$aetherius> DRAIN LIFE: 200.00",
+      "           <MELEE$aetherius> SHOCK DMG: 150.01",
       "05.230 Expired <MELEE$aetherius> SHOCK DMG",
       "       Expired <MELEE$aetherius> DRAIN LIFE",
       "       Expired <MELEE$aetherius> RESIST MAGIC",
@@ -540,8 +537,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "       Expired <SPELL$divine_justice_expert> RESIST SHOCK",
       "       Expired <SPELL$divine_justice_expert> RESIST POISON",
       "The skeleton champion took a total of 524.0 damage (174.0 overkill).",
-      "       Total overkill by effect id:",
-      "       <MELEE$aetherius> SHOCK DMG: 173.99"
+      "       Overkill by effect:",
+      "           <MELEE$aetherius> SHOCK DMG: 173.99"
     );
   }
 
@@ -599,10 +596,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "00.000 You cast <SPELL$1>",
       "00.410 You hit with <SPELL$1>",
       "       Applied DRAIN LIFE 100.0",
-      "       The enemy hp drained [-90.0/10]",
-      "       The enemy has died.",
-      "       Total damage by effect id:",
-      "       <SPELL$1> DRAIN LIFE: 100.00",
+      "       The enemy has died. Breakdown:",
+      "           <SPELL$1> DRAIN LIFE: 100.00",
       "01.140 You cast <SPELL$2>",
       "01.410 Expired <SPELL$1> DRAIN LIFE",
       "01.550 You hit with <SPELL$2>",
@@ -624,10 +619,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "       You aim <ARROW> + <BOW$1> + <POISON$2>",
       "01.581 You hit with <ARROW> + <BOW$1> + <POISON$2>",
       "       Applied DRAIN LIFE 100.0",
-      "       The enemy hp drained [-90.0/10]",
-      "       The enemy has died.",
-      "       Total damage by effect id:",
-      "       <BOW$1> DRAIN LIFE: 100.00",
+      "       The enemy has died. Breakdown:",
+      "           <BOW$1> DRAIN LIFE: 100.00",
       "       Applied DRAIN LIFE 100.0",
       "02.581 Expired <BOW$1> DRAIN LIFE",
       "       Expired (1)<POISON$2> DRAIN LIFE",
@@ -669,12 +662,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "02.360 Expired (1)<POISON$2> MAGIC DMG",
       "02.760 Expired (2)<POISON$2> MAGIC DMG",
       "The enemy has survived 7.0 damage (3.0 hp left).",
-      "       Total damage by effect id:",
-      "       (1)<POISON$1> MAGIC DMG: 1.00",
-      "       (2)<POISON$1> MAGIC DMG: 1.00",
-      "       (3)<POISON$1> MAGIC DMG: 1.00",
-      "       (1)<POISON$2> MAGIC DMG: 2.00",
-      "       (2)<POISON$2> MAGIC DMG: 2.00"
+      "       Damage by effect:",
+      "           (1)<POISON$1> MAGIC DMG: 1.00",
+      "           (2)<POISON$1> MAGIC DMG: 1.00",
+      "           (3)<POISON$1> MAGIC DMG: 1.00",
+      "           (1)<POISON$2> MAGIC DMG: 2.00",
+      "           (2)<POISON$2> MAGIC DMG: 2.00"
     );
   }
 
