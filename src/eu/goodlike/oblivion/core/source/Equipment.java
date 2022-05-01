@@ -28,7 +28,7 @@ public final class Equipment implements Source {
 
   @Override
   public boolean isPhysical() {
-    return false;  // TODO: how to decide this?
+    return isPhysical;
   }
 
   @Override
@@ -47,20 +47,22 @@ public final class Equipment implements Source {
   }
 
   public Equipment(String type) {
-    this(type, "", null, 0);
+    this(type, "", null, 0, true);
   }
 
-  public Equipment(String type, String action, Hit.Pattern pattern, double timeToSwap) {
+  public Equipment(String type, String action, Hit.Pattern pattern, double timeToSwap, boolean isPhysical) {
     this.type = type;
     this.action = action;
     this.pattern = pattern;
     this.timeToSwap = timeToSwap;
+    this.isPhysical = isPhysical;
   }
 
   private final String type;
   private final String action;
   private final Hit.Pattern pattern;
   private final double timeToSwap;
+  private final boolean isPhysical;
 
   private final Carrier noEffect = create();
 

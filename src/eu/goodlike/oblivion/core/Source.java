@@ -24,12 +24,12 @@ import static eu.goodlike.oblivion.Global.Settings.SWAP_STAFF;
  */
 public interface Source extends Hit.Pattern, Comparable<Source> {
 
-  Source MELEE = new Equipment("MELEE", "swing", STRIKE, SWAP_MELEE);
-  Source BOW = new Equipment("BOW", "aim", SHOOT, SWAP_BOW);
+  Source MELEE = new Equipment("MELEE", "swing", STRIKE, SWAP_MELEE, true);
+  Source BOW = new Equipment("BOW", "aim", SHOOT, SWAP_BOW, true);
   Source ARROW = new Equipment("ARROW");
   Source POISON = Poison.getInstance();
   Source SPELL = new Magic("SPELL");
-  Source STAFF = new Equipment("STAFF", "ready", EMIT, SWAP_STAFF);
+  Source STAFF = new Equipment("STAFF", "ready", EMIT, SWAP_STAFF, false);
 
   List<Source> ALL_IN_ORDER = ImmutableList.of(MELEE, BOW, ARROW, POISON, SPELL, STAFF);
 

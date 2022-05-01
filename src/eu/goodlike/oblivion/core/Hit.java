@@ -12,7 +12,6 @@ import static eu.goodlike.oblivion.core.Source.ARROW;
 import static eu.goodlike.oblivion.core.Source.BOW;
 import static eu.goodlike.oblivion.core.Source.MELEE;
 import static eu.goodlike.oblivion.core.Source.POISON;
-import static eu.goodlike.oblivion.core.Source.STAFF;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -41,15 +40,11 @@ public final class Hit implements Iterable<Carrier> {
   }
 
   public Optional<Carrier> requiresSwap(Carrier oldWeapon) {
-    return getWeapon()
-      .filter(newWeapon -> !newWeapon.equals(oldWeapon));
+    return getWeapon().filter(newWeapon -> !newWeapon.equals(oldWeapon));
   }
 
   public boolean requiresCooldownAfter(Hit last) {
-    return last != null
-      && (getWeapon().flatMap(last::requiresSwap).isPresent()
-      || !getWeapon().isPresent()
-      || last.getWeapon().map(Carrier::getSource).filter(STAFF::equals).isPresent());
+    return last != null && (!getWeapon().isPresent() || requiresSwap(last) || last.usesMysticalWeapon());
   }
 
   public boolean isCombo(Hit last) {
@@ -106,6 +101,17 @@ public final class Hit implements Iterable<Carrier> {
     if (!equipment.any(carriers)) {
       carriers.add(equipment.withNoEffect());
     }
+  }
+
+  private boolean requiresSwap(Hit last) {
+    return getWeapon().flatMap(last::requiresSwap).isPresent();
+  }
+
+  private boolean usesMysticalWeapon() {
+    return getWeapon()
+      .map(Carrier::getSource)
+      .filter(source -> !source.isPhysical())
+      .isPresent();
   }
 
   private String hitTrace() {
