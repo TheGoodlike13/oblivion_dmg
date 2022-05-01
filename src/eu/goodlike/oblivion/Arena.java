@@ -99,20 +99,18 @@ public final class Arena {
 
   private void fight() {
     try {
-      performHits();
-      awaitEffectExpiration();
+      equipFirstWeapon();
+
+      for (Hit hit : hits) {
+        play.next(hit);
+      }
+
+      enemy.resolve(play);
+
       writeObituary();
     }
     finally {
       refresh();
-    }
-  }
-
-  private void performHits() {
-    equipFirstWeapon();
-
-    for (Hit hit : hits) {
-      play.next(hit);
     }
   }
 
@@ -123,14 +121,6 @@ public final class Arena {
       .map(Optional::get)
       .findFirst()
       .ifPresent(play::setInitialWeapon);
-  }
-
-  private void awaitEffectExpiration() {
-    while (enemy.isAlive() && enemy.isAffected()) {
-      enemy.tick(play);
-    }
-
-    enemy.resolve(play);
   }
 
   private void writeObituary() {
