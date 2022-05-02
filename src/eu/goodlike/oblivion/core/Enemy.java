@@ -228,10 +228,12 @@ public final class Enemy implements Target {
   }
 
   @Override
-  public void drain(double hp) {
+  public boolean drain(double hp) {
     if (isAlive()) {
       health -= hp;
+      return true;
     }
+    return false;
   }
 
   /**
@@ -376,8 +378,8 @@ public final class Enemy implements Target {
     }
 
     @Override
-    public void drain(double hp) {
-      Enemy.this.drain(hp);
+    public boolean drain(double hp) {
+      return Enemy.this.drain(hp);
     }
 
     public void applyResistModsAtOnce(Target target) {

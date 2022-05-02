@@ -33,8 +33,10 @@ public interface Target {
    * Drain this target's hp by given amount.
    * Negative values can be used to remove the drain.
    * Does not affect dead targets.
+   *
+   * @return true if it was applied, false if the target was already dead
    */
-  void drain(double hp);
+  boolean drain(double hp);
 
   /**
    * Inform this target that an effect was applied with given magnitude & duration.

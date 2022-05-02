@@ -227,29 +227,31 @@ public final class Arena {
       actual.damage(dmg);
 
       damageTotals.merge(id, dmg, Double::sum);
-      checkPossibleDeath();
+      breakdownPossibleDeath();
     }
 
     @Override
-    public void drain(double hp) {
-      actual.drain(hp);
+    public boolean drain(double hp) {
+      boolean wasApplied = actual.drain(hp);
 
       if (isTicking) {
-        if (enemy.isAlive()) {
-          writeEnemyHp("restored");
+        if (wasApplied) {
           damageTotals.remove(id);
+          writeEnemyHp("restored");
         }
       }
       else {
-        combatLog(newEffect(hp));
-        if (!isDeathConfirmed) {
+        if (wasApplied) {
           damageTotals.put(id, hp);
         }
-        checkPossibleDeath();
-        if (!isDeathConfirmed) {
+        combatLog(newEffect(hp));
+
+        breakdownPossibleDeath();
+        if (!hasDeathBeenBrokenDown) {
           writeEnemyHp("drained");
         }
       }
+      return wasApplied;
     }
 
     @Override
@@ -287,7 +289,7 @@ public final class Arena {
       this.lastHit = null;
       this.combo = 0;
 
-      this.isDeathConfirmed = false;
+      this.hasDeathBeenBrokenDown = false;
 
       this.actual = null;
       this.id = null;
@@ -310,7 +312,7 @@ public final class Arena {
     private Hit lastHit;
     private int combo;
 
-    private boolean isDeathConfirmed;
+    private boolean hasDeathBeenBrokenDown;
 
     private Target actual;
     private Effect.Id id;
@@ -331,9 +333,9 @@ public final class Arena {
       liveDamage.clear();
     }
 
-    private void checkPossibleDeath() {
-      if (!isDeathConfirmed && !enemy.isAlive()) {
-        isDeathConfirmed = true;
+    private void breakdownPossibleDeath() {
+      if (!hasDeathBeenBrokenDown && !enemy.isAlive()) {
+        hasDeathBeenBrokenDown = true;
         combatLog("The " + label + " has died. Breakdown:");
         writeBreakdown();
         switchTotalsToOverkillMode();
