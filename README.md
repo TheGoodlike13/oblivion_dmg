@@ -76,14 +76,3 @@ Drain works too, although all it does is effectively reduce max hp from the star
 Damage effects are ignored.
 While possible, they are not applicable to combat situations, and would only
 add to code complexity.
-
-### Untested assumptions (requires modding)
-
-Anything that this application allows that is outside of the bounds of the base
-game should be considered extra.
-
-1) I've added a magic factor to weakness/resist effects.
-To verify, I'd need a poison with such an effect.
-Under the assumption, it is affected by magic resistance.
-For reference, "drain life" did have this factor as a poison.
-Elemental damage did not.

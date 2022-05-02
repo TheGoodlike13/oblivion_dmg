@@ -31,7 +31,7 @@ public interface Source extends HitPattern, Comparable<Source> {
   Source SPELL = new Magic("SPELL");
   Source STAFF = new Equipment("STAFF", "ready", EMIT, SWAP_STAFF, false);
 
-  List<Source> ALL_IN_ORDER = ImmutableList.of(ARROW, BOW, MELEE, POISON, SPELL, STAFF);
+  List<Source> ALL_IN_ORDER = ImmutableList.of(ARROW, MELEE, POISON, BOW, SPELL, STAFF);
 
   /**
    * @return equivalent to {@link #create} with no params, but always returns the same instance

@@ -103,7 +103,7 @@ public final class StructureException extends RuntimeException {
     "MELEE",
     "MELEE + POISON",
     "ARROW + BOW",
-    "ARROW + BOW + POISON"
+    "ARROW + POISON + BOW"
   );
 
 }
