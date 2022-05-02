@@ -745,13 +745,13 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "       Applied FIRE DMG 9.0 for 37s",
       "       Applied SHOCK DMG 9.0 for 37s",
       "30.400 Expired (1)<POISON$1> MAGIC DMG",
-      "37.400 Expired (2)<POISON$1> FIRE DMG",
-      "       Expired (3)<POISON$1> SHOCK DMG",
+      "37.400 Expired (1)<POISON$1> FIRE DMG",
+      "       Expired (1)<POISON$1> SHOCK DMG",
       "The enemy has survived 906.0 damage (94.0 hp left).",
       "       Damage by effect:",
       "           (1)<POISON$1> MAGIC DMG: 240.00",
-      "           (2)<POISON$1> FIRE DMG: 333.00",
-      "           (3)<POISON$1> SHOCK DMG: 333.00",
+      "           (1)<POISON$1> FIRE DMG: 333.00",
+      "           (1)<POISON$1> SHOCK DMG: 333.00",
       "-----"
     );
   }

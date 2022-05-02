@@ -4,6 +4,8 @@ import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.Factor;
 import eu.goodlike.oblivion.core.Target;
 
+import java.util.Objects;
+
 public final class Resist extends BaseEffect {
 
   public static final class OfFactor implements Type {
@@ -26,6 +28,19 @@ public final class Resist extends BaseEffect {
     @Override
     public String toString() {
       return "RESIST " + factor;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      OfFactor ofFactor = (OfFactor)o;
+      return Objects.equals(factor, ofFactor.factor);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(factor);
     }
   }
 

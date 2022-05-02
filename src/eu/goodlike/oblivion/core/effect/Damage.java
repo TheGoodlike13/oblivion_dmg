@@ -4,6 +4,8 @@ import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.Element;
 import eu.goodlike.oblivion.core.Target;
 
+import java.util.Objects;
+
 public final class Damage extends BaseEffect {
 
   public static final class OfElement implements Type {
@@ -26,6 +28,19 @@ public final class Damage extends BaseEffect {
     @Override
     public String toString() {
       return element + " DMG";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      OfElement ofElement = (OfElement)o;
+      return Objects.equals(element, ofElement.element);
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(element);
     }
   }
 
