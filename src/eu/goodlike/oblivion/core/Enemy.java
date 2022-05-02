@@ -110,7 +110,7 @@ public final class Enemy implements Target {
         observer.next(id);
         Effect original = activeEffects.put(id, effect);
         if (original != null) {
-          observer.markExpired();
+          observer.markExpired(effect);
           original.onRemove(this);
         }
         effect.onApply(target);
@@ -140,7 +140,7 @@ public final class Enemy implements Target {
 
       if (effect.hasExpired()) {
         i.remove();
-        observer.markExpired();
+        observer.markExpired(effect);
         effect.onRemove(target);
       }
     });
@@ -236,13 +236,6 @@ public final class Enemy implements Target {
     return false;
   }
 
-  /**
-   * @return current health over max health
-   */
-  public String healthStatus() {
-    return String.format("[%.1f/%d]", health, maxHealth);
-  }
-
   public Enemy(int maxHealth, EffectText... bonus) {
     this(maxHealth, Arrays.asList(bonus));
   }
@@ -298,6 +291,10 @@ public final class Enemy implements Target {
     return level() + healthStatus() + multipliers();
   }
 
+  public String healthStatus() {
+    return String.format("%.1f/%d", health, maxHealth);
+  }
+
   private String level() {
     return confine(level) <= 0 ? "" : "[LVL " + confine(level) + "] ";
   }
@@ -340,8 +337,10 @@ public final class Enemy implements Target {
 
     /**
      * Marks the effect being processed as having expired or replaced.
+     *
+     * @param effect active effect associated with the effect being processed
      */
-    void markExpired();
+    void markExpired(Effect effect);
 
     /**
      * Non-observing observer, stand-in for null.
@@ -361,7 +360,7 @@ public final class Enemy implements Target {
       }
 
       @Override
-      public void markExpired() {
+      public void markExpired(Effect effect) {
       }
     };
   }
