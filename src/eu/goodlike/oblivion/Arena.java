@@ -269,7 +269,7 @@ public final class Arena {
     }
 
     public void dumpModifiedFactors() {
-      if (!modifiedFactors.isEmpty()) {
+      if (enemy.isAlive() && !modifiedFactors.isEmpty()) {
         String factorMods = factorMods(modifiedFactors, true).collect(joining(", "));
         combatLog("Resulting multipliers: " + factorMods);
         modifiedFactors.clear();

@@ -717,7 +717,6 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "       Applied RESIST MAGIC -100.0",
       "       Applied RESIST SHOCK -100.0",
       "       Applied (1)<POISON$1> SHOCK DMG 7.0 for 27s",
-      "       Resulting multipliers: MAGIC  x2.00, SHOCK  x2.00",
       "01.400 Expired <MELEE$aetherius> SHOCK DMG",
       "       Expired <MELEE$aetherius> DRAIN LIFE",
       "       Expired <MELEE$aetherius> RESIST MAGIC",
