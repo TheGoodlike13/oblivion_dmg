@@ -215,6 +215,7 @@ public final class Arena {
     @Override
     public void modifyResist(Factor factor, double percent) {
       actual.modifyResist(factor, percent);
+
       if (!isTicking) {
         combatLog(newEffect(percent));
       }
@@ -224,6 +225,7 @@ public final class Arena {
     @Override
     public void damage(double dmg) {
       actual.damage(dmg);
+
       damageTotals.merge(id, dmg, Double::sum);
       checkPossibleDeath();
     }
@@ -231,8 +233,9 @@ public final class Arena {
     @Override
     public void drain(double hp) {
       actual.drain(hp);
+
       if (isTicking) {
-        if (!isDeathConfirmed) {
+        if (enemy.isAlive()) {
           writeEnemyHp("restored");
           damageTotals.remove(id);
         }
@@ -252,6 +255,7 @@ public final class Arena {
     @Override
     public void poke(double magnitude, double duration) {
       actual.poke(magnitude, duration);
+
       if (!isTicking) {
         combatLog(String.format("%s %s %.1f for %.0fs", newEffectChange(), newEffectId(), magnitude, duration));
       }
