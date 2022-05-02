@@ -1,9 +1,9 @@
 package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ImmutableList;
+import eu.goodlike.oblivion.core.method.Poison;
 import eu.goodlike.oblivion.core.source.Equipment;
-import eu.goodlike.oblivion.core.source.Magic;
-import eu.goodlike.oblivion.core.source.Poison;
+import eu.goodlike.oblivion.core.source.Spell;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +28,7 @@ public interface Source extends HitPattern, Comparable<Source> {
   Source BOW = new Equipment("BOW", "aim", SHOOT, SWAP_BOW, true);
   Source ARROW = new Equipment("ARROW");
   Poison POISON = Poison.getInstance();
-  Source SPELL = new Magic("SPELL");
+  Source SPELL = new Spell();
   Source STAFF = new Equipment("STAFF", "invoke", EMIT, SWAP_STAFF, false);
 
   List<Source> ALL_IN_ORDER = ImmutableList.of(ARROW, MELEE, POISON, BOW, SPELL, STAFF);

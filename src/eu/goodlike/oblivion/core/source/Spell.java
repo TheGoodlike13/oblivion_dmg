@@ -1,26 +1,15 @@
 package eu.goodlike.oblivion.core.source;
 
 import eu.goodlike.oblivion.core.Carrier;
-import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.EffectText;
-import eu.goodlike.oblivion.core.Element;
-import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.Source;
-import eu.goodlike.oblivion.core.effect.Drain;
 
 import java.util.List;
 
 import static eu.goodlike.oblivion.Global.Settings.CAST;
+import static eu.goodlike.oblivion.core.Factor.MAGIC;
 
-public final class Magic extends Element implements Method, Source {
-
-  public EffectText drain(int hp) {
-    return new EffectText(this, drain(), hp);
-  }
-
-  public Effect.Type drain() {
-    return Drain.TYPE;
-  }
+public final class Spell implements Source {
 
   @Override
   public Carrier withNoEffect() {
@@ -42,11 +31,12 @@ public final class Magic extends Element implements Method, Source {
     return CAST.cooldown(combo);
   }
 
-  public Magic(String name) {
-    super(name);
-  }
-
   private final Carrier noEffect = create();
+
+  @Override
+  public String toString() {
+    return "SPELL";
+  }
 
   @Override
   public String describeAction() {

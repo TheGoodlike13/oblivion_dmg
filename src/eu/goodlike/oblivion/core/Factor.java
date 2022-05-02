@@ -1,8 +1,8 @@
 package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ImmutableList;
-import eu.goodlike.oblivion.core.source.Magic;
-import eu.goodlike.oblivion.core.source.Poison;
+import eu.goodlike.oblivion.core.method.Magic;
+import eu.goodlike.oblivion.core.method.Poison;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public interface Factor {
 
   Poison POISON = Poison.getInstance();
-  Magic MAGIC = new Magic("MAGIC");
+  Magic MAGIC = new Magic();
   Element FIRE = new Element("FIRE");
   Element FROST = new Element("FROST");
   Element SHOCK = new Element("SHOCK");
