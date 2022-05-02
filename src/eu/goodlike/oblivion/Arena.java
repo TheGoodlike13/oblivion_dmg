@@ -350,8 +350,8 @@ public final class Arena {
       }
     }
 
-    private String newEffect(double percent) {
-      return String.format("%s %s %.1f", newEffectChange(), newEffectId(), percent);
+    private String newEffect(double magnitude) {
+      return String.format("%s %s %.1f", newEffectChange(), newEffectId(), magnitude);
     }
 
     private String newEffectChange() {
