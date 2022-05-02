@@ -30,7 +30,7 @@ public final class Arena {
 
   public void setEnemy(NamedValue<Enemy> enemy) {
     this.label = enemy.getName().replace('_', ' ');
-    this.enemy = enemy.getValue();
+    this.enemy = enemy.getValue().updateLevel();
     announceOpponent();
   }
 

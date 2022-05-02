@@ -587,6 +587,21 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
+  void lifeDoesNotWait() {
+    sendInput("enemy $xivilai", "level 31", "enemy $xivilai");
+
+    assertOutput(
+      "You face the xivilai (336 hp)",
+      "FIRE   x0.67",
+      "SHOCK  x1.20",
+      "Player level has been set to <31>.",
+      "You face the xivilai (348 hp)",
+      "FIRE   x0.67",
+      "SHOCK  x1.20"
+    );
+  }
+
+  @Test
   void thatIsQuiteTheGoblin() {
     sendInput("enemy :goblin 50 [5 25] *10");
 

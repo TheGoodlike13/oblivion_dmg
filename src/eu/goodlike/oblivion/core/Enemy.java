@@ -177,10 +177,13 @@ public final class Enemy implements Target {
 
   /**
    * Wipes all active effects and sets hp back to max.
+   *
+   * @return this enemy
    */
-  public void resurrect() {
+  public Enemy resurrect() {
     resolve();
     this.health = maxHealth;
+    return this;
   }
 
   public Enemy setLeveled(int levelMultiplier, int minLevel, int maxLevel) {
@@ -199,16 +202,15 @@ public final class Enemy implements Target {
     this.maxLevel = Math.max(minLevel, maxLevel);
 
     this.level = minLevel;
-    updateLevel();
-    return this;
+    return updateLevel();
   }
 
-  public void updateLevel() {
+  public Enemy updateLevel() {
     int diff = confine(LEVEL) - confine(level);
 
     level = LEVEL;
     maxHealth = maxHealth + diff * levelMultiplier;
-    resurrect();
+    return resurrect();
   }
 
   @Override
