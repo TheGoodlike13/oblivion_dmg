@@ -756,6 +756,50 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     );
   }
 
+  @Test
+  void doubleTap() {
+    sendInput("enemy 1000", "+p 8m30s 9f37s 9s37s", "$1", "go");
+
+    assertOutputSegment(
+      "You face the enemy (1000 hp)",
+      "[#1] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 8 for 30s + FIRE DMG 9 for 37s + SHOCK DMG 9 for 37s}",
+      "[#2] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 8 for 30s + FIRE DMG 9 for 37s + SHOCK DMG 9 for 37s}",
+      "00.000 You begin equipped with <MELEE>",
+      "       You swing <MELEE> + <POISON$1>",
+      "00.400 You hit with <MELEE> + <POISON$1>",
+      "       Applied MAGIC DMG 8.0 for 30s",
+      "       Applied FIRE DMG 9.0 for 37s",
+      "       Applied SHOCK DMG 9.0 for 37s",
+      "       You swing <MELEE> + <POISON$1>",
+      "00.680 You hit with <MELEE> + <POISON$1>",
+      "       Applied MAGIC DMG 8.0 for 30s",
+      "       Applied FIRE DMG 9.0 for 37s",
+      "       Applied SHOCK DMG 9.0 for 37s",
+      "19.771 The enemy has died. Breakdown:",
+      "           (1)<POISON$1> MAGIC DMG: 154.97",
+      "           (1)<POISON$1> FIRE DMG: 174.34",
+      "           (1)<POISON$1> SHOCK DMG: 174.34",
+      "           (2)<POISON$1> MAGIC DMG: 152.73",
+      "           (2)<POISON$1> FIRE DMG: 171.82",
+      "           (2)<POISON$1> SHOCK DMG: 171.81",
+      "30.400 Expired (1)<POISON$1> MAGIC DMG",
+      "30.680 Expired (2)<POISON$1> MAGIC DMG",
+      "37.400 Expired (1)<POISON$1> FIRE DMG",
+      "       Expired (1)<POISON$1> SHOCK DMG",
+      "37.680 Expired (2)<POISON$1> FIRE DMG",
+      "       Expired (2)<POISON$1> SHOCK DMG",
+      "The enemy took a total of 1812.0 damage (812.0 overkill).",
+      "       Overkill by effect:",
+      "           (2)<POISON$1> SHOCK DMG: 161.19",
+      "           (1)<POISON$1> MAGIC DMG: 85.03",
+      "           (1)<POISON$1> FIRE DMG: 158.66",
+      "           (1)<POISON$1> SHOCK DMG: 158.66",
+      "           (2)<POISON$1> MAGIC DMG: 87.27",
+      "           (2)<POISON$1> FIRE DMG: 161.18",
+      "-----"
+    );
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);
