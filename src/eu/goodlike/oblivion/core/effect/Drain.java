@@ -24,12 +24,12 @@ public final class Drain extends BaseEffect {
 
   @Override
   public void onApply(Target target) {
-    target.drain(magnitude);
+    target.drain(effectiveMagnitude());
   }
 
   @Override
   public void onRemove(Target target) {
-    target.drain(-magnitude);
+    target.drain(-effectiveMagnitude());
   }
 
   @Override

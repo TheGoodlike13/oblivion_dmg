@@ -110,7 +110,7 @@ public final class Enemy implements Target {
         observer.next(id);
         Effect original = activeEffects.put(id, effect);
         if (original != null) {
-          observer.markExpired(effect);
+          observer.markExpired(original);
           original.onRemove(this);
         }
         effect.onApply(target);

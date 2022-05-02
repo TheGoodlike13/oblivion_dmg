@@ -1,5 +1,7 @@
 package eu.goodlike.oblivion;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
 import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.Enemy;
@@ -9,6 +11,7 @@ import eu.goodlike.oblivion.core.Target;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -215,6 +218,7 @@ public final class Arena {
         Write.line("The %s took a total of %.1f damage (%.1f overkill).", label, enemy.damageTaken(), enemy.overkill());
         writeFinalBreakdown("Overkill");
       }
+      writeWastedDamageBreakdown();
     }
 
     public PlayByPlay() {
@@ -230,6 +234,7 @@ public final class Arena {
 
       this.modifiedFactors = new ArrayList<>();
       this.damageTotals = new LinkedHashMap<>();
+      this.wastedEffects = ArrayListMultimap.create();
 
       this.hasDeathBeenBrokenDown = false;
 
@@ -251,6 +256,7 @@ public final class Arena {
 
     private final List<Factor> modifiedFactors;
     private final Map<Effect.Id, Double> damageTotals;
+    private final ListMultimap<Effect.Id, Effect> wastedEffects;
 
     private double duration;
     private double lastLog;
@@ -277,7 +283,7 @@ public final class Arena {
       if (!hasDeathBeenBrokenDown && !enemy.isAlive()) {
         hasDeathBeenBrokenDown = true;
         combatLog("The " + label + " has died. Breakdown:");
-        writeBreakdown();
+        writeDamageBreakdown();
         switchTotalsToOverkillMode();
       }
     }
@@ -294,15 +300,40 @@ public final class Arena {
       if (!damageTotals.isEmpty()) {
         combatLog(desc + " by effect:");
       }
-      writeBreakdown();
+      writeDamageBreakdown();
     }
 
-    private void writeBreakdown() {
+    private void writeDamageBreakdown() {
       damageTotals.forEach(this::writeEffect);
     }
 
     private void writeEffect(Effect.Id id, double d) {
       combatLog(String.format("    %s: %.2f", id, d));
+    }
+
+    private void writeWastedDamageBreakdown() {
+      if (!wastedEffects.isEmpty()) {
+        combatLog("Total damage wasted due to overlap:");
+      }
+      double total = wastedEffects.asMap().entrySet()
+        .stream()
+        .mapToDouble(e -> writeWastedEffect(e.getKey(), e.getValue()))
+        .sum();
+      if (total > 0) {
+        combatLog(String.format("Grand total: %.2f", total));
+      }
+    }
+
+    private double writeWastedEffect(Effect.Id id, Collection<Effect> effects) {
+      combatLog(id.toString());
+
+      double sum = 0;
+      for (Effect effect : effects) {
+        double total = effect.effectiveMagnitude() * effect.remainingDuration();
+        combatLog(String.format("%9.1f * %4.2fs = %7.2f", effect.effectiveMagnitude(), effect.remainingDuration(), total));
+        sum += total;
+      }
+      return sum;
     }
 
     private void writeDrainStatus(String status) {
@@ -332,7 +363,10 @@ public final class Arena {
       @Override
       public void poke(double magnitude, double duration) {
         super.poke(magnitude, duration);
-        combatLog(String.format("%s %s %.1f for %.0fs", newEffectChange(), newEffectId(), magnitude, duration));
+        combatLog(newEffect(magnitude, duration));
+        if (expired != null) {
+          wastedEffects.put(id, expired);
+        }
       }
 
       public HitStats(Target actual) {
@@ -340,15 +374,31 @@ public final class Arena {
       }
 
       private String newEffect(double magnitude) {
-        return String.format("%s %s %.1f", newEffectChange(), newEffectId(), magnitude);
+        return newEffect(magnitude, 0);
       }
 
-      private String newEffectChange() {
+      private String newEffect(double magnitude, double duration) {
+        return String.join(" ", howNew(), whichEffect(), numbers(magnitude, duration));
+      }
+
+      private String howNew() {
         return expired == null ? "Applied" : "Replaced";
       }
 
-      private Object newEffectId() {
-        return lastHit.count(id.getType()) > 1 ? id : id.getType();
+      private String whichEffect() {
+        return String.valueOf(lastHit.count(id.getType()) > 1 ? id : id.getType());
+      }
+
+      private String numbers(double magnitude, double duration) {
+        return duration > 0
+          ? String.format("%.1f for %.0fs", magnitude, duration)
+          : magnitudesOnly(magnitude);
+      }
+
+      private String magnitudesOnly(double magnitude) {
+        return expired == null
+          ? String.format("%.1f", magnitude)
+          : String.format("%.1f with %.1f", expired.effectiveMagnitude(), magnitude);
       }
     }
 

@@ -46,12 +46,12 @@ public final class Resist extends BaseEffect {
 
   @Override
   public void onApply(Target target) {
-    target.modifyResist(resist.factor, magnitude);
+    target.modifyResist(resist.factor, effectiveMagnitude());
   }
 
   @Override
   public void onRemove(Target target) {
-    target.modifyResist(resist.factor, -magnitude);
+    target.modifyResist(resist.factor, -effectiveMagnitude());
   }
 
   @Override

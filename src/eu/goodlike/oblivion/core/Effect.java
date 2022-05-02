@@ -73,9 +73,15 @@ public interface Effect {
    */
   void onTick(Target target);
 
+  double effectiveMagnitude();
+
+  double remainingDuration();
+
   /**
    * @return false if this effect still has duration remaining, true otherwise
    */
-  boolean hasExpired();
+  default boolean hasExpired() {
+    return remainingDuration() <= 0;
+  }
 
 }

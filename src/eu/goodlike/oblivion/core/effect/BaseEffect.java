@@ -36,8 +36,13 @@ public abstract class BaseEffect implements Effect {
   }
 
   @Override
-  public boolean hasExpired() {
-    return remaining <= 0;
+  public double effectiveMagnitude() {
+    return magnitude;
+  }
+
+  @Override
+  public double remainingDuration() {
+    return remaining;
   }
 
   protected BaseEffect(double magnitude, double duration) {
@@ -45,8 +50,7 @@ public abstract class BaseEffect implements Effect {
     this.remaining = duration;
   }
 
-  protected final double magnitude;
-
+  private final double magnitude;
   private double remaining;
 
   /**

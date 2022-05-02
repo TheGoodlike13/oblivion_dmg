@@ -46,7 +46,7 @@ public final class Damage extends BaseEffect {
 
   @Override
   public void onApply(Target target) {
-    target.poke(magnitude, originalDuration);
+    target.poke(effectiveMagnitude(), remainingDuration());
   }
 
   @Override
@@ -55,14 +55,11 @@ public final class Damage extends BaseEffect {
 
   @Override
   protected void onEffectiveTick(Target target, double tick) {
-    target.damage(tick * magnitude);
+    target.damage(tick * effectiveMagnitude());
   }
 
   public Damage(double magnitude, double duration) {
     super(magnitude, duration);
-    this.originalDuration = duration;
   }
-
-  private final double originalDuration;
 
 }
