@@ -946,6 +946,63 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     );
   }
 
+  @Test
+  void forgotToFortifyDestructionAgain() {
+    sendInput(
+      "difficulty 100",
+      "enemy 330 20rfr :bear",
+      "$divine_justice_apprentice",
+      "$divine_justice_expert",
+      "$aetherius",
+      "go"
+    );
+
+    assertOutputSegment(
+      "Difficulty slider has been set to <100.0>",
+      "You face the bear (330 hp)",
+      "FROST  x0.80",
+      "[#1] Next hit: <SPELL$divine_justice_apprentice> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
+      "[#2] Next hit: <SPELL$divine_justice_expert> {RESIST MAGIC -100 for 6s + RESIST SHOCK -100 for 6s + RESIST POISON -100 for 6s}",
+      "[#3] Next hit: <MELEE$aetherius> {SHOCK DMG 18 for 1s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s}",
+      "00.000 You begin equipped with <MELEE$aetherius>",
+      "       You cast <SPELL$divine_justice_apprentice>",
+      "00.410 You hit with <SPELL$divine_justice_apprentice>",
+      "       Applied RESIST MAGIC -100.0",
+      "       Applied RESIST SHOCK -100.0",
+      "       Applied RESIST POISON -100.0",
+      "       Resulting multipliers: MAGIC  x2.00, SHOCK  x2.00, POISON x2.00",
+      "01.140 You cast <SPELL$divine_justice_expert>",
+      "01.550 You hit with <SPELL$divine_justice_expert>",
+      "       Applied RESIST MAGIC -200.0",
+      "       Applied RESIST SHOCK -200.0",
+      "       Applied RESIST POISON -200.0",
+      "       Resulting multipliers: MAGIC  x4.00, SHOCK  x4.00, POISON x4.00",
+      "       You swing <MELEE$aetherius>",
+      "01.950 You hit with <MELEE$aetherius>",
+      "       Applied SHOCK DMG 48.0 for 1s",
+      "       Applied DRAIN LIFE 66.7",
+      "       The bear hp drained [263.3/330]",
+      "       Applied RESIST MAGIC -400.0",
+      "       Applied RESIST SHOCK -400.0",
+      "       Resulting multipliers: MAGIC  x8.00, SHOCK  x8.00",
+      "02.950 Expired <MELEE$aetherius> SHOCK DMG",
+      "       Expired <MELEE$aetherius> DRAIN LIFE",
+      "       The bear hp restored [282.0/330]",
+      "       Expired <MELEE$aetherius> RESIST MAGIC",
+      "       Expired <MELEE$aetherius> RESIST SHOCK",
+      "06.410 Expired <SPELL$divine_justice_apprentice> RESIST MAGIC",
+      "       Expired <SPELL$divine_justice_apprentice> RESIST SHOCK",
+      "       Expired <SPELL$divine_justice_apprentice> RESIST POISON",
+      "07.550 Expired <SPELL$divine_justice_expert> RESIST MAGIC",
+      "       Expired <SPELL$divine_justice_expert> RESIST SHOCK",
+      "       Expired <SPELL$divine_justice_expert> RESIST POISON",
+      "The bear has survived 48.0 damage (282.0 hp left).",
+      "       Damage by effect:",
+      "           <MELEE$aetherius> SHOCK DMG: 48.00",
+      "-----"
+    );
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);
