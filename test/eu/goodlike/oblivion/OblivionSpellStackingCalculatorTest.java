@@ -538,7 +538,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "       Expired <SPELL$divine_justice_expert> RESIST POISON",
       "The skeleton champion took a total of 524.0 damage (174.0 overkill).",
       "       Overkill by effect:",
-      "           <MELEE$aetherius> SHOCK DMG: 173.99"
+      "           <MELEE$aetherius> SHOCK DMG: 174.00"
     );
   }
 
@@ -604,6 +604,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "       Applied DRAIN LIFE 100.0",
       "02.550 Expired <SPELL$2> DRAIN LIFE",
       "The enemy took a total of 100.0 damage (90.0 overkill).",
+      "       Overkill by effect:",
+      "           <SPELL$1> DRAIN LIFE: 90.00",
       "-----"
     );
   }
@@ -628,6 +630,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "       Expired (1)<POISON$2> DRAIN LIFE",
       "The enemy took a total of 101.0 damage (91.0 overkill).",
       "       Overkill by effect:",
+      "           <BOW$1> DRAIN LIFE: 90.00",
       "           <BOW$1> MAGIC DMG: 1.00",
       "-----"
     );
@@ -648,6 +651,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "           <BOW$1> DRAIN LIFE: 100.00",
       "02.581 Expired <BOW$1> DRAIN LIFE",
       "The enemy took a total of 100.0 damage (90.0 overkill).",
+      "       Overkill by effect:",
+      "           <BOW$1> DRAIN LIFE: 90.00",
       "-----"
     );
   }
@@ -691,6 +696,39 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "           (3)<POISON$1> MAGIC DMG: 1.00",
       "           (1)<POISON$2> MAGIC DMG: 2.00",
       "           (2)<POISON$2> MAGIC DMG: 2.00"
+    );
+  }
+
+  @Test
+  void youWouldntPoisonARat() {
+    sendInput("difficulty 100", "enemy 4 :rat", "$aetherius +p 7s27s", "go");
+
+    assertOutputSegment(
+      "Difficulty slider has been set to <100.0>",
+      "You face the rat (4 hp)",
+      "[#1] Next hit: <MELEE$aetherius> {SHOCK DMG 18 for 1s + DRAIN LIFE 100 for 1s + RESIST MAGIC -100 for 1s + RESIST SHOCK -100 for 1s} + <POISON$1> {SHOCK DMG 7 for 27s}",
+      "00.000 You begin equipped with <MELEE$aetherius>",
+      "       You swing <MELEE$aetherius> + <POISON$1>",
+      "00.400 You hit with <MELEE$aetherius> + <POISON$1>",
+      "       Applied <MELEE$aetherius> SHOCK DMG 3.0 for 1s",
+      "       Applied DRAIN LIFE 16.7",
+      "       The rat has died. Breakdown:",
+      "           <MELEE$aetherius> DRAIN LIFE: 16.67",
+      "       Applied RESIST MAGIC -100.0",
+      "       Applied RESIST SHOCK -100.0",
+      "       Applied (1)<POISON$1> SHOCK DMG 7.0 for 27s",
+      "       Resulting multipliers: MAGIC  x2.00, SHOCK  x2.00",
+      "01.400 Expired <MELEE$aetherius> SHOCK DMG",
+      "       Expired <MELEE$aetherius> DRAIN LIFE",
+      "       Expired <MELEE$aetherius> RESIST MAGIC",
+      "       Expired <MELEE$aetherius> RESIST SHOCK",
+      "27.400 Expired (1)<POISON$1> SHOCK DMG",
+      "The rat took a total of 208.7 damage (204.7 overkill).",
+      "       Overkill by effect:",
+      "           <MELEE$aetherius> DRAIN LIFE: 12.67",
+      "           <MELEE$aetherius> SHOCK DMG: 3.00",
+      "           (1)<POISON$1> SHOCK DMG: 189.00",
+      "-----"
     );
   }
 

@@ -224,7 +224,7 @@ public final class Arena {
     @Override
     public void damage(double dmg) {
       actual.damage(dmg);
-      totalDamage.merge(id, dmg, Double::sum);
+      damageTotals.merge(id, dmg, Double::sum);
       checkPossibleDeath();
     }
 
@@ -234,13 +234,13 @@ public final class Arena {
       if (isTicking) {
         if (!isDeathConfirmed) {
           writeEnemyHp("restored");
-          totalDamage.remove(id);
+          damageTotals.remove(id);
         }
       }
       else {
         combatLog(newEffect(hp));
         if (!isDeathConfirmed) {
-          totalDamage.put(id, hp);
+          damageTotals.put(id, hp);
         }
         checkPossibleDeath();
         if (!isDeathConfirmed) {
@@ -295,7 +295,7 @@ public final class Arena {
       this.nextDump = 1d / DUMPS;
 
       this.liveDamage = new LinkedHashMap<>();
-      this.totalDamage = new LinkedHashMap<>();
+      this.damageTotals = new LinkedHashMap<>();
 
       this.modifiedFactors = new ArrayList<>();
     }
@@ -318,7 +318,7 @@ public final class Arena {
     private double nextDump;
 
     private final Map<Effect.Id, Double> liveDamage;
-    private final Map<Effect.Id, Double> totalDamage;
+    private final Map<Effect.Id, Double> damageTotals;
 
     private final List<Factor> modifiedFactors;
 
@@ -332,6 +332,15 @@ public final class Arena {
         isDeathConfirmed = true;
         combatLog("The " + label + " has died. Breakdown:");
         writeBreakdown();
+        switchTotalsToOverkillMode();
+      }
+    }
+
+    private void switchTotalsToOverkillMode() {
+      damageTotals.clear();
+      double overkill = enemy.overkill();
+      if (overkill >= BASICALLY_NO_OVERKILL) {
+        damageTotals.merge(id, overkill, Double::sum);
       }
     }
 
@@ -362,20 +371,21 @@ public final class Arena {
     }
 
     private void writeFinalBreakdown(String desc) {
-      if (!totalDamage.isEmpty()) {
+      if (!damageTotals.isEmpty()) {
         combatLog(desc + " by effect:");
       }
       writeBreakdown();
     }
 
     private void writeBreakdown() {
-      totalDamage.forEach(this::writeEffect);
-      totalDamage.clear();
+      damageTotals.forEach(this::writeEffect);
     }
 
     private void writeEffect(Effect.Id id, double d) {
       combatLog(String.format("    %s: %.2f", id, d));
     }
+
+    private static final double BASICALLY_NO_OVERKILL = 0.005;
   }
 
 }
