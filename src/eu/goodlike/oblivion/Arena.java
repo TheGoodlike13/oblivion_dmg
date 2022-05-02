@@ -2,6 +2,7 @@ package eu.goodlike.oblivion;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Streams;
 import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.Enemy;
@@ -13,9 +14,11 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static eu.goodlike.oblivion.Global.Settings.TICK;
@@ -134,8 +137,8 @@ public final class Arena {
       .ifPresent(play::setInitialWeapon);
   }
 
-  private Stream<String> factorMods(List<Factor> factors, boolean includeAll) {
-    return factors.stream()
+  private Stream<String> factorMods(Iterable<Factor> factors, boolean includeAll) {
+    return Streams.stream(factors)
       .map(factor -> factorMod(factor, includeAll))
       .filter(StringUtils::isNotBlank);
   }
@@ -232,7 +235,7 @@ public final class Arena {
       this.id = null;
       this.expired = null;
 
-      this.modifiedFactors = new ArrayList<>();
+      this.modifiedFactors = new LinkedHashSet<>();
       this.damageTotals = new LinkedHashMap<>();
       this.wastedEffects = ArrayListMultimap.create();
 
@@ -254,7 +257,7 @@ public final class Arena {
 
     private boolean hasDeathBeenBrokenDown;
 
-    private final List<Factor> modifiedFactors;
+    private final Set<Factor> modifiedFactors;
     private final Map<Effect.Id, Double> damageTotals;
     private final ListMultimap<Effect.Id, Effect> wastedEffects;
 
