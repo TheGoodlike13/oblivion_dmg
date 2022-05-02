@@ -96,18 +96,6 @@ public final class Global {
     public static double TICK = 0.001;
 
     /**
-     * Amount of damage dumps per second.
-     * Must be a positive integer.
-     * <p/>
-     * When running the calculation, it can be a little hard to get perspective on damage taken.
-     * This also depends on how fast does the enemy die, how many effects are there, etc.
-     * On the other hand, spamming damage info every tick is too much.
-     * This allows you to configure exactly how often do you want to see them.
-     * Tests are tuned to the default value of 1:4, or every 250 ticks, or every 250ms.
-     */
-    public static int DUMPS = 4;
-
-    /**
      * Config files containing prepared entities which can be parsed and stored into caches for future use.
      */
     public static String PREPARED_ENEMIES = "prepared_enemies.txt";
@@ -144,7 +132,6 @@ public final class Global {
       LEVEL = StructureException.natOrThrow(properties.getProperty("level"), "player level");
       DIFFICULTY = StructureException.intOrThrow(properties.getProperty("difficulty"), "difficulty setting");
       TICK = StructureException.positiveOrThrow(properties.getProperty("tick"), "tick setting");
-      DUMPS = StructureException.natOrThrow(properties.getProperty("dumps"), "dumps per second");
       PREPARED_ENEMIES = properties.getProperty("prepared.enemies");
       PREPARED_ITEMS = properties.getProperty("prepared.items");
       PREPARED_SPELLS = properties.getProperty("prepared.spells");

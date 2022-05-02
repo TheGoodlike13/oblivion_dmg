@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static eu.goodlike.oblivion.Global.Settings.DUMPS;
 import static eu.goodlike.oblivion.Global.Settings.TICK;
 import static java.util.stream.Collectors.joining;
 
@@ -190,11 +189,6 @@ public final class Arena {
     @Override
     public void tick() {
       this.isTicking = true;
-
-      if (duration >= nextDump) {
-        nextDump += 1d / DUMPS;
-        dumpNextChunkOfDamage();
-      }
       duration += TICK;
     }
 
@@ -298,9 +292,7 @@ public final class Arena {
 
       this.duration = 0;
       this.lastLog = -1;
-      this.nextDump = 1d / DUMPS;
 
-      this.liveDamage = new LinkedHashMap<>();
       this.damageTotals = new LinkedHashMap<>();
 
       this.modifiedFactors = new ArrayList<>();
@@ -321,17 +313,10 @@ public final class Arena {
 
     private double duration;
     private double lastLog;
-    private double nextDump;
 
-    private final Map<Effect.Id, Double> liveDamage;
     private final Map<Effect.Id, Double> damageTotals;
 
     private final List<Factor> modifiedFactors;
-
-    private void dumpNextChunkOfDamage() {
-      liveDamage.forEach((id, d) -> combatLog(String.format("Took %s %.2f", id, d)));
-      liveDamage.clear();
-    }
 
     private void breakdownPossibleDeath() {
       if (!hasDeathBeenBrokenDown && !enemy.isAlive()) {
