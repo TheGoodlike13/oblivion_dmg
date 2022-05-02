@@ -1,6 +1,7 @@
 package eu.goodlike.oblivion.command;
 
 import eu.goodlike.oblivion.NamedValue;
+import eu.goodlike.oblivion.Write;
 import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.StructureException;
@@ -26,7 +27,7 @@ public final class SetHit extends BaseCommand {
   @Override
   protected void performTask() {
     parseCarriers();
-    Hit hit = new Hit(carriers);
+    Hit hit = hitFromParsedCarriers();
     THE_ARENA.addHit(HITS.put(hit));
   }
 
@@ -72,6 +73,20 @@ public final class SetHit extends BaseCommand {
     }
 
     start = -1;
+  }
+
+  private Hit hitFromParsedCarriers() {
+    try {
+      return new Hit(carriers);
+    }
+    catch (StructureException e) {
+      carriers.forEach(this::writeForReference);
+      throw e;
+    }
+  }
+
+  private void writeForReference(Carrier carrier) {
+    Write.line(carrier.toString());
   }
 
 }

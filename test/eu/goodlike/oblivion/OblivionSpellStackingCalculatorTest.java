@@ -462,8 +462,15 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("+m 1m +s 1m", "$1 +st 1m", "$1 +p 1m :1m $1m");
 
     assertOutput(
+      "<MELEE$1> {MAGIC DMG 1 for 1s}",
+      "<SPELL$2> {MAGIC DMG 1 for 1s}",
       "Bad input: Invalid hit: MELEE + SPELL; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, ARROW + BOW, ARROW + POISON + BOW]",
+      "<MELEE$1> {MAGIC DMG 1 for 1s}",
+      "<STAFF$3> {MAGIC DMG 1 for 1s}",
       "Bad input: Invalid hit: MELEE + STAFF; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, ARROW + BOW, ARROW + POISON + BOW]",
+      "<MELEE$1> {MAGIC DMG 1 for 1s}",
+      "<POISON$1m> {MAGIC DMG 1 for 1s}",
+      "<POISON$1m> {MAGIC DMG 1 for 1s}",
       "Bad input: Invalid hit: MELEE + POISON + POISON; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, ARROW + BOW, ARROW + POISON + BOW]"
     );
   }
