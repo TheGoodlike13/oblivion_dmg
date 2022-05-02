@@ -64,6 +64,11 @@ tasks.dependencyUpdates {
     }
 }
 
+// as much as I like new stuff, my IDE has not been updated since 2018 and doesn't handle new JAVA well
+// I will not update my IDE because I dislike some changes that were made in future versions
+// it is far easier to deal with the older version of the language than newer version of the IDE...
+sourceCompatibility = JavaVersion.VERSION_1_8
+
 repositories {
     mavenCentral()
 }
