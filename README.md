@@ -74,5 +74,12 @@ All items and spells must have a unique name.
 This allows them to be uniquely referenced without issue when planning attacks.
 This limitation exists at the parser level, so the code itself permits this.
 
+Player level only determines HP of the enemy.
+In-game it might prevent certain enemies from spawning.
+This application does not care about that.
+It does place a lower bound on enemy HP as if you've met them at the nearest appropriate level.
+This assumes that the enemy data is entered properly or prepared data is used.
+The user is free to create whatever funky enemy they want.
+
 Calculations are done using double floating point precision.
 The resulting errors are trivial and unlikely to cause issues, but do keep it in mind.
