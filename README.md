@@ -57,22 +57,22 @@ This includes absorption and reflection.
 These sort of effects dip too far into simulation territory.
 I'm more interested in calculations :)
 
-Calculations are done using double floating point precision.
-The resulting errors are trivial and unlikely to cause issues, but do keep it in mind.
+Healing is not implemented.
+I feel like it would add to the complexity of the application needlessly.
+Passive effects like troll regeneration should be negligible in most scenarios.
+I'd expect them to be on par with physical damage, which is also ignored.
 
-For simplicity, resist & weakness of a factor are treated as the same type of effect.
+Permanent damage effects are ignored.
+They are simply not applicable to any real combat scenario.
+Similar to healing, it would only add to the complexity of the code.
+
+Resist and weakness are treated as the same type of effect.
 As a result, items or spells cannot have both.
 It could be possible to make such a spell in-game, but it would be of no practical use.
 
-The core logic allows multiple spells with the same name that stack.
-This is not possible in-game, as spell names have to be unique (albeit not case sensitive).
-However, the parsing logic ensures all spells and other items will have a unique reference.
-This prevents creating two weapons with the same name, which is possible in-game.
-For the record, such weapon effects would stack in-game.
+All items and spells must have a unique name.
+This allows them to be uniquely referenced without issue when planning attacks.
+This limitation exists at the parser level, so the code itself permits this.
 
-Targets can have permanent effects to simulate innate weakness or resist due to
-race or equipment.
-Drain works too, although all it does is effectively reduce max hp from the start.
-Damage effects are ignored.
-While possible, they are not applicable to combat situations, and would only
-add to code complexity.
+Calculations are done using double floating point precision.
+The resulting errors are trivial and unlikely to cause issues, but do keep it in mind.
