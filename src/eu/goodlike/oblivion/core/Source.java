@@ -29,7 +29,7 @@ public interface Source extends HitPattern, Comparable<Source> {
   Source ARROW = new Equipment("ARROW");
   Poison POISON = Poison.getInstance();
   Source SPELL = new Magic("SPELL");
-  Source STAFF = new Equipment("STAFF", "ready", EMIT, SWAP_STAFF, false);
+  Source STAFF = new Equipment("STAFF", "invoke", EMIT, SWAP_STAFF, false);
 
   List<Source> ALL_IN_ORDER = ImmutableList.of(ARROW, MELEE, POISON, BOW, SPELL, STAFF);
 
