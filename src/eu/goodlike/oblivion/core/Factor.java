@@ -35,4 +35,6 @@ public interface Factor {
    */
   EffectText resist(int pc);
 
+  Effect.Type resist();
+
 }

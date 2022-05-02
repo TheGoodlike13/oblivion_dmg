@@ -27,7 +27,7 @@ public interface Source extends HitPattern, Comparable<Source> {
   Source MELEE = new Equipment("MELEE", "swing", STRIKE, SWAP_MELEE, true);
   Source BOW = new Equipment("BOW", "aim", SHOOT, SWAP_BOW, true);
   Source ARROW = new Equipment("ARROW");
-  Source POISON = Poison.getInstance();
+  Poison POISON = Poison.getInstance();
   Source SPELL = new Magic("SPELL");
   Source STAFF = new Equipment("STAFF", "ready", EMIT, SWAP_STAFF, false);
 

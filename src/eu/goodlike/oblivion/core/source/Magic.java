@@ -1,6 +1,7 @@
 package eu.goodlike.oblivion.core.source;
 
 import eu.goodlike.oblivion.core.Carrier;
+import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Element;
 import eu.goodlike.oblivion.core.Method;
@@ -14,7 +15,11 @@ import static eu.goodlike.oblivion.Global.Settings.CAST;
 public final class Magic extends Element implements Method, Source {
 
   public EffectText drain(int hp) {
-    return new EffectText(this, Drain.TYPE, hp);
+    return new EffectText(this, drain(), hp);
+  }
+
+  public Effect.Type drain() {
+    return Drain.TYPE;
   }
 
   @Override

@@ -14,6 +14,11 @@ public class Element implements Factor {
     return new EffectText(MAGIC, resistElement, pc);
   }
 
+  @Override
+  public Effect.Type resist() {
+    return resistElement;
+  }
+
   /**
    * @return effect which does given damage of this element per second
    * @throws StructureException if damage is negative
@@ -21,6 +26,10 @@ public class Element implements Factor {
   public EffectText damage(int dmg) {
     StructureException.throwOnNegativeDamage(dmg);
     return new EffectText(this, damageElement, dmg);
+  }
+
+  public Effect.Type damage() {
+    return damageElement;
   }
 
   public Element(String elementName) {

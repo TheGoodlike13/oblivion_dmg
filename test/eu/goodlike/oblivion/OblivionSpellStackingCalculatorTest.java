@@ -610,21 +610,25 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void overDrainHit() {
-    sendInput("enemy 10", "+b 100d +p 100d", "go");
+    sendInput("enemy 10", "+b 100d 1m +p 100d", "go");
 
     assertOutputSegment(
       "You face the enemy (10 hp)",
-      "[#1] Next hit: <ARROW> {NO EFFECTS} + <BOW$1> {DRAIN LIFE 100 for 1s} + <POISON$2> {DRAIN LIFE 100 for 1s}",
+      "[#1] Next hit: <ARROW> {NO EFFECTS} + <BOW$1> {DRAIN LIFE 100 for 1s + MAGIC DMG 1 for 1s} + <POISON$2> {DRAIN LIFE 100 for 1s}",
       "00.000 You begin equipped with <BOW$1>",
       "       You aim <ARROW> + <BOW$1> + <POISON$2>",
       "01.581 You hit with <ARROW> + <BOW$1> + <POISON$2>",
       "       Applied <BOW$1> DRAIN LIFE 100.0",
       "       The enemy has died. Breakdown:",
       "           <BOW$1> DRAIN LIFE: 100.00",
+      "       Applied MAGIC DMG 1.0 for 1s",
       "       Applied (1)<POISON$2> DRAIN LIFE 100.0",
       "02.581 Expired <BOW$1> DRAIN LIFE",
+      "       Expired <BOW$1> MAGIC DMG",
       "       Expired (1)<POISON$2> DRAIN LIFE",
-      "The enemy took a total of 100.0 damage (90.0 overkill).",
+      "The enemy took a total of 101.0 damage (91.0 overkill).",
+      "       Overkill by effect:",
+      "           <BOW$1> MAGIC DMG: 1.00",
       "-----"
     );
   }

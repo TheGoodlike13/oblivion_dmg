@@ -344,7 +344,7 @@ public final class Arena {
     }
 
     private Object newEffectId() {
-      return lastHit.hasMultipleChunks() ? id : id.getType();
+      return lastHit.count(id.getType()) > 1 ? id : id.getType();
     }
 
     private void combatLog(String text) {

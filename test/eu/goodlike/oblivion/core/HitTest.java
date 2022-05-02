@@ -187,26 +187,15 @@ class HitTest {
   }
 
   @Test
-  void chunky() {
-    Carrier melee = MELEE.create(MAGIC.damage(10));
-    Carrier melee2Effects = MELEE.create(MAGIC.damage(10), MAGIC.weakness(100));
-    Carrier meleeExplicitEmpty = MELEE.create();
-    Carrier poison = POISON.create(MAGIC.damage(10));
+  void effectCount() {
+    Carrier melee = MELEE.create(MAGIC.damage(10), MAGIC.weakness(100));
+    Carrier poison = POISON.create(MAGIC.damage(20));
+    Hit hit = new Hit(melee, poison);
 
-    Hit oneChunk = new Hit(melee);
-    assertThat(oneChunk.hasMultipleChunks()).isFalse();
-
-    Hit stillOneChunk = new Hit(melee2Effects);
-    assertThat(stillOneChunk.hasMultipleChunks()).isFalse();
-
-    Hit twoChunks = new Hit(melee, poison);
-    assertThat(twoChunks.hasMultipleChunks()).isTrue();
-
-    Hit oneChunkDueToImplicit = new Hit(poison);
-    assertThat(oneChunkDueToImplicit.hasMultipleChunks()).isFalse();
-
-    Hit twoChunksDueToExplicit = new Hit(meleeExplicitEmpty, poison);
-    assertThat(twoChunksDueToExplicit.hasMultipleChunks()).isTrue();
+    assertThat(hit.count(MAGIC.drain())).isEqualTo(0);
+    assertThat(hit.count(MAGIC.resist())).isEqualTo(1);
+    assertThat(hit.count(MAGIC.damage())).isEqualTo(2);
+    assertThat(hit.count(POISON.resist())).isEqualTo(0);
   }
 
   private void assertHit(Source... sources) {

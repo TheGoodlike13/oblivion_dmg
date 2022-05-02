@@ -18,6 +18,11 @@ public final class Poison implements Method, Source {
   }
 
   @Override
+  public Effect.Type resist() {
+    return resistPoison;
+  }
+
+  @Override
   public Carrier withNoEffect() {
     return NAME_POISON;
   }

@@ -1,6 +1,7 @@
 package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Streams;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,8 +49,12 @@ public final class Hit implements Iterable<Carrier>, HitPattern {
       && getWeapon().equals(last.getWeapon());
   }
 
-  public boolean hasMultipleChunks() {
-    return carriers.stream().filter(this::isExplicit).count() > 1;
+  public long count(Effect.Type type) {
+    return Streams.stream(this)
+      .flatMap(Streams::stream)
+      .map(EffectText::getType)
+      .filter(type::equals)
+      .count();
   }
 
   @Override
