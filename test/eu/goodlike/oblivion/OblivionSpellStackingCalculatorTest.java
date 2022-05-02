@@ -731,6 +731,31 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     );
   }
 
+  @Test
+  void whyWontYouDie() {
+    sendInput("enemy 1000", "+p 8m30s 9f37s 9s37s", "go");
+
+    assertOutputSegment(
+      "You face the enemy (1000 hp)",
+      "[#1] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 8 for 30s + FIRE DMG 9 for 37s + SHOCK DMG 9 for 37s}",
+      "00.000 You begin equipped with <MELEE>",
+      "       You swing <MELEE> + <POISON$1>",
+      "00.400 You hit with <MELEE> + <POISON$1>",
+      "       Applied MAGIC DMG 8.0 for 30s",
+      "       Applied FIRE DMG 9.0 for 37s",
+      "       Applied SHOCK DMG 9.0 for 37s",
+      "30.400 Expired (1)<POISON$1> MAGIC DMG",
+      "37.400 Expired (2)<POISON$1> FIRE DMG",
+      "       Expired (3)<POISON$1> SHOCK DMG",
+      "The enemy has survived 906.0 damage (94.0 hp left).",
+      "       Damage by effect:",
+      "           (1)<POISON$1> MAGIC DMG: 240.00",
+      "           (2)<POISON$1> FIRE DMG: 333.00",
+      "           (3)<POISON$1> SHOCK DMG: 333.00",
+      "-----"
+    );
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);
