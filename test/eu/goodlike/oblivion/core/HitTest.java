@@ -169,6 +169,7 @@ class HitTest {
   void isNotCombo() {
     for (Source source : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
       assertThat(hit(source).isCombo(null)).isFalse();
+      assertThat(hit(source).isCombo(new Hit(source.create()))).isFalse();
       assertThat(hit(source).isCombo(hit(SPELL))).isFalse();
       assertThat(hit(SPELL).isCombo(hit(source))).isFalse();
     }
