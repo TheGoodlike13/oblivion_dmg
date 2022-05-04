@@ -2,53 +2,53 @@ package eu.goodlike.oblivion.command;
 
 import eu.goodlike.oblivion.NamedValue;
 import eu.goodlike.oblivion.Write;
-import eu.goodlike.oblivion.core.Carrier;
+import eu.goodlike.oblivion.core.Effector;
 import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.StructureException;
-import eu.goodlike.oblivion.parse.ParseCarrier;
+import eu.goodlike.oblivion.parse.ParseEffector;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static eu.goodlike.oblivion.Global.CARRIERS;
+import static eu.goodlike.oblivion.Global.EFFECTORS;
 import static eu.goodlike.oblivion.Global.HITS;
 import static eu.goodlike.oblivion.Global.THE_ARENA;
 
 /**
  * Sets the next hit for the next calculation.
- * All the inputs are parsed as a list of carriers.
- * Args that start with '$' are treated as references to carriers in cache.
- * Args that start with '+' indicate a new carrier.
- * All args following that will be parsed as a carrier until the next one is indicated.
- * For details, see {@link ParseCarrier}.
+ * All the inputs are parsed as a list of effectors.
+ * Args that start with '$' are treated as references to effectors in cache.
+ * Args that start with '+' indicate a new effector.
+ * All args following that will be parsed as a effector until the next one is indicated.
+ * For details, see {@link ParseEffector}.
  */
 public final class SetHit extends BaseCommand {
 
   @Override
   protected void performTask() {
-    parseCarriers();
-    Hit hit = hitFromParsedCarriers();
+    parseEffectors();
+    Hit hit = hitFromParsedEffectors();
     THE_ARENA.addHit(HITS.put(hit));
   }
 
   private int cursor = -1;
   private int start = -1;
-  private final List<Carrier> carriers = new ArrayList<>();
+  private final List<Effector> effectors = new ArrayList<>();
 
-  private void parseCarriers() {
+  private void parseEffectors() {
     while (++cursor < inputs.length) {
       identify(inputs[cursor]);
     }
-    parseNextCarrierIfAny();
+    parseNextEffectorIfAny();
   }
 
   private void identify(String input) {
     if (input.startsWith("$")) {
-      parseNextCarrierIfAny();
+      parseNextEffectorIfAny();
       parseNextReference(input.substring(1));
     }
     else if (input.startsWith("+")) {
-      parseNextCarrierIfAny();
+      parseNextEffectorIfAny();
       start = cursor;
     }
     else {
@@ -57,7 +57,7 @@ public final class SetHit extends BaseCommand {
   }
 
   private void parseNextReference(String ref) {
-    carriers.add(CARRIERS.getCached(ref).getValue());
+    effectors.add(EFFECTORS.getCached(ref).getValue());
   }
 
   private void ensureNoDangleBerries(String input) {
@@ -66,27 +66,27 @@ public final class SetHit extends BaseCommand {
     }
   }
 
-  private void parseNextCarrierIfAny() {
+  private void parseNextEffectorIfAny() {
     if (start >= 0) {
-      NamedValue<Carrier> carrier = new ParseCarrier(inputs(start, cursor)).thenCache();
-      carriers.add(carrier.getValue());
+      NamedValue<Effector> effector = new ParseEffector(inputs(start, cursor)).thenCache();
+      effectors.add(effector.getValue());
     }
 
     start = -1;
   }
 
-  private Hit hitFromParsedCarriers() {
+  private Hit hitFromParsedEffectors() {
     try {
-      return new Hit(carriers);
+      return new Hit(effectors);
     }
     catch (StructureException e) {
-      carriers.forEach(this::writeForReference);
+      effectors.forEach(this::writeForReference);
       throw e;
     }
   }
 
-  private void writeForReference(Carrier carrier) {
-    Write.line(carrier.toString());
+  private void writeForReference(Effector effector) {
+    Write.line(effector.toString());
   }
 
 }

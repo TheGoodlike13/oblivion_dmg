@@ -3,8 +3,8 @@ package eu.goodlike.oblivion;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Streams;
-import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Effect;
+import eu.goodlike.oblivion.core.Effector;
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Factor;
 import eu.goodlike.oblivion.core.Hit;
@@ -151,7 +151,7 @@ public final class Arena {
   }
 
   private final class PlayByPlay implements Enemy.Observer {
-    public void setInitialWeapon(Carrier initialWeapon) {
+    public void setInitialWeapon(Effector initialWeapon) {
       equippedWeapon = initialWeapon;
       play.combatLog("You begin equipped with " + initialWeapon.getLabel());
     }
@@ -245,7 +245,7 @@ public final class Arena {
       this.lastLog = -1;
     }
 
-    private Carrier equippedWeapon;
+    private Effector equippedWeapon;
     private boolean needsSwap;
 
     private Hit lastHit;

@@ -16,26 +16,26 @@ import static eu.goodlike.oblivion.core.Source.POISON;
 import static java.util.stream.Collectors.joining;
 
 /**
- * Combination of carriers which apply their effects at once upon a hit.
+ * Combination of effectors which apply their effects at once upon a hit.
  * For example: enchanted bow which fires an enchanted arrow with poison.
  * All of them apply their effects at once (i.e. cannot influence each other for this hit).
- * This class ensures the combination of carriers is faithful to the game.
+ * This class ensures the combination of effectors is faithful to the game.
  * <p/>
- * The order of carriers in this hit is consistent with their natural ordering.
+ * The order of effectors in this hit is consistent with their natural ordering.
  */
-public final class Hit implements Iterable<Carrier>, HitPattern {
+public final class Hit implements Iterable<Effector>, HitPattern {
 
   public Source getDeliveryMechanism() {
-    return getWeapon().orElse(carriers.get(0)).getSource();
+    return getWeapon().orElse(effectors.get(0)).getSource();
   }
 
-  public Optional<Carrier> getWeapon() {
-    return carriers.stream()
+  public Optional<Effector> getWeapon() {
+    return effectors.stream()
       .filter(c -> c.getSource().isWeapon())
       .findFirst();
   }
 
-  public Optional<Carrier> requiresSwap(Carrier oldWeapon) {
+  public Optional<Effector> requiresSwap(Effector oldWeapon) {
     return getWeapon().filter(newWeapon -> !newWeapon.equals(oldWeapon));
   }
 
@@ -58,8 +58,8 @@ public final class Hit implements Iterable<Carrier>, HitPattern {
   }
 
   @Override
-  public Iterator<Carrier> iterator() {
-    return carriers.iterator();
+  public Iterator<Effector> iterator() {
+    return effectors.iterator();
   }
 
   @Override
@@ -72,31 +72,31 @@ public final class Hit implements Iterable<Carrier>, HitPattern {
     return getDeliveryMechanism().cooldown(combo);
   }
 
-  public Hit(Carrier... carriers) {
-    this(Arrays.asList(carriers));
+  public Hit(Effector... effectors) {
+    this(Arrays.asList(effectors));
   }
 
   /**
-   * Creates a new hit from given carriers.
+   * Creates a new hit from given effectors.
    * They are sorted according to their natural ordering.
    * <p/>
-   * In some cases, the carriers will be supplemented with implicit equipment with no enchants.
+   * In some cases, the effectors will be supplemented with implicit equipment with no enchants.
    * For example: if there is an arrow, a bow will be added if missing.
    * This removes the need to specify them explicitly.
    * Poison prefers a melee weapon if it cannot be decided otherwise.
    *
-   * @throws StructureException if the hit resulting from given carriers is completely invalid
+   * @throws StructureException if the hit resulting from given effectors is completely invalid
    */
-  public Hit(List<Carrier> carriers) {
-    this.carriers = ensureOrderAndEquipment(carriers);
+  public Hit(List<Effector> effectors) {
+    this.effectors = ensureOrderAndEquipment(effectors);
 
     StructureException.throwOnInvalidHit(hitTrace());
   }
 
-  private final List<Carrier> carriers;
+  private final List<Effector> effectors;
 
-  private List<Carrier> ensureOrderAndEquipment(List<Carrier> carriers) {
-    List<Carrier> mutableCopy = new ArrayList<>(carriers);
+  private List<Effector> ensureOrderAndEquipment(List<Effector> effectors) {
+    List<Effector> mutableCopy = new ArrayList<>(effectors);
 
     if (BOW.any(mutableCopy)) {
       ensure(ARROW, mutableCopy);
@@ -111,9 +111,9 @@ public final class Hit implements Iterable<Carrier>, HitPattern {
     return ImmutableList.sortedCopyOf(mutableCopy);
   }
 
-  private void ensure(Source equipment, List<Carrier> carriers) {
-    if (!equipment.any(carriers)) {
-      carriers.add(equipment.withNoEffect());
+  private void ensure(Source equipment, List<Effector> effectors) {
+    if (!equipment.any(effectors)) {
+      effectors.add(equipment.withNoEffect());
     }
   }
 
@@ -123,27 +123,27 @@ public final class Hit implements Iterable<Carrier>, HitPattern {
 
   private boolean usesMysticalWeapon() {
     return getWeapon()
-      .map(Carrier::getSource)
+      .map(Effector::getSource)
       .filter(source -> !source.isPhysical())
       .isPresent();
   }
 
-  private boolean isExplicit(Carrier carrier) {
-    Carrier implicit = carrier.getSource().withNoEffect();
-    return !carrier.equals(implicit);
+  private boolean isExplicit(Effector effector) {
+    Effector implicit = effector.getSource().withNoEffect();
+    return !effector.equals(implicit);
   }
 
   private String hitTrace() {
-    return carriers.stream()
-      .map(Carrier::getSource)
+    return effectors.stream()
+      .map(Effector::getSource)
       .map(Source::toString)
       .collect(joining(" + "));
   }
 
   @Override
   public String toString() {
-    return carriers.stream()
-      .map(Carrier::toString)
+    return effectors.stream()
+      .map(Effector::toString)
       .collect(joining(" + "));
   }
 
@@ -152,8 +152,8 @@ public final class Hit implements Iterable<Carrier>, HitPattern {
   }
 
   public String toLabelString() {
-    return carriers.stream()
-      .map(Carrier::getLabel)
+    return effectors.stream()
+      .map(Effector::getLabel)
       .collect(joining(" + "));
   }
 

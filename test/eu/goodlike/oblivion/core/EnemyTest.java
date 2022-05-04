@@ -21,13 +21,13 @@ import static org.assertj.core.api.Assertions.within;
 
 class EnemyTest {
 
-  private static final Carrier FIRE_WEAK_1 = SPELL.create(FIRE.weakness(100), MAGIC.weakness(100));
-  private static final Carrier FIRE_WEAK_2 = FIRE_WEAK_1.copy();
+  private static final Effector FIRE_WEAK_1 = SPELL.create(FIRE.weakness(100), MAGIC.weakness(100));
+  private static final Effector FIRE_WEAK_2 = FIRE_WEAK_1.copy();
 
-  private static final Carrier POISON_WEAK_1 = SPELL.create(POISON.weakness(100), MAGIC.weakness(100));
-  private static final Carrier POISON_WEAK_2 = POISON_WEAK_1.copy();
+  private static final Effector POISON_WEAK_1 = SPELL.create(POISON.weakness(100), MAGIC.weakness(100));
+  private static final Effector POISON_WEAK_2 = POISON_WEAK_1.copy();
 
-  private static final Carrier JOURNEYMAN = POISON.create(MAGIC.damage(4).forSecs(15));
+  private static final Effector JOURNEYMAN = POISON.create(MAGIC.damage(4).forSecs(15));
 
   private Enemy target;
 
@@ -186,7 +186,7 @@ class EnemyTest {
 
   @Test
   void sameSpellModifierAffectsItself() {
-    Carrier weaknessToMagic100 = SPELL.create(MAGIC.weakness(100));
+    Effector weaknessToMagic100 = SPELL.create(MAGIC.weakness(100));
 
     target.hit(weaknessToMagic100);  // +100 (replaced)
     target.hit(weaknessToMagic100);  // +200
@@ -198,7 +198,7 @@ class EnemyTest {
 
   @Test
   void sameSpellDamageCompleteOverlap() {
-    Carrier dmgMagic10 = SPELL.create(MAGIC.damage(10));
+    Effector dmgMagic10 = SPELL.create(MAGIC.damage(10));
 
     target.hit(dmgMagic10);
     target.hit(dmgMagic10);
@@ -208,7 +208,7 @@ class EnemyTest {
 
   @Test
   void sameSpellDamagePartialOverlap() {
-    Carrier dmgMagic10 = SPELL.create(MAGIC.damage(10));
+    Effector dmgMagic10 = SPELL.create(MAGIC.damage(10));
 
     target.hit(dmgMagic10);
     target.tick(0.5);
@@ -226,7 +226,7 @@ class EnemyTest {
 
   @Test
   void wastedMagicWeaknessEffectDueToInefficientOrder() {
-    Carrier weaknessBadOrder = SPELL.create(MAGIC.weakness(100), FIRE.weakness(100));
+    Effector weaknessBadOrder = SPELL.create(MAGIC.weakness(100), FIRE.weakness(100));
 
     target.hit(weaknessBadOrder);  // +100, +100 (replaced)
     target.hit(weaknessBadOrder);  // +200, +100
@@ -238,7 +238,7 @@ class EnemyTest {
 
   @Test
   void efficientOrder() {
-    Carrier weaknessGoodOrder = SPELL.create(FIRE.weakness(100), MAGIC.weakness(100));
+    Effector weaknessGoodOrder = SPELL.create(FIRE.weakness(100), MAGIC.weakness(100));
 
     target.hit(weaknessGoodOrder);  // +100, +100 (replaced)
     target.hit(weaknessGoodOrder);  // +200, +200
@@ -283,8 +283,8 @@ class EnemyTest {
 
   @Test
   void spellStacking_fourTimes_inefficient() {
-    Carrier badWeakness1 = SPELL.create(MAGIC.weakness(100), FIRE.weakness(100));
-    Carrier badWeakness2 = SPELL.create(MAGIC.weakness(100), FIRE.weakness(100));
+    Effector badWeakness1 = SPELL.create(MAGIC.weakness(100), FIRE.weakness(100));
+    Effector badWeakness2 = SPELL.create(MAGIC.weakness(100), FIRE.weakness(100));
 
     target.hit(badWeakness1);  // +100, +100 (replaced)
     target.hit(badWeakness2);  // +200, +200 (replaced)
@@ -313,7 +313,7 @@ class EnemyTest {
 
   @Test
   void multipleDrainsFromSameSource() {
-    Carrier drainHp = SPELL.create(MAGIC.drain(100));
+    Effector drainHp = SPELL.create(MAGIC.drain(100));
 
     target.hit(drainHp);
     target.hit(drainHp);
@@ -349,7 +349,7 @@ class EnemyTest {
 
   @Test
   void drainWeaknessStacking() {
-    Carrier weapon = MELEE.create(MAGIC.drain(100), MAGIC.weakness(100));
+    Effector weapon = MELEE.create(MAGIC.drain(100), MAGIC.weakness(100));
 
     target.hit(weapon);
     target.hit(weapon);
@@ -385,7 +385,7 @@ class EnemyTest {
   void enchantsSuck_singleHit_grandSoul() {
     DIFFICULTY = 100;
 
-    Carrier usedGrandSoul = MELEE.create(FIRE.damage(40));
+    Effector usedGrandSoul = MELEE.create(FIRE.damage(40));
 
     target.hit(FIRE_WEAK_1);
     target.hit(FIRE_WEAK_2);
@@ -398,7 +398,7 @@ class EnemyTest {
   void enchantsSuck_damageOverTime_grandSoul() {
     DIFFICULTY = 100;
 
-    Carrier usedGrandSoul = MELEE.create(FIRE.damage(5).forSecs(14));
+    Effector usedGrandSoul = MELEE.create(FIRE.damage(5).forSecs(14));
 
     target.hit(FIRE_WEAK_1);
     target.hit(FIRE_WEAK_2);
@@ -413,7 +413,7 @@ class EnemyTest {
 
     resurrect("Breton", MAGIC.resist(50));
 
-    Carrier usedGrandSoul = MELEE.create(FIRE.damage(5).forSecs(14));
+    Effector usedGrandSoul = MELEE.create(FIRE.damage(5).forSecs(14));
 
     target.hit(FIRE_WEAK_1);
     target.hit(FIRE_WEAK_2);
@@ -477,7 +477,7 @@ class EnemyTest {
 
   @Test
   void poisonStacks() {
-    Carrier mix = POISON.create(MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10));
+    Effector mix = POISON.create(MAGIC.damage(10), FROST.damage(10), SHOCK.damage(10));
 
     target.hit(mix);
     target.hit(mix);
@@ -488,8 +488,8 @@ class EnemyTest {
 
   @Test
   void spellStacking_withWeapons() {
-    Carrier weapon1 = MELEE.create(FIRE.weakness(100), MAGIC.weakness(100));
-    Carrier weapon2 = weapon1.copy();
+    Effector weapon1 = MELEE.create(FIRE.weakness(100), MAGIC.weakness(100));
+    Effector weapon2 = weapon1.copy();
 
     target.hit(weapon1);
     target.hit(weapon2);

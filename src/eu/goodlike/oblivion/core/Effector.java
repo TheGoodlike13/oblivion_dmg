@@ -17,22 +17,22 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * Examples include: weapons, arrows, spells, poisons.
  * Just like in-game, each effect must have a unique type.
  * <p/>
- * Carriers can be combined to create actual {@link Hit}s, like {@link Source#BOW} + {@link Source#ARROW}.
+ * Effectors can be combined to create actual {@link Hit}s, like {@link Source#BOW} + {@link Source#ARROW}.
  * <p/>
  * The effects should be applied in iteration order.
  * <p/>
- * Carriers have a natural ordering that is consistent with their {@link Source}.
- * This ordering conveys how multiple carriers that belong to a single {@link Hit} should be applied.
+ * Effectors have a natural ordering that is consistent with their {@link Source}.
+ * This ordering conveys how multiple effectors that belong to a single {@link Hit} should be applied.
  * {@link #equals)} is NOT consistent with this ordering!
  * Avoid {@link SortedSet} and similar!
  * <p/>
- * Two carriers should only be equal if they represent the exactly same item or spell.
+ * Two effectors should only be equal if they represent the exactly same item or spell.
  * Usually object identity is sufficient to achieve this.
  * <p/>
  * This class can be overridden to provide different strategies for uniquely identifying effects.
  * In such cases, {@link #copy(String)} should also be overridden!
  */
-public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
+public class Effector implements Iterable<EffectText>, Comparable<Effector> {
 
   public final Source getSource() {
     return source;
@@ -43,11 +43,11 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
   }
 
   /**
-   * When hitting a target multiple times with the same carrier (e.g. spell), effects do not stack, but override
+   * When hitting a target multiple times with the same effector (e.g. spell), effects do not stack, but override
    * each other instead (usually).
    * The id from this method allows us to identify effects which should be overridden rather than stacked.
    * <p/>
-   * Result is undefined if the effect did not come from this carrier.
+   * Result is undefined if the effect did not come from this effector.
    *
    * @param effect effect which we must uniquely identify
    * @return id which uniquely identifies the given effect
@@ -56,15 +56,15 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
     return new UniquePerType(this, effect.getType());
   }
 
-  public final Carrier copy() {
+  public final Effector copy() {
     return copy(label);
   }
 
   /**
-   * Creates a copy of this carrier with a different label. The effects of this carrier and the copy will stack!
+   * Creates a copy of this effector with a different label. The effects of this effector and the copy will stack!
    */
-  public Carrier copy(String label) {
-    return new Carrier(label, source, method, effects);
+  public Effector copy(String label) {
+    return new Effector(label, source, method, effects);
   }
 
   public String getLabel() {
@@ -77,14 +77,14 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
   }
 
   @Override
-  public final int compareTo(Carrier other) {
+  public final int compareTo(Effector other) {
     return ORDER.compare(this, other);
   }
 
-  public Carrier(String label,
-                 Source source,
-                 Method method,
-                 Iterable<EffectText> effects) {
+  public Effector(String label,
+                  Source source,
+                  Method method,
+                  Iterable<EffectText> effects) {
     this.label = label;
     this.source = source;
     this.method = method;
@@ -117,7 +117,7 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
       .collect(joining(" + ", "{", "}"));
   }
 
-  private static final Comparator<Carrier> ORDER = Comparator.comparing(Carrier::getSource);
+  private static final Comparator<Effector> ORDER = Comparator.comparing(Effector::getSource);
 
   private static final class UniquePerType implements Effect.Id {
     @Override
@@ -125,17 +125,17 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
       return type;
     }
 
-    public UniquePerType(Carrier carrier, Effect.Type type) {
-      this.carrier = carrier;
+    public UniquePerType(Effector effector, Effect.Type type) {
+      this.effector = effector;
       this.type = type;
     }
 
-    private final Carrier carrier;
+    private final Effector effector;
     private final Effect.Type type;
 
     @Override
     public String toString() {
-      return carrier.getLabel() + " " + getType();
+      return effector.getLabel() + " " + getType();
     }
 
     @Override
@@ -143,13 +143,13 @@ public class Carrier implements Iterable<EffectText>, Comparable<Carrier> {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       UniquePerType other = (UniquePerType)o;
-      return Objects.equals(carrier, other.carrier)
+      return Objects.equals(effector, other.effector)
         && Objects.equals(type, other.type);
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(carrier, type);
+      return Objects.hash(effector, type);
     }
   }
 

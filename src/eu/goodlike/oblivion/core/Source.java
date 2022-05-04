@@ -36,28 +36,28 @@ public interface Source extends HitPattern, Comparable<Source> {
   /**
    * @return equivalent to {@link #create} with no params, but always returns the same instance
    */
-  default Carrier withNoEffect() {
+  default Effector withNoEffect() {
     return create();
   }
 
-  default Carrier create(EffectText... effects) {
+  default Effector create(EffectText... effects) {
     return create(Arrays.asList(effects));
   }
 
-  default Carrier create(List<EffectText> effects) {
+  default Effector create(List<EffectText> effects) {
     return create(null, effects);
   }
 
   /**
-   * Creates a new carrier with given effects.
-   * This source is effectively the type of the new carrier.
-   * Hits from this carrier will always stack with other carriers.
+   * Creates a new effector with given effects.
+   * This source is effectively the type of the new effector.
+   * Hits from this effector will always stack with other effectors.
    * <p/>
    * The label is optional and can be null. It's entirely cosmetic (affects only {@link #toString}).
    *
    * @throws StructureException if any of the given effects are duplicate
    */
-  Carrier create(String label, List<EffectText> effects);
+  Effector create(String label, List<EffectText> effects);
 
   default boolean isWeapon() {
     return false;
@@ -97,11 +97,11 @@ public interface Source extends HitPattern, Comparable<Source> {
   }
 
   /**
-   * @return true if any of the given carriers are of this source, false otherwise
+   * @return true if any of the given effectors are of this source, false otherwise
    */
-  default boolean any(Iterable<? extends Carrier> carriers) {
-    for (Carrier carrier : carriers) {
-      if (this == carrier.getSource()) {
+  default boolean any(Iterable<? extends Effector> effectors) {
+    for (Effector effector : effectors) {
+      if (this == effector.getSource()) {
         return true;
       }
     }

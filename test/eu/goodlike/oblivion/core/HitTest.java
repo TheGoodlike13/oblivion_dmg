@@ -189,8 +189,8 @@ class HitTest {
 
   @Test
   void effectCount() {
-    Carrier melee = MELEE.create(MAGIC.damage(10), MAGIC.weakness(100));
-    Carrier poison = POISON.create(MAGIC.damage(20));
+    Effector melee = MELEE.create(MAGIC.damage(10), MAGIC.weakness(100));
+    Effector poison = POISON.create(MAGIC.damage(20));
     Hit hit = new Hit(melee, poison);
 
     assertThat(hit.count(MAGIC.drain())).isEqualTo(0);
@@ -200,23 +200,23 @@ class HitTest {
   }
 
   private void assertHit(Source... sources) {
-    assertThatNoException().isThrownBy(() -> new Hit(dummyCarriers(sources)));
+    assertThatNoException().isThrownBy(() -> new Hit(dummies(sources)));
   }
 
   private void assertImplicit(String implicit, Source... sources) {
-    Hit hit = new Hit(dummyCarriers(sources));
-    assertThat(hit).anyMatch(carrier -> carrier.getSource().toString().equals(implicit));
+    Hit hit = new Hit(dummies(sources));
+    assertThat(hit).anyMatch(effector -> effector.getSource().toString().equals(implicit));
   }
 
   private void assertInvalid(Source... sources) {
-    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> new Hit(dummyCarriers(sources)));
+    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> new Hit(dummies(sources)));
   }
 
   private Hit hit(Source... sources) {
-    return new Hit(dummyCarriers(sources));
+    return new Hit(dummies(sources));
   }
 
-  private List<Carrier> dummyCarriers(Source... sources) {
+  private List<Effector> dummies(Source... sources) {
     return Stream.of(sources).map(Source::withNoEffect).collect(toList());
   }
 

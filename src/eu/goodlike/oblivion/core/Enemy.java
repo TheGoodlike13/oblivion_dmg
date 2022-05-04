@@ -82,10 +82,10 @@ public final class Enemy implements Target {
 
   /**
    * Shorthand for {@link #hit(Hit)}, helps with testing.
-   * If the carrier cannot be considered a hit by itself, it will be supplemented with enchanted equipment.
+   * If the effector cannot be considered a hit by itself, it will be supplemented with enchanted equipment.
    * See {@link Hit#Hit(List)} for details.
    */
-  public void hit(Carrier byItself) {
+  public void hit(Effector byItself) {
     hit(new Hit(byItself));
   }
 
@@ -95,17 +95,17 @@ public final class Enemy implements Target {
 
   /**
    * Hits this target.
-   * All the effects from all the carriers are applied at once, consistent with in-game logic.
-   * If any of the carriers has hit this target before, may replace existing effects instead of stacking.
+   * All the effects from all the effectors are applied at once, consistent with in-game logic.
+   * If any of the effectors has hit this target before, may replace existing effects instead of stacking.
    */
   public void hit(Hit hit, Observer observer) {
     Dummy dummy = new Dummy();
     Target target = observer.observing(dummy);
 
-    for (Carrier carrier : hit) {
-      for (EffectText e : carrier) {
-        Effect.Id id = carrier.toId(e);
-        Effect effect = e.activate(carrier.getMethod(), this);
+    for (Effector effector : hit) {
+      for (EffectText e : effector) {
+        Effect.Id id = effector.toId(e);
+        Effect effect = e.activate(effector.getMethod(), this);
 
         observer.next(id);
         Effect original = activeEffects.put(id, effect);

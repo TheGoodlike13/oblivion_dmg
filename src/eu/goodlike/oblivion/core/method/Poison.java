@@ -2,9 +2,9 @@ package eu.goodlike.oblivion.core.method;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
-import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.EffectText;
+import eu.goodlike.oblivion.core.Effector;
 import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.effect.Resist;
@@ -25,12 +25,12 @@ public final class Poison implements Method, Source {
   }
 
   @Override
-  public Carrier withNoEffect() {
+  public Effector withNoEffect() {
     return NAME_POISON;
   }
 
   @Override
-  public Carrier create(String label, List<EffectText> effects) {
+  public Effector create(String label, List<EffectText> effects) {
     return new PoisonBottle(label, effects);
   }
 
@@ -60,9 +60,9 @@ public final class Poison implements Method, Source {
   }
 
   private static Poison INSTANCE;
-  private static final Carrier NAME_POISON = new PoisonBottle(null, Collections.emptyList());
+  private static final Effector NAME_POISON = new PoisonBottle(null, Collections.emptyList());
 
-  private static final class PoisonBottle extends Carrier {
+  private static final class PoisonBottle extends Effector {
     @Override
     public Effect.Id toId(EffectText effect) {
       Effect.Type type = effect.getType();
@@ -71,7 +71,7 @@ public final class Poison implements Method, Source {
     }
 
     @Override
-    public Carrier copy(String label) {
+    public Effector copy(String label) {
       return new PoisonBottle(label, this);
     }
 

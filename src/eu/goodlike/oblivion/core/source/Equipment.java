@@ -1,7 +1,7 @@
 package eu.goodlike.oblivion.core.source;
 
-import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.EffectText;
+import eu.goodlike.oblivion.core.Effector;
 import eu.goodlike.oblivion.core.HitPattern;
 import eu.goodlike.oblivion.core.Source;
 
@@ -12,13 +12,13 @@ import static eu.goodlike.oblivion.core.Factor.MAGIC;
 public final class Equipment implements Source {
 
   @Override
-  public Carrier withNoEffect() {
+  public Effector withNoEffect() {
     return noEffect;
   }
 
   @Override
-  public Carrier create(String label, List<EffectText> effects) {
-    return new Carrier(label, this, MAGIC, effects);
+  public Effector create(String label, List<EffectText> effects) {
+    return new Effector(label, this, MAGIC, effects);
   }
 
   @Override
@@ -64,7 +64,7 @@ public final class Equipment implements Source {
   private final double timeToSwap;
   private final boolean isPhysical;
 
-  private final Carrier noEffect = create();
+  private final Effector noEffect = create();
 
   @Override
   public String toString() {

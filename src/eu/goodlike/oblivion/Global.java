@@ -1,13 +1,13 @@
 package eu.goodlike.oblivion;
 
 import com.google.common.collect.ImmutableList;
-import eu.goodlike.oblivion.core.Carrier;
+import eu.goodlike.oblivion.core.Effector;
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.HitPattern;
 import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.StructureException;
-import eu.goodlike.oblivion.parse.ParseCarrier;
+import eu.goodlike.oblivion.parse.ParseEffector;
 import eu.goodlike.oblivion.parse.ParseEnemy;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public final class Global {
     WRITER = System.out::print;
     THE_ARENA.reset();
     ENEMIES.reset(Settings.PREPARED_ENEMIES);
-    CARRIERS.reset(Settings.PREPARED_ITEMS, Settings.PREPARED_SPELLS);
+    EFFECTORS.reset(Settings.PREPARED_ITEMS, Settings.PREPARED_SPELLS);
     HITS.reset();
     ITS_ALL_OVER = false;
   }
@@ -50,9 +50,9 @@ public final class Global {
    * Caches which holds prepared entities as well as references created as part of parsing user input.
    */
   public static final InputCache<Enemy> ENEMIES = new InputCache<>(ParseEnemy::new);
-  public static final InputCache<Carrier> CARRIERS = new InputCache<>(ParseCarrier::new);
+  public static final InputCache<Effector> EFFECTORS = new InputCache<>(ParseEffector::new);
   public static final InputCache<Hit> HITS = new InputCache<>();
-  public static final List<InputCache<?>> CACHES = ImmutableList.of(ENEMIES, CARRIERS, HITS);
+  public static final List<InputCache<?>> CACHES = ImmutableList.of(ENEMIES, EFFECTORS, HITS);
 
   /**
    * Flag which determines if the application should exit or not.

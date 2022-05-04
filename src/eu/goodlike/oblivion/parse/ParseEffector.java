@@ -2,8 +2,8 @@ package eu.goodlike.oblivion.parse;
 
 import eu.goodlike.oblivion.NamedValue;
 import eu.goodlike.oblivion.Parse;
-import eu.goodlike.oblivion.core.Carrier;
 import eu.goodlike.oblivion.core.EffectText;
+import eu.goodlike.oblivion.core.Effector;
 import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.StructureException;
 
@@ -11,13 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static eu.goodlike.oblivion.Global.CARRIERS;
+import static eu.goodlike.oblivion.Global.EFFECTORS;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
- * Parses carrier input.
+ * Parses effector input.
  * Accepts any amount of inputs.
- * Treats them as a single carrier.
+ * Treats them as a single effector.
  * <p/>
  * Inputs with ':' prefix are treated as labels.
  * Only last label is considered, others ignored.
@@ -28,37 +28,37 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * This input is required.
  * In practice, there should be only a single source at the beginning of input.
  * <p/>
- * All other inputs are treated as carrier effects.
+ * All other inputs are treated as effector effects.
  * They must be parsable.
  * <p/>
- * Cached nameless carrier will receive a name from the cache.
- * Thus both the label and the carrier can be different as a result of {@link #thenCache}.
+ * Cached nameless effectors will receive a name from the cache.
+ * Thus both the label and the effector can be different as a result of {@link #thenCache}.
  */
-public final class ParseCarrier extends BaseParseInput<Carrier> {
+public final class ParseEffector extends BaseParseInput<Effector> {
 
   @Override
-  protected Carrier parse() {
+  protected Effector parse() {
     Source source = Parse.source(this.source);
     List<EffectText> effects = Parse.effects(this.effects);
     return source.create(label, effects);
   }
 
   @Override
-  public NamedValue<Carrier> thenCache() {
-    String ref = CARRIERS.ensureRef(label);
-    Carrier carrier = getValue().copy(ref);
-    return CARRIERS.put(ref, carrier);
+  public NamedValue<Effector> thenCache() {
+    String ref = EFFECTORS.ensureRef(label);
+    Effector effector = getValue().copy(ref);
+    return EFFECTORS.put(ref, effector);
   }
 
-  public ParseCarrier(String input) {
+  public ParseEffector(String input) {
     this(Parse.line(input));
   }
 
-  public ParseCarrier(String[] inputs) {
+  public ParseEffector(String[] inputs) {
     this(Stream.of(inputs));
   }
 
-  public ParseCarrier(Stream<String> inputs) {
+  public ParseEffector(Stream<String> inputs) {
     inputs.forEach(this::identify);
 
     if (source == null) {

@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Objects;
 
 /**
- * Effects as they appear in-game on various carriers (e.g. spells in your spell book).
+ * Effects as they appear in-game on various effectors (e.g. spells in your spell book).
  * The magnitudes of these effects can be affected by the resistance of the target or in-game difficulty
  * when actually applied.
  * The duration of these effects is 1s by default.

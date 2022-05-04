@@ -11,7 +11,7 @@ import static eu.goodlike.oblivion.core.Source.SPELL;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 
-class CarrierTest {
+class EffectorTest {
 
   @Test
   void noMoreThanOneInstanceOfAnEffect() {
