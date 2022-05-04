@@ -128,11 +128,6 @@ public final class Hit implements Iterable<Effector>, HitPattern {
       .isPresent();
   }
 
-  private boolean isExplicit(Effector effector) {
-    Effector implicit = effector.getSource().withNoEffect();
-    return !effector.equals(implicit);
-  }
-
   private String hitTrace() {
     return effectors.stream()
       .map(Effector::getSource)
