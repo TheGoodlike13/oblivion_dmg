@@ -286,8 +286,6 @@ public final class Arena {
 
     private void prepare(Hit hit) {
       needsSwap = false;
-      combo = hit.isCombo(lastHit) ? combo + 1 : 0;
-
       hit.requiresSwap(equippedWeapon).ifPresent(newWeapon -> {
         needsSwap = true;
         equippedWeapon = newWeapon;
@@ -310,9 +308,10 @@ public final class Arena {
       if (idleTime > 0) {
         play.combatLog(String.format("You wait for %.2fs", idleTime));
         enemy.tick(idleTime, this);
-        if (idleTime >= lastHit.cooldown(combo)) {
-          combo = 0;
-        }
+      }
+
+      if (!hit.isCombo(lastHit) || idleTime >= lastHit.cooldown(combo)) {
+        combo = 0;
       }
     }
 
@@ -326,6 +325,7 @@ public final class Arena {
       isTicking = false;
       enemy.hit(hit, this);
       isTicking = true;
+      combo += 1;
 
       dumpModifiedFactors();
       return timeToHit;
