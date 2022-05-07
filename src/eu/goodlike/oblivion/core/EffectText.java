@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableSet;
 
 import java.util.Objects;
 
+import static eu.goodlike.oblivion.Global.Settings.EFFECTIVENESS;
+
 /**
  * Effects as they appear in-game on various effectors (e.g. spells in your spell book).
  * The magnitudes of these effects can be affected by the resistance of the target or in-game difficulty
@@ -52,15 +54,42 @@ public final class EffectText {
     return type;
   }
 
+  /**
+   * This method should only be called by spells.
+   * <p/>
+   * If effectiveness is not exactly 100, there will be an asterisk near the magnitude of the returned effect.
+   *
+   * @return this effect but scaled by the factor of current spell effectiveness
+   */
+  public EffectText scale() {
+    if (EFFECTIVENESS == 100) {
+      return unscaled == null ? this : unscaled;
+    }
+
+    int scaledMagnitude = scaledMagnitude();
+    if (unscaled == null) {
+      return new EffectText(factor, type, scaledMagnitude, duration, this);
+    }
+
+    return scaledMagnitude == magnitude
+      ? this
+      : new EffectText(factor, type, magnitude, duration, unscaled);
+  }
+
   public EffectText(Factor factor, Effect.Type type, int magnitude) {
     this(factor, type, magnitude, 1);
   }
 
   public EffectText(Factor factor, Effect.Type type, int magnitude, int duration) {
+    this(factor, type, magnitude, duration, null);
+  }
+
+  public EffectText(Factor factor, Effect.Type type, int magnitude, int duration, EffectText unscaled) {
     this.factor = factor;
     this.type = type;
     this.magnitude = magnitude;
     this.duration = duration;
+    this.unscaled = unscaled;
   }
 
   private final Factor factor;
@@ -68,9 +97,20 @@ public final class EffectText {
   private final int magnitude;
   private final int duration;
 
+  private final EffectText unscaled;
+
+  private int scaledMagnitude() {
+    int baseMagnitude = unscaled == null ? magnitude : unscaled.magnitude;
+    return baseMagnitude * EFFECTIVENESS / 100;
+  }
+
   @Override
   public String toString() {
-    return String.format("%s %d for %ds", type, magnitude, duration);
+    return String.format("%s %d%s for %ds", type, magnitude, scaleIndicator(), duration);
+  }
+
+  private String scaleIndicator() {
+    return unscaled == null ? "" : "*";
   }
 
   @Override

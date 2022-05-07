@@ -1338,6 +1338,43 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     );
   }
 
+  @Test
+  void badTimeToBeWearingArmor() {
+    sendInput("enemy 60", "+s 100wm5s", "spell_effect 94", "$1", "+s 10m", "+m 10m", "go");
+
+    assertOutputSegment(
+      "You face the enemy (60 hp)",
+      "[#1] Next hit: <SPELL$1> {RESIST MAGIC -100 for 5s}",
+      "Spell effectiveness has been set to <94>",
+      "[#2] Next hit: <SPELL$1> {RESIST MAGIC -94* for 5s}",
+      "[#3] Next hit: <SPELL$2> {MAGIC DMG 9* for 1s}",
+      "[#4] Next hit: <MELEE$3> {MAGIC DMG 10 for 1s}",
+      "00.000 You begin equipped with <MELEE$3>",
+      "       You cast <SPELL$1>",
+      "00.410 You hit with <SPELL$1>",
+      "       Applied RESIST MAGIC -94.0",
+      "       Resulting multipliers: MAGIC  x1.94",
+      "01.140 You cast <SPELL$1>",
+      "01.550 You hit with <SPELL$1>",
+      "       Replaced RESIST MAGIC -94.0 with -182.4",
+      "       Resulting multipliers: MAGIC  x2.82",
+      "02.280 You cast <SPELL$2>",
+      "02.690 You hit with <SPELL$2>",
+      "       Applied MAGIC DMG 25.4 for 1s",
+      "       You swing <MELEE$3>",
+      "03.090 You hit with <MELEE$3>",
+      "       Applied MAGIC DMG 28.2 for 1s",
+      "03.690 Expired <SPELL$2> MAGIC DMG",
+      "04.090 Expired <MELEE$3> MAGIC DMG",
+      "06.550 Expired <SPELL$1> RESIST MAGIC",
+      "The enemy has survived 53.6 damage (6.4 hp left).",
+      "       Damage by effect:",
+      "           <SPELL$2> MAGIC DMG: 25.41",
+      "           <MELEE$3> MAGIC DMG: 28.24",
+      "-----"
+    );
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);

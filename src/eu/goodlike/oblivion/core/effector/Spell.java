@@ -1,5 +1,6 @@
 package eu.goodlike.oblivion.core.effector;
 
+import com.google.common.collect.Streams;
 import eu.goodlike.oblivion.core.Armament;
 import eu.goodlike.oblivion.core.Category;
 import eu.goodlike.oblivion.core.EffectText;
@@ -49,7 +50,7 @@ public final class Spell extends BaseEffector implements Armament {
 
   @Override
   public Iterator<EffectText> iterator() {
-    return super.iterator();
+    return Streams.stream(super.iterator()).map(EffectText::scale).iterator();
   }
 
   public Spell(String label, Iterable<EffectText> effects) {

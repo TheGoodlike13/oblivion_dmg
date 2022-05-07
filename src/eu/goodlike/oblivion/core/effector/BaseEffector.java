@@ -1,6 +1,7 @@
 package eu.goodlike.oblivion.core.effector;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Streams;
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Effector;
@@ -69,7 +70,7 @@ public abstract class BaseEffector implements Effector {
       return "NO EFFECTS";
     }
 
-    return effects.stream()
+    return Streams.stream(this)
       .map(EffectText::toString)
       .collect(joining(" + "));
   }

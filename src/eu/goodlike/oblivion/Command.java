@@ -12,11 +12,13 @@ import eu.goodlike.oblivion.command.SetDifficulty;
 import eu.goodlike.oblivion.command.SetEnemy;
 import eu.goodlike.oblivion.command.SetHit;
 import eu.goodlike.oblivion.command.SetLevel;
+import eu.goodlike.oblivion.command.SetSpellEffectiveness;
 import eu.goodlike.oblivion.command.UndoLastHit;
 
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static org.apache.commons.lang3.StringUtils.remove;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 
 /**
@@ -42,6 +44,7 @@ public interface Command {
     QUIT(ItsAllOver::new),
     REFRESH(Refresh::new),
     RESET(Reset::new),
+    SPELL_EFFECT(SetSpellEffectiveness::new),
     UNDO(UndoLastHit::new),
     WAIT(NowJustHoldOnACottonPickinMinute::new),
     WHAT(ButWhatDoesThisMean::new);
@@ -58,7 +61,7 @@ public interface Command {
     }
 
     public boolean matches(String input) {
-      return startsWithIgnoreCase(name(), input);
+      return startsWithIgnoreCase(name(), input) || startsWithIgnoreCase(remove(name(), '_'), input);
     }
 
     Name(Supplier<Command> factory) {
