@@ -11,11 +11,11 @@ import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.Target;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -48,13 +48,12 @@ public final class Arena {
     Write.line("You will wait at least %.2fs between hits", pause);
   }
 
-  public void removeLastAction() {
+  public void removeLastHit() {
     if (hits.isEmpty()) {
       Write.line("No hits to remove.");
     }
     else {
-      Hit removed = hits.remove(hits.size() - 1);
-      Write.line("Removed hit: " + removed);
+      Write.line("Removed hit: " + hits.removeLast());
     }
   }
 
@@ -73,7 +72,7 @@ public final class Arena {
     Write.separator();
 
     play = new PlayByPlay();
-    hits = new ArrayList<>();
+    hits = new ArrayDeque<>();
     if (enemy != null) {
       enemy.updateLevel();
       announceOpponent();
@@ -82,7 +81,7 @@ public final class Arena {
 
   public void reset() {
     play = new PlayByPlay();
-    hits = new ArrayList<>();
+    hits = new ArrayDeque<>();
     pause = 0;
     label = null;
     enemy = null;
@@ -93,7 +92,7 @@ public final class Arena {
   }
 
   private PlayByPlay play;
-  private List<Hit> hits;
+  private Deque<Hit> hits;
   private double pause;
   private String label;
   private Enemy enemy;
@@ -127,9 +126,10 @@ public final class Arena {
   private void fight() {
     equipFirstWeapon();
 
-    for (Hit hit : hits) {
+    while (!hits.isEmpty()) {
+      Hit hit = hits.removeFirst();
       boolean shouldContinue = play.next(hit);
-      if (!shouldContinue) {
+      if (!shouldContinue && !hits.isEmpty()) {
         play.giveItARest();
         break;
       }
