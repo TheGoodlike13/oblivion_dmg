@@ -13,11 +13,11 @@ import java.util.List;
  */
 public interface Factor {
 
-  Poison POISON = Poison.getInstance();
-  Magic MAGIC = new Magic();
-  Element FIRE = new Element("FIRE");
-  Element FROST = new Element("FROST");
-  Element SHOCK = new Element("SHOCK");
+  Poison  POISON = Poison.getInstance();
+  Magic   MAGIC  = new Magic();
+  Element FIRE   = new Element("FIRE");
+  Element FROST  = new Element("FROST");
+  Element SHOCK  = new Element("SHOCK");
 
   List<Factor> ALL = ImmutableList.of(POISON, MAGIC, FIRE, FROST, SHOCK);
 

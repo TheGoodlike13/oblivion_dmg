@@ -37,12 +37,12 @@ public interface Effector extends Iterable<EffectText>, Comparable<Effector> {
    * All possible categories are defined in this class.
    */
   interface Factory<E extends Effector> {
-    Category<Melee> MELEE = new Category<>("MELEE", Melee::new);
-    Category<Bow> BOW = new Category<>("BOW", Bow::new);
-    Category<Arrow> ARROW = new Category<>("ARROW", Arrow::new);
-    Poison POISON = Poison.getInstance();
-    Spell SPELL = new Spell();
-    Category<Staff> STAFF = new Category<>("STAFF", Staff::new);
+    Category<Melee> MELEE  = new Category<>("MELEE", Melee::new);
+    Category<Bow>   BOW    = new Category<>("BOW", Bow::new);
+    Category<Arrow> ARROW  = new Category<>("ARROW", Arrow::new);
+    Poison          POISON = Poison.getInstance();
+    Spell           SPELL  = new Spell();
+    Category<Staff> STAFF  = new Category<>("STAFF", Staff::new);
 
     List<Category> ALL_IN_ORDER = ImmutableList.of(ARROW, MELEE, POISON, BOW, SPELL, STAFF);
 
