@@ -1,6 +1,7 @@
 package eu.goodlike.oblivion;
 
 import com.google.common.collect.ImmutableList;
+import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Effector;
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Hit;
@@ -92,6 +93,17 @@ public final class Global {
     public static double DIFFICULTY = 50;
 
     /**
+     * Multiplier for spell magnitude.
+     * Must be a positive integer.
+     * Unlike other multipliers, this one adjusts the magnitude at {@link EffectText} level.
+     * This means the magnitude must remain an integer, and will be rounded down.
+     * <p/>
+     * Unlike in-game, spell effect descriptions will be updated and marked as modified by this
+     * effectiveness (unless it is exactly 100).
+     */
+    public static double EFFECTIVENESS = 100;
+
+    /**
      * Tick rate in seconds.
      * Must be a positive double.
      */
@@ -148,6 +160,7 @@ public final class Global {
 
       LEVEL = StructureException.natOrThrow(properties.getProperty("level"), "player level");
       DIFFICULTY = StructureException.intOrThrow(properties.getProperty("difficulty"), "difficulty setting");
+      EFFECTIVENESS = StructureException.positiveOrThrow(properties.getProperty("effectiveness"), "spell effectiveness");
 
       TICK = StructureException.positiveOrThrow(properties.getProperty("tick"), "tick setting");
       RAMPAGE = StructureException.positiveOrThrow(properties.getProperty("rampage"), "rampage setting");
