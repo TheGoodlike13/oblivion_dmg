@@ -21,4 +21,9 @@ public interface HitPattern {
   double timeToHit(int combo);
   double cooldown(int combo);
 
+  interface Builder {
+    Builder combo(double nextTimeToHit, double nextCooldown);
+    HitPattern build();
+  }
+
 }

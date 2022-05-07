@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.function.Consumer;
 
+import static org.apache.commons.lang3.StringUtils.split;
+
 /**
  * Various objects that are accessible globally to simplify APIs.
  */
@@ -102,14 +104,23 @@ public final class Global {
     public static String PREPARED_ITEMS = "prepared_items.txt";
     public static String PREPARED_SPELLS = "prepared_spells.txt";
 
+    /**
+     * Time it takes to swap to a particular type of weapon in seconds.
+     * Must be a positive double.
+     */
+    public static double SWAP_MELEE = 0.7;
+    public static double SWAP_BOW = 1.06;
+    public static double SWAP_STAFF = 1.17;
+
+    /**
+     * Patterns for various types of attacks.
+     * The values for both time to hit and cooldown must be positive doubles.
+     * There is no limit for number of combos, but they must have both time to hit and a cooldown value.
+     */
     public static HitPattern STRIKE = new Hit.Combo(0.4, 0.58).combo(0.28, 0.4);
     public static HitPattern SHOOT = new Hit.Combo(1.58, 0.66);
     public static HitPattern EMIT = new Hit.Combo(0.53, 0.63);
     public static HitPattern CAST = new Hit.Combo(0.41, 0.73);
-
-    public static double SWAP_MELEE = 0.7;
-    public static double SWAP_BOW = 1.06;
-    public static double SWAP_STAFF = 1.17;
 
     /**
      * Loads the settings from the settings.properties file.
@@ -135,6 +146,31 @@ public final class Global {
       PREPARED_ENEMIES = properties.getProperty("prepared.enemies");
       PREPARED_ITEMS = properties.getProperty("prepared.items");
       PREPARED_SPELLS = properties.getProperty("prepared.spells");
+
+      SWAP_MELEE = StructureException.positiveOrThrow(properties.getProperty("melee.swap"), "melee swap time");
+      SWAP_BOW = StructureException.positiveOrThrow(properties.getProperty("bow.swap"), "bow swap time");
+      SWAP_STAFF = StructureException.positiveOrThrow(properties.getProperty("staff.swap"), "staff swap time");
+
+      STRIKE = loadCombo(properties, "melee.combo");
+      SHOOT = loadCombo(properties, "bow.combo");
+      EMIT = loadCombo(properties, "staff.combo");
+      CAST = loadCombo(properties, "spell.combo");
+    }
+
+    private static HitPattern loadCombo(Properties properties, String comboProperty) {
+      String combos = properties.getProperty(comboProperty);
+
+      HitPattern.Builder builder = Hit.Combo.builder();
+      for (String combo : split(combos, ";")) {
+        String[] durations = split(combo.trim(), "_");
+        if (durations.length != 2) {
+          throw new StructureException("Invalid " + comboProperty + " config", combos);
+        }
+        double timeToHit = StructureException.doubleOrThrow(durations[0], comboProperty + " time to hit");
+        double cooldown = StructureException.doubleOrThrow(durations[1], comboProperty + " cooldown");
+        builder.combo(timeToHit, cooldown);
+      }
+      return builder.build();
     }
 
     private Settings() {

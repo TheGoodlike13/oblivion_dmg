@@ -181,7 +181,13 @@ public final class Hit implements Iterable<Effector>, HitPattern {
       .collect(joining(" + "));
   }
 
-  public static final class Combo implements HitPattern {
+  /**
+   * Describes timing for attacks of some armament.
+   * <p/>
+   * Single combo always return the same values.
+   * Combos of 2 alternate, etc.
+   */
+  public static final class Combo implements HitPattern, HitPattern.Builder {
     @Override
     public double timeToHit(int combo) {
       int index = combo % fullCombo.size(); // TODO: might as well refactor duplicate code
@@ -196,8 +202,18 @@ public final class Hit implements Iterable<Effector>, HitPattern {
       return actual.cooldown;
     }
 
+    @Override
     public Combo combo(double nextTimeToHit, double nextCooldown) {
       return new Combo(nextTimeToHit, nextCooldown, fullCombo);
+    }
+
+    @Override
+    public Combo build() {
+      return this;
+    }
+
+    public static HitPattern.Builder builder() {
+      return new Builder();
     }
 
     public Combo(double timeToHit, double cooldown) {
@@ -214,6 +230,25 @@ public final class Hit implements Iterable<Effector>, HitPattern {
     private final double timeToHit;
     private final double cooldown;
     private final List<Combo> fullCombo;
+
+    private static final class Builder implements HitPattern.Builder {
+      @Override
+      public HitPattern.Builder combo(double nextTimeToHit, double nextCooldown) {
+        return combo == null
+          ? combo = new Combo(nextTimeToHit, nextCooldown)
+          : combo.combo(nextTimeToHit, nextCooldown);
+      }
+
+      @Override
+      public HitPattern build() {
+        if (combo == null) {
+          throw new StructureException("Combo must have size of at least one!");
+        }
+        return combo;
+      }
+
+      private Combo combo;
+    }
   }
 
 }
