@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static eu.goodlike.oblivion.Consumerable.whileConsuming;
 import static eu.goodlike.oblivion.Global.Settings.RAMPAGE;
 import static eu.goodlike.oblivion.Global.Settings.TICK;
 import static java.util.stream.Collectors.joining;
@@ -126,8 +127,8 @@ public final class Arena {
   private void fight() {
     equipFirstWeapon();
 
-    while (!hits.isEmpty()) {
-      Hit hit = hits.removeFirst();
+    int totalHits = hits.size();
+    for (Hit hit : whileConsuming(hits)) {
       boolean shouldContinue = play.next(hit);
       if (!shouldContinue && !hits.isEmpty()) {
         play.giveItARest();
@@ -137,6 +138,7 @@ public final class Arena {
 
     enemy.resolve(play);
 
+    play.writeRemainingHits(totalHits);
     play.writeObituary();
   }
 
@@ -238,6 +240,15 @@ public final class Arena {
       this.expired = effect;
       if (effect.hasExpired()) {
         combatLog("Expired " + id);
+      }
+    }
+
+    public void writeRemainingHits(int totalHits) {
+      if (!hits.isEmpty()) {
+        Write.line("Performed %d hits out of total %d prepared", totalHits - hits.size(), totalHits);
+        for (Hit hit : hits) {
+          Write.line("Skipped: " + hit);
+        }
       }
     }
 
