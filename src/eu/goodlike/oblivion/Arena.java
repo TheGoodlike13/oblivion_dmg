@@ -38,17 +38,24 @@ public final class Arena {
   }
 
   public void addHit(NamedValue<Hit> hit) {
-    hits.add(hit.getValue());
-    Write.line("[#" + hit.getName() + "] Next hit: " + hit.getValue());
+    Action action = new NextHit(hit.getValue());
+    actions.add(action);
+    Write.line("[#" + hit.getName() + "] Next hit: " + action);
   }
 
-  public void removeLastHit() {
-    if (hits.isEmpty()) {
-      Write.line("No hits to remove.");
+  public void addPause(double waitTime) {
+    Action pause = new Pause(waitTime);
+    actions.add(pause);
+    Write.line("Next: " + pause);
+  }
+
+  public void removeLastAction() {
+    if (actions.isEmpty()) {
+      Write.line("No actions to remove.");
     }
     else {
-      Hit removed = hits.remove(hits.size() - 1);
-      Write.line("Removed hit: " + removed);
+      Action removed = actions.remove(actions.size() - 1);
+      Write.line("Removed action: " + removed);
     }
   }
 
@@ -67,7 +74,7 @@ public final class Arena {
     Write.separator();
 
     play = new PlayByPlay();
-    hits = new ArrayList<>();
+    actions = new ArrayList<>();
     if (enemy != null) {
       enemy.updateLevel();
       announceOpponent();
@@ -76,7 +83,7 @@ public final class Arena {
 
   public void reset() {
     play = new PlayByPlay();
-    hits = new ArrayList<>();
+    actions = new ArrayList<>();
     label = null;
     enemy = null;
   }
@@ -86,7 +93,7 @@ public final class Arena {
   }
 
   private PlayByPlay play;
-  private List<Hit> hits;
+  private List<Action> actions;
   private String label;
   private Enemy enemy;
 
@@ -100,7 +107,7 @@ public final class Arena {
   }
 
   private boolean ready() {
-    if (hits.isEmpty()) {
+    if (actions.isEmpty()) {
       String beholdee = enemy == null ? "void" : label;
       Write.line("You stare at the " + beholdee + ".");
       Write.line("The " + beholdee + " stares at you.");
@@ -119,8 +126,8 @@ public final class Arena {
   private void fight() {
     equipFirstWeapon();
 
-    for (Hit hit : hits) {
-      play.next(hit);
+    for (Action action : actions) {
+      action.perform();
     }
 
     enemy.resolve(play);
@@ -129,8 +136,8 @@ public final class Arena {
   }
 
   private void equipFirstWeapon() {
-    hits.stream()
-      .map(Hit::getWeapon)
+    actions.stream()
+      .map(Action::getWeapon)
       .filter(Optional::isPresent)
       .map(Optional::get)
       .findFirst()
@@ -150,10 +157,62 @@ public final class Arena {
       : String.format("%-6s x%.2f", factor, multiplier);
   }
 
+  private final class NextHit implements Action {
+    @Override
+    public void perform() {
+      play.next(nextHit);
+    }
+
+    @Override
+    public Optional<Armament> getWeapon() {
+      return nextHit.getWeapon();
+    }
+
+    public NextHit(Hit nextHit) {
+      this.nextHit = nextHit;
+    }
+
+    private final Hit nextHit;
+
+    @Override
+    public String toString() {
+      return nextHit.toString();
+    }
+  }
+
+  private final class Pause implements Action {
+    @Override
+    public void perform() {
+      play.registerPause(waitTime);
+    }
+
+    public Pause(double waitTime) {
+      this.waitTime = waitTime;
+    }
+
+    private final double waitTime;
+
+    @Override
+    public String toString() {
+      return String.format("Pause %.2fs", waitTime);
+    }
+  }
+
+  private interface Action {
+    void perform();
+    default Optional<Armament> getWeapon() {
+      return Optional.empty();
+    }
+  }
+
   private final class PlayByPlay implements Enemy.Observer {
     public void setInitialWeapon(Armament initialWeapon) {
       equippedWeapon = initialWeapon;
       play.combatLog("You begin equipped with " + initialWeapon.getName());
+    }
+
+    public void registerPause(double waitTime) {
+      idleTime += waitTime;
     }
 
     public void next(Hit hit) {
@@ -166,18 +225,28 @@ public final class Arena {
       });
 
       if (needsSwap || hit.requiresCooldownAfter(lastHit)) {
-        enemy.tick(hit.cooldown(combo), this);
+        double cooldown = hit.cooldown(combo);
+        idleTime -= cooldown;
+        enemy.tick(cooldown, this);
       }
 
       if (needsSwap) {
         combatLog("You begin to swap your weapon.");
         double timeToSwap = equippedWeapon.timeToSwap();
+        idleTime -= timeToSwap;
         enemy.tick(timeToSwap, this);
         combatLog("You equip " + equippedWeapon.getName());
       }
 
+      if (idleTime > 0) {
+        play.combatLog(String.format("You wait for %.2fs", idleTime));
+        enemy.tick(idleTime, this);
+        combo = 0;
+      }
+
       combatLog("You " + hit.toPerformString());
-      enemy.tick(hit.timeToHit(combo), this);
+      double timeToHit = hit.timeToHit(combo);
+      enemy.tick(timeToHit, this);
 
       combatLog("You hit with " + hit.toLabelString());
       lastHit = hit;
@@ -186,6 +255,7 @@ public final class Arena {
       isTicking = true;
 
       dumpModifiedFactors();
+      idleTime = -timeToHit;
     }
 
     @Override
@@ -228,6 +298,7 @@ public final class Arena {
       this.equippedWeapon = null;
       this.needsSwap = false;
 
+      this.idleTime = 0;
       this.lastHit = null;
       this.combo = 0;
 
@@ -248,6 +319,7 @@ public final class Arena {
     private Armament equippedWeapon;
     private boolean needsSwap;
 
+    private double idleTime;
     private Hit lastHit;
     private int combo;
 

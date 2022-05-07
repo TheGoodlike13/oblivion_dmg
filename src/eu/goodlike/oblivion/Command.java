@@ -4,6 +4,7 @@ import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
 import eu.goodlike.oblivion.command.ItsAllOver;
 import eu.goodlike.oblivion.command.JustForget;
 import eu.goodlike.oblivion.command.LowerTheGates;
+import eu.goodlike.oblivion.command.NowJustHoldOnACottonPickinMinute;
 import eu.goodlike.oblivion.command.Refresh;
 import eu.goodlike.oblivion.command.RepeatHit;
 import eu.goodlike.oblivion.command.Reset;
@@ -42,6 +43,7 @@ public interface Command {
     RESET(Reset::new),
     QUIT(ItsAllOver::new),
     UNDO(UndoLastHit::new),
+    WAIT(NowJustHoldOnACottonPickinMinute::new),
     WHAT(ButWhatDoesThisMean::new);
 
     public static Name find(String input) {

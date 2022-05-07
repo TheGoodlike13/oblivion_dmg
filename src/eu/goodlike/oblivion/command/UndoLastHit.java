@@ -17,7 +17,7 @@ public final class UndoLastHit extends BaseCommand {
   @Override
   protected void performTask() {
     tryParseTimes();
-    IntStream.range(0, times).forEach(any -> THE_ARENA.removeLastHit());
+    IntStream.range(0, times).forEach(any -> THE_ARENA.removeLastAction());
   }
 
   private int times = 1;

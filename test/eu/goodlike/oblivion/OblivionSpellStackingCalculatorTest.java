@@ -311,7 +311,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "All your hits land on the wall.",
       "Good job.",
       "How about picking an enemy?",
-      "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "Removed action: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "You face the enemy (10 hp)",
       "You stare at the enemy.",
       "The enemy stares at you.",
@@ -341,7 +341,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
     assertOutput(
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}"
+      "Removed action: <SPELL$1> {MAGIC DMG 10 for 1s}"
     );
   }
 
@@ -352,8 +352,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutput(
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "[#2] Next hit: <SPELL$2> {MAGIC DMG 10 for 1s}",
-      "Removed hit: <SPELL$2> {MAGIC DMG 10 for 1s}",
-      "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}"
+      "Removed action: <SPELL$2> {MAGIC DMG 10 for 1s}",
+      "Removed action: <SPELL$1> {MAGIC DMG 10 for 1s}"
     );
   }
 
@@ -362,10 +362,10 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("undo", "+s 10m", "undo 2", "undo xxx");
 
     assertOutput(
-      "No hits to remove.",
+      "No actions to remove.",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "No hits to remove.",
+      "Removed action: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "No actions to remove.",
       "Bad input: Cannot parse undo amount <xxx>"
     );
   }
@@ -1118,6 +1118,67 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "            10.0 * 0.72s =    7.20",
       "            10.0 * 0.72s =    7.20",
       "       Grand total: 14.40",
+      "-----"
+    );
+  }
+
+  @Test
+  void holdOnWaitAMinute() {
+    sendInput("enemy 100", "+m 50m", "wait 1", "$1", "go");
+
+    assertOutputSegment(
+      "You face the enemy (100 hp)",
+      "[#1] Next hit: <MELEE$1> {MAGIC DMG 50 for 1s}",
+      "Next: Pause 1.00s",
+      "[#2] Next hit: <MELEE$1> {MAGIC DMG 50 for 1s}",
+      "00.000 You begin equipped with <MELEE$1>",
+      "       You swing <MELEE$1>",
+      "00.400 You hit with <MELEE$1>",
+      "       Applied MAGIC DMG 50.0 for 1s",
+      "       You wait for 0.60s",
+      "01.000 You swing <MELEE$1>",
+      "01.400 Expired <MELEE$1> MAGIC DMG",
+      "       You hit with <MELEE$1>",
+      "       Applied MAGIC DMG 50.0 for 1s",
+      "02.400 The enemy has died. Breakdown:",
+      "           <MELEE$1> MAGIC DMG: 100.00",
+      "       Expired <MELEE$1> MAGIC DMG",
+      "The enemy took a total of 100.0 damage (0.0 overkill).",
+      "-----"
+    );
+  }
+
+  @Test
+  void timeDoesNotJustWait() {
+    sendInput("wait");
+
+    assertOutput("Bad input: Cannot parse wait time <>");
+  }
+
+  @Test
+  void noTimeToWait() {
+    sendInput("enemy 100", "+m 50m", "wait 1", "+m 50m", "go");
+
+    assertOutputSegment(
+      "You face the enemy (100 hp)",
+      "[#1] Next hit: <MELEE$1> {MAGIC DMG 50 for 1s}",
+      "Next: Pause 1.00s",
+      "[#2] Next hit: <MELEE$2> {MAGIC DMG 50 for 1s}",
+      "00.000 You begin equipped with <MELEE$1>",
+      "       You swing <MELEE$1>",
+      "00.400 You hit with <MELEE$1>",
+      "       Applied MAGIC DMG 50.0 for 1s",
+      "00.980 You begin to swap your weapon.",
+      "01.400 Expired <MELEE$1> MAGIC DMG",
+      "01.680 You equip <MELEE$2>",
+      "       You swing <MELEE$2>",
+      "02.080 You hit with <MELEE$2>",
+      "       Applied MAGIC DMG 50.0 for 1s",
+      "03.080 The enemy has died. Breakdown:",
+      "           <MELEE$1> MAGIC DMG: 50.00",
+      "           <MELEE$2> MAGIC DMG: 50.00",
+      "       Expired <MELEE$2> MAGIC DMG",
+      "The enemy took a total of 100.0 damage (0.0 overkill).",
       "-----"
     );
   }
