@@ -39,9 +39,9 @@ public interface Command {
     GO(LowerTheGates::new),
     HIT(RepeatHit::new),
     LEVEL(SetLevel::new),
+    QUIT(ItsAllOver::new),
     REFRESH(Refresh::new),
     RESET(Reset::new),
-    QUIT(ItsAllOver::new),
     UNDO(UndoLastHit::new),
     WAIT(NowJustHoldOnACottonPickinMinute::new),
     WHAT(ButWhatDoesThisMean::new);
