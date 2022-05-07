@@ -102,7 +102,7 @@ public final class Parse {
      * Caches the result of parsing the input.
      * Returns the result of caching the value.
      * <p/>
-     * As caches have their own labeling logic, the label and even the value may be different.
+     * As caches have their own labeling logic, the label and even the value may become different.
      */
     NamedValue<T> thenCache();
   }
