@@ -190,16 +190,12 @@ public final class Hit implements Iterable<Effector>, HitPattern {
   public static final class Combo implements HitPattern, HitPattern.Builder {
     @Override
     public double timeToHit(int combo) {
-      int index = combo % fullCombo.size(); // TODO: might as well refactor duplicate code
-      Combo actual = fullCombo.get(index);
-      return actual.timeToHit;
+      return actual(combo).timeToHit;
     }
 
     @Override
     public double cooldown(int combo) {
-      int index = combo % fullCombo.size();
-      Combo actual = fullCombo.get(index);
-      return actual.cooldown;
+      return actual(combo).cooldown;
     }
 
     @Override
@@ -230,6 +226,11 @@ public final class Hit implements Iterable<Effector>, HitPattern {
     private final double timeToHit;
     private final double cooldown;
     private final List<Combo> fullCombo;
+
+    private Combo actual(int combo) {
+      int index = combo % fullCombo.size();
+      return fullCombo.get(index);
+    }
 
     private static final class Builder implements HitPattern.Builder {
       @Override
