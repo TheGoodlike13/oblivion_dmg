@@ -101,7 +101,7 @@ public final class Global {
      * Unlike in-game, spell effect descriptions will be updated and marked as modified by this
      * effectiveness (unless it is exactly 100).
      */
-    public static double EFFECTIVENESS = 100;
+    public static int EFFECTIVENESS = 100;
 
     /**
      * Tick rate in seconds.
@@ -160,7 +160,7 @@ public final class Global {
 
       LEVEL = StructureException.natOrThrow(properties.getProperty("level"), "player level");
       DIFFICULTY = StructureException.doubleOrThrow(properties.getProperty("difficulty"), "difficulty setting");
-      EFFECTIVENESS = StructureException.positiveOrThrow(properties.getProperty("effectiveness"), "spell effectiveness");
+      EFFECTIVENESS = StructureException.natOrThrow(properties.getProperty("effectiveness"), "spell effectiveness");
 
       TICK = StructureException.positiveOrThrow(properties.getProperty("tick"), "tick setting");
       RAMPAGE = StructureException.positiveOrThrow(properties.getProperty("rampage"), "rampage setting");
