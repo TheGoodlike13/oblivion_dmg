@@ -324,6 +324,7 @@ public final class Arena {
       isTicking = false;
       enemy.hit(hit, this);
       isTicking = true;
+
       dumpModifiedFactors();
       return timeToHit;
     }
