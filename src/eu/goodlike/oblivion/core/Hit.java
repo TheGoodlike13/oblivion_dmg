@@ -45,13 +45,13 @@ public final class Hit implements Iterable<Effector>, HitPattern {
    * The rules for cooldown cancelling are:
    * <p/>1) Never cancel cooldown if you cast a spell.
    * <p/>2) Never cancel cooldown if you need to swap.
-   * <p/>3) Never cancel cooldown if you continue to use a staff.
+   * <p/>3) Never cancel cooldown if you continue to use a rigid weapon (e.g. staff).
    * <p/>4) In all other cases, cancel cooldown.
    *
    * @return true if this hit cannot cancel the cooldown of the last hit
    */
   public boolean requiresCooldownAfter(Hit last) {
-    return last != null && (isSpell() || requiresSwap(last) || last.usesMysticalWeapon());
+    return last != null && (isSpell() || requiresSwap(last) || last.usesRigidWeapon());
   }
 
   /**
@@ -153,10 +153,8 @@ public final class Hit implements Iterable<Effector>, HitPattern {
     return getWeapon().flatMap(last::requiresSwap).isPresent();
   }
 
-  private boolean usesMysticalWeapon() { // TODO: related specifically to staffs not chaining
-    return getWeapon()
-      .filter(weapon -> !weapon.isPhysical())
-      .isPresent();
+  private boolean usesRigidWeapon() {
+    return getWeapon().filter(Armament::isRigid).isPresent();
   }
 
   private String hitTrace() {

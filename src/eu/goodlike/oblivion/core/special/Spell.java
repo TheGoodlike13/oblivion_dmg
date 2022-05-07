@@ -23,8 +23,8 @@ public final class Spell extends Category<Spell.Cast> {
     }
 
     @Override
-    public boolean isPhysical() {
-      return false;
+    public boolean isRigid() {
+      return true;
     }
 
     @Override

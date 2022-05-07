@@ -17,8 +17,8 @@ public final class Melee extends BaseEffector implements Armament {
   }
 
   @Override
-  public boolean isPhysical() {
-    return true;
+  public boolean isRigid() {
+    return false;
   }
 
   @Override

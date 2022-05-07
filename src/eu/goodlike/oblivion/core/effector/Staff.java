@@ -17,8 +17,8 @@ public final class Staff extends BaseEffector implements Armament {
   }
 
   @Override
-  public boolean isPhysical() {
-    return false;
+  public boolean isRigid() {
+    return true;
   }
 
   @Override
