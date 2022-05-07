@@ -93,7 +93,7 @@ public final class Parse {
   }
 
   /**
-   * Parse logic wrapper.
+   * Wrapper for parsing logic.
    * Takes input in some format & parses it into label and other params.
    * Finally, allows lazy parsing of value via {@link #getValue}.
    */
