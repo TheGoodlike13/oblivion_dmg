@@ -44,7 +44,7 @@ public interface Effector extends Iterable<EffectText>, Comparable<Effector> {
     Category<Spell> SPELL  = new Category<>("SPELL", Spell::new);
     Category<Staff> STAFF  = new Category<>("STAFF", Staff::new);
 
-    List<Category> ALL_IN_ORDER = ImmutableList.of(ARROW, MELEE, POISON, BOW, SPELL, STAFF);
+    List<Category<?>> ALL_IN_ORDER = ImmutableList.of(ARROW, MELEE, POISON, BOW, SPELL, STAFF);
 
     default E create(EffectText... effects) {
       return create(Arrays.asList(effects));

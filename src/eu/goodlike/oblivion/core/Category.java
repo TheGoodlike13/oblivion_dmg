@@ -11,7 +11,7 @@ import java.util.function.Predicate;
  * <p/>
  * The categories have a natural ordering which defines how they should be processed as part of a single hit.
  */
-public class Category<E extends Effector> implements Effector.Factory<E>, Comparable<Category>, Predicate<Effector> {
+public class Category<E extends Effector> implements Effector.Factory<E>, Comparable<Category<?>>, Predicate<Effector> {
 
   /**
    * @return equivalent to {@link #create} with no params, but always returns the same instance
@@ -26,7 +26,7 @@ public class Category<E extends Effector> implements Effector.Factory<E>, Compar
   }
 
   @Override
-  public int compareTo(Category other) {
+  public int compareTo(Category<?> other) {
     return ALL_IN_ORDER.indexOf(this) - ALL_IN_ORDER.indexOf(other);
   }
 

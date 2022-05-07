@@ -80,7 +80,7 @@ public final class Hit implements Iterable<Effector>, HitPattern {
 
   @Override
   public Iterator<Effector> iterator() {
-    return effectors.iterator();
+    return allEffectors.iterator();
   }
 
   @Override
@@ -109,11 +109,11 @@ public final class Hit implements Iterable<Effector>, HitPattern {
    * @throws StructureException if the hit resulting from given effectors is completely invalid
    */
   public Hit(List<Effector> effectors) {
-    this.effectors = ensureOrderAndEquipment(effectors);
+    this.allEffectors = ensureOrderAndEquipment(effectors);
 
     StructureException.throwOnInvalidHit(hitTrace());
 
-    this.armament = this.effectors.stream()
+    this.armament = allEffectors.stream()
       .filter(Armament.class::isInstance)
       .map(Armament.class::cast)
       .findFirst()
@@ -121,7 +121,7 @@ public final class Hit implements Iterable<Effector>, HitPattern {
   }
 
   private final Armament armament;
-  private final List<Effector> effectors;
+  private final List<Effector> allEffectors;
 
   private List<Effector> ensureOrderAndEquipment(List<Effector> effectors) {
     List<Effector> mutableCopy = new ArrayList<>(effectors);
@@ -139,7 +139,7 @@ public final class Hit implements Iterable<Effector>, HitPattern {
     return ImmutableList.sortedCopyOf(mutableCopy);
   }
 
-  private void ensure(Category equipment, List<Effector> effectors) {
+  private void ensure(Category<?> equipment, List<Effector> effectors) {
     if (!equipment.any(effectors)) {
       effectors.add(equipment.withNoEffect());
     }
@@ -158,7 +158,7 @@ public final class Hit implements Iterable<Effector>, HitPattern {
   }
 
   private String hitTrace() {
-    return effectors.stream()
+    return allEffectors.stream()
       .map(Effector::getCategory)
       .map(Category::toString)
       .collect(joining(" + "));
@@ -166,7 +166,7 @@ public final class Hit implements Iterable<Effector>, HitPattern {
 
   @Override
   public String toString() {
-    return effectors.stream()
+    return allEffectors.stream()
       .map(Effector::toString)
       .collect(joining(" + "));
   }
@@ -176,7 +176,7 @@ public final class Hit implements Iterable<Effector>, HitPattern {
   }
 
   public String toLabelString() {
-    return effectors.stream()
+    return allEffectors.stream()
       .map(Effector::getName)
       .collect(joining(" + "));
   }

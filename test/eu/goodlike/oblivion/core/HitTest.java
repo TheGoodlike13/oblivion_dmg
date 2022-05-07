@@ -102,14 +102,14 @@ class HitTest {
 
   @Test
   void neverRequireCooldownForFirstHit() {
-    for (Category category : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
+    for (Category<? extends Armament> category : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
       assertThat(hit(category).requiresCooldownAfter(null)).isFalse();
     }
   }
 
   @Test
   void alwaysRequireCooldownWhenSwappingWeapons() {
-    for (Category category : ImmutableList.of(MELEE, BOW, STAFF)) {
+    for (Category<? extends Armament> category : ImmutableList.of(MELEE, BOW, STAFF)) {
       assertThat(new Hit(category.create()).requiresCooldownAfter(hit(category))).isTrue();
     }
 
@@ -155,7 +155,7 @@ class HitTest {
 
   @Test
   void isNotCombo() {
-    for (Category category : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
+    for (Category<? extends Armament> category : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
       assertThat(hit(category).isCombo(null)).isFalse();
       assertThat(hit(category).isCombo(new Hit(category.create()))).isFalse();
       assertThat(hit(category).isCombo(hit(SPELL))).isFalse();
@@ -187,20 +187,20 @@ class HitTest {
     assertThat(hit.count(POISON.resist())).isEqualTo(0);
   }
 
-  private void assertHit(Category... categories) {
+  private void assertHit(Category<?>... categories) {
     assertThatNoException().isThrownBy(() -> new Hit(dummies(categories)));
   }
 
-  private void assertImplicit(String implicit, Category... categories) {
+  private void assertImplicit(String implicit, Category<?>... categories) {
     Hit hit = new Hit(dummies(categories));
     assertThat(hit).anyMatch(effector -> effector.getCategory().toString().equals(implicit));
   }
 
-  private void assertInvalid(Category... categories) {
+  private void assertInvalid(Category<?>... categories) {
     assertThatExceptionOfType(StructureException.class).isThrownBy(() -> new Hit(dummies(categories)));
   }
 
-  private Hit hit(Category... categories) {
+  private Hit hit(Category<?>... categories) {
     return new Hit(dummies(categories));
   }
 

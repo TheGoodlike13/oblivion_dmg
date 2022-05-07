@@ -38,7 +38,7 @@ public final class ParseEffector extends BaseParseInput<Effector> {
 
   @Override
   protected Effector parse() {
-    Category category = Parse.category(this.source);
+    Category<?> category = Parse.category(this.source);
     List<EffectText> effects = Parse.effects(this.effects);
     return category.create(label, effects);
   }

@@ -76,7 +76,7 @@ public final class Enemy implements Target {
    * Shorthand for {@link #hit(Hit)}, helps with testing.
    * The actual hit will be unique.
    */
-  public void hit(Category category, EffectText... effects) {
+  public void hit(Category<?> category, EffectText... effects) {
     hit(category.create(effects));
   }
 
