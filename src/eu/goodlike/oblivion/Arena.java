@@ -294,7 +294,7 @@ public final class Arena {
       });
 
       if (needsSwap || hit.requiresCooldownAfter(lastHit)) {
-        double cooldown = hit.cooldown(combo);
+        double cooldown = lastHit.cooldown(combo);
         idleTime -= cooldown;
         enemy.tick(cooldown, this);
       }
@@ -310,7 +310,7 @@ public final class Arena {
       if (idleTime > 0) {
         play.combatLog(String.format("You wait for %.2fs", idleTime));
         enemy.tick(idleTime, this);
-        if (idleTime >= hit.cooldown(combo)) {
+        if (idleTime >= lastHit.cooldown(combo)) {
           combo = 0;
         }
       }
