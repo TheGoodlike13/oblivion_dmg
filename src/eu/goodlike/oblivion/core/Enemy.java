@@ -82,7 +82,7 @@ public final class Enemy implements Target {
 
   /**
    * Shorthand for {@link #hit(Hit)}, helps with testing.
-   * If the effector cannot be considered a hit by itself, it will be supplemented with enchanted equipment.
+   * If the effector is not an armament, it will be supplemented with one.
    * See {@link Hit#Hit(List)} for details.
    */
   public void hit(Effector byItself) {
