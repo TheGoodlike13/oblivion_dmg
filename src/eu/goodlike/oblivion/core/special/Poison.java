@@ -1,18 +1,18 @@
-package eu.goodlike.oblivion.core.method;
+package eu.goodlike.oblivion.core.special;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
+import eu.goodlike.oblivion.core.Category;
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Effector;
 import eu.goodlike.oblivion.core.Method;
-import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.effect.Resist;
+import eu.goodlike.oblivion.core.effector.BaseEffector;
 
-import java.util.Collections;
 import java.util.List;
 
-public final class Poison implements Method, Source {
+public final class Poison extends Category<Poison.Bottle> implements Method {
 
   @Override
   public EffectText resist(int pc) {
@@ -25,13 +25,8 @@ public final class Poison implements Method, Source {
   }
 
   @Override
-  public Effector withNoEffect() {
-    return NAME_POISON;
-  }
-
-  @Override
-  public Effector create(String label, List<EffectText> effects) {
-    return new PoisonBottle(label, effects);
+  public Bottle create(String label, List<EffectText> effects) {
+    return new Bottle(label, effects);
   }
 
   @Override
@@ -39,12 +34,11 @@ public final class Poison implements Method, Source {
     return 1;
   }
 
-  private final Resist.Type resistPoison = new Resist.OfFactor(this);
-
-  @Override
-  public String toString() {
-    return "POISON";
+  private Poison() {
+    super("POISON", Bottle::new);
   }
+
+  private final Resist.Type resistPoison = new Resist.OfFactor(this);
 
   /**
    * The way class loading works must be preventing referencing static instances.
@@ -60,9 +54,18 @@ public final class Poison implements Method, Source {
   }
 
   private static Poison INSTANCE;
-  private static final Effector NAME_POISON = new PoisonBottle(null, Collections.emptyList());
 
-  private static final class PoisonBottle extends Effector {
+  public static final class Bottle extends BaseEffector {
+    @Override
+    public Category<?> getCategory() {
+      return Poison.getInstance();
+    }
+
+    @Override
+    public Method getMethod() {
+      return Poison.getInstance();
+    }
+
     @Override
     public Effect.Id toId(EffectText effect) {
       Effect.Type type = effect.getType();
@@ -72,11 +75,11 @@ public final class Poison implements Method, Source {
 
     @Override
     public Effector copy(String label) {
-      return new PoisonBottle(label, this);
+      return new Bottle(label, this);
     }
 
-    public PoisonBottle(String label, Iterable<EffectText> effects) {
-      super(label, getInstance(), getInstance(), effects);
+    public Bottle(String label, Iterable<EffectText> effects) {
+      super(label, effects);
     }
 
     private final Multiset<Effect.Type> useCounter = HashMultiset.create();
@@ -88,19 +91,19 @@ public final class Poison implements Method, Source {
       return type;
     }
 
-    private AlwaysUnique(PoisonBottle poison, Effect.Type type, int use) {
+    private AlwaysUnique(Bottle poison, Effect.Type type, int use) {
       this.poison = poison;
       this.type = type;
       this.use = use;
     }
 
-    private final PoisonBottle poison;
+    private final Bottle poison;
     private final Effect.Type type;
     private final int use;
 
     @Override
     public String toString() {
-      return "(" + use + ")" + poison.getLabel() + " " + getType();
+      return "(" + use + ")" + poison.getName() + " " + getType();
     }
   }
 

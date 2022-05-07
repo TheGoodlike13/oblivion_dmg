@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static eu.goodlike.oblivion.core.Effector.Factory.ARROW;
+import static eu.goodlike.oblivion.core.Effector.Factory.BOW;
+import static eu.goodlike.oblivion.core.Effector.Factory.MELEE;
+import static eu.goodlike.oblivion.core.Effector.Factory.POISON;
+import static eu.goodlike.oblivion.core.Effector.Factory.SPELL;
+import static eu.goodlike.oblivion.core.Effector.Factory.STAFF;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
-import static eu.goodlike.oblivion.core.Source.ARROW;
-import static eu.goodlike.oblivion.core.Source.BOW;
-import static eu.goodlike.oblivion.core.Source.MELEE;
-import static eu.goodlike.oblivion.core.Source.POISON;
-import static eu.goodlike.oblivion.core.Source.SPELL;
-import static eu.goodlike.oblivion.core.Source.STAFF;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -60,18 +60,6 @@ class HitTest {
   }
 
   @Test
-  void delivery() {
-    assertThat(hit(MELEE).getDeliveryMechanism()).isEqualTo(MELEE);
-    assertThat(hit(BOW).getDeliveryMechanism()).isEqualTo(BOW);
-    assertThat(hit(SPELL).getDeliveryMechanism()).isEqualTo(SPELL);
-    assertThat(hit(STAFF).getDeliveryMechanism()).isEqualTo(STAFF);
-
-    // implicits
-    assertThat(hit(ARROW).getDeliveryMechanism()).isEqualTo(BOW);
-    assertThat(hit(POISON).getDeliveryMechanism()).isEqualTo(MELEE);
-  }
-
-  @Test
   void weapons() {
     assertThat(hit(MELEE).getWeapon()).contains(MELEE.withNoEffect());
     assertThat(hit(BOW).getWeapon()).contains(BOW.withNoEffect());
@@ -85,15 +73,15 @@ class HitTest {
 
   @Test
   void alwaysSwapWhenNoWeapon() {
-    for (Source source : ImmutableList.of(MELEE, BOW, STAFF)) {
-      assertThat(hit(source).requiresSwap(null)).contains(source.withNoEffect());
+    for (Category<? extends Armament> category : ImmutableList.of(MELEE, BOW, STAFF)) {
+      assertThat(hit(category).requiresSwap(null)).contains(category.withNoEffect());
     }
   }
 
   @Test
   void alwaysSwapDifferentWeaponOfSameType() {
-    for (Source source : ImmutableList.of(MELEE, BOW, STAFF)) {
-      assertThat(hit(source).requiresSwap(source.create())).contains(source.withNoEffect());
+    for (Category<? extends Armament> category : ImmutableList.of(MELEE, BOW, STAFF)) {
+      assertThat(hit(category).requiresSwap(category.create())).contains(category.withNoEffect());
     }
   }
 
@@ -114,15 +102,15 @@ class HitTest {
 
   @Test
   void neverRequireCooldownForFirstHit() {
-    for (Source source : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
-      assertThat(hit(source).requiresCooldownAfter(null)).isFalse();
+    for (Category category : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
+      assertThat(hit(category).requiresCooldownAfter(null)).isFalse();
     }
   }
 
   @Test
   void alwaysRequireCooldownWhenSwappingWeapons() {
-    for (Source source : ImmutableList.of(MELEE, BOW, STAFF)) {
-      assertThat(new Hit(source.create()).requiresCooldownAfter(hit(source))).isTrue();
+    for (Category category : ImmutableList.of(MELEE, BOW, STAFF)) {
+      assertThat(new Hit(category.create()).requiresCooldownAfter(hit(category))).isTrue();
     }
 
     assertThat(hit(BOW).requiresCooldownAfter(hit(MELEE))).isTrue();
@@ -167,11 +155,11 @@ class HitTest {
 
   @Test
   void isNotCombo() {
-    for (Source source : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
-      assertThat(hit(source).isCombo(null)).isFalse();
-      assertThat(hit(source).isCombo(new Hit(source.create()))).isFalse();
-      assertThat(hit(source).isCombo(hit(SPELL))).isFalse();
-      assertThat(hit(SPELL).isCombo(hit(source))).isFalse();
+    for (Category category : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
+      assertThat(hit(category).isCombo(null)).isFalse();
+      assertThat(hit(category).isCombo(new Hit(category.create()))).isFalse();
+      assertThat(hit(category).isCombo(hit(SPELL))).isFalse();
+      assertThat(hit(SPELL).isCombo(hit(category))).isFalse();
     }
   }
 
@@ -199,25 +187,25 @@ class HitTest {
     assertThat(hit.count(POISON.resist())).isEqualTo(0);
   }
 
-  private void assertHit(Source... sources) {
-    assertThatNoException().isThrownBy(() -> new Hit(dummies(sources)));
+  private void assertHit(Category... categories) {
+    assertThatNoException().isThrownBy(() -> new Hit(dummies(categories)));
   }
 
-  private void assertImplicit(String implicit, Source... sources) {
-    Hit hit = new Hit(dummies(sources));
-    assertThat(hit).anyMatch(effector -> effector.getSource().toString().equals(implicit));
+  private void assertImplicit(String implicit, Category... categories) {
+    Hit hit = new Hit(dummies(categories));
+    assertThat(hit).anyMatch(effector -> effector.getCategory().toString().equals(implicit));
   }
 
-  private void assertInvalid(Source... sources) {
-    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> new Hit(dummies(sources)));
+  private void assertInvalid(Category... categories) {
+    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> new Hit(dummies(categories)));
   }
 
-  private Hit hit(Source... sources) {
-    return new Hit(dummies(sources));
+  private Hit hit(Category... categories) {
+    return new Hit(dummies(categories));
   }
 
-  private List<Effector> dummies(Source... sources) {
-    return Stream.of(sources).map(Source::withNoEffect).collect(toList());
+  private List<Effector> dummies(Category<?>... categories) {
+    return Stream.of(categories).map(Category::withNoEffect).collect(toList());
   }
 
 }

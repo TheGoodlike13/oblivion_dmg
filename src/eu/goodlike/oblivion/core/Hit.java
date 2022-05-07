@@ -9,52 +9,73 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import static eu.goodlike.oblivion.core.Source.ARROW;
-import static eu.goodlike.oblivion.core.Source.BOW;
-import static eu.goodlike.oblivion.core.Source.MELEE;
-import static eu.goodlike.oblivion.core.Source.POISON;
+import static eu.goodlike.oblivion.core.Effector.Factory.ARROW;
+import static eu.goodlike.oblivion.core.Effector.Factory.BOW;
+import static eu.goodlike.oblivion.core.Effector.Factory.MELEE;
+import static eu.goodlike.oblivion.core.Effector.Factory.POISON;
 import static java.util.stream.Collectors.joining;
 
 /**
- * Combination of effectors which apply their effects at once upon a hit.
+ * Combination of an armament and optional accessories which all apply their effects at once.
+ * Effects that are applied at once cannot influence subsequent effects in the same hit.
  * For example: enchanted bow which fires an enchanted arrow with poison.
- * All of them apply their effects at once (i.e. cannot influence each other for this hit).
- * This class ensures the combination of effectors is faithful to the game.
- * <p/>
- * The order of effectors in this hit is consistent with their natural ordering.
+ * The order in which these effects are applied is consistent with the natural order of the effectors.
  */
 public final class Hit implements Iterable<Effector>, HitPattern {
 
-  public Source getDeliveryMechanism() {
-    return getWeapon().orElse(effectors.get(0)).getSource();
+  /**
+   * @return armament of this hit if it's a weapon, empty otherwise
+   */
+  public Optional<Armament> getWeapon() {
+    return armament.isEquipment()
+      ? Optional.of(armament)
+      : Optional.empty();
   }
 
-  public Optional<Effector> getWeapon() {
-    return effectors.stream()
-      .filter(c -> c.getSource().isWeapon())
-      .findFirst();
-  }
-
-  public Optional<Effector> requiresSwap(Effector oldWeapon) {
+  /**
+   * Compares the armament of this hit with the given weapon.
+   * If this hit uses a different weapon, returns it.
+   * Otherwise returns empty.
+   */
+  public Optional<Armament> requiresSwap(Armament oldWeapon) {
     return getWeapon().filter(newWeapon -> !newWeapon.equals(oldWeapon));
   }
 
+  /**
+   * The rules for cooldown cancelling are:
+   * <p/>1) Never cancel cooldown if you cast a spell.
+   * <p/>2) Never cancel cooldown if you need to swap.
+   * <p/>3) Never cancel cooldown if you continue to use a staff.
+   * <p/>4) In all other cases, cancel cooldown.
+   *
+   * @return true if this hit cannot cancel the cooldown of the last hit
+   */
   public boolean requiresCooldownAfter(Hit last) {
-    return last != null && (!getWeapon().isPresent() || requiresSwap(last) || last.usesMysticalWeapon());
+    return last != null && (isSpell() || requiresSwap(last) || last.usesMysticalWeapon());
   }
 
+  /**
+   * @return true if last hit used the exact same weapon, false otherwise
+   */
   public boolean isCombo(Hit last) {
     return last != null
       && getWeapon().isPresent()
       && getWeapon().equals(last.getWeapon());
   }
 
+  /**
+   * @return amount of given type of effects in this hit; 2 or more is only possible if this hit has accessories
+   */
   public long count(Effect.Type type) {
     return Streams.stream(this)
       .flatMap(Streams::stream)
       .map(EffectText::getType)
       .filter(type::equals)
       .count();
+  }
+
+  public boolean hasMultiple(Effect.Type type) {
+    return count(type) > 1;
   }
 
   @Override
@@ -64,12 +85,12 @@ public final class Hit implements Iterable<Effector>, HitPattern {
 
   @Override
   public double timeToHit(int combo) {
-    return getDeliveryMechanism().timeToHit(combo);
+    return armament.timeToHit(combo);
   }
 
   @Override
   public double cooldown(int combo) {
-    return getDeliveryMechanism().cooldown(combo);
+    return armament.cooldown(combo);
   }
 
   public Hit(Effector... effectors) {
@@ -91,8 +112,15 @@ public final class Hit implements Iterable<Effector>, HitPattern {
     this.effectors = ensureOrderAndEquipment(effectors);
 
     StructureException.throwOnInvalidHit(hitTrace());
+
+    this.armament = this.effectors.stream()
+      .filter(Armament.class::isInstance)
+      .map(Armament.class::cast)
+      .findFirst()
+      .orElseThrow(() -> new IllegalStateException("Should be at least 1 armament"));
   }
 
+  private final Armament armament;
   private final List<Effector> effectors;
 
   private List<Effector> ensureOrderAndEquipment(List<Effector> effectors) {
@@ -111,27 +139,30 @@ public final class Hit implements Iterable<Effector>, HitPattern {
     return ImmutableList.sortedCopyOf(mutableCopy);
   }
 
-  private void ensure(Source equipment, List<Effector> effectors) {
+  private void ensure(Category equipment, List<Effector> effectors) {
     if (!equipment.any(effectors)) {
       effectors.add(equipment.withNoEffect());
     }
+  }
+
+  private boolean isSpell() {
+    return !getWeapon().isPresent();
   }
 
   private boolean requiresSwap(Hit last) {
     return getWeapon().flatMap(last::requiresSwap).isPresent();
   }
 
-  private boolean usesMysticalWeapon() {
+  private boolean usesMysticalWeapon() { // TODO: related specifically to staffs not chaining
     return getWeapon()
-      .map(Effector::getSource)
-      .filter(source -> !source.isPhysical())
+      .filter(weapon -> !weapon.isPhysical())
       .isPresent();
   }
 
   private String hitTrace() {
     return effectors.stream()
-      .map(Effector::getSource)
-      .map(Source::toString)
+      .map(Effector::getCategory)
+      .map(Category::toString)
       .collect(joining(" + "));
   }
 
@@ -143,19 +174,19 @@ public final class Hit implements Iterable<Effector>, HitPattern {
   }
 
   public String toPerformString() {
-    return getDeliveryMechanism().describeAction() + " " + toLabelString();
+    return armament.describeAction() + " " + toLabelString();
   }
 
   public String toLabelString() {
     return effectors.stream()
-      .map(Effector::getLabel)
+      .map(Effector::getName)
       .collect(joining(" + "));
   }
 
   public static final class Combo implements HitPattern {
     @Override
     public double timeToHit(int combo) {
-      int index = combo % fullCombo.size();
+      int index = combo % fullCombo.size(); // TODO: might as well refactor duplicate code
       Combo actual = fullCombo.get(index);
       return actual.timeToHit;
     }

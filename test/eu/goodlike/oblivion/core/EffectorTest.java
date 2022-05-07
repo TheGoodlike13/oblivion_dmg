@@ -2,12 +2,12 @@ package eu.goodlike.oblivion.core;
 
 import org.junit.jupiter.api.Test;
 
+import static eu.goodlike.oblivion.core.Effector.Factory.SPELL;
 import static eu.goodlike.oblivion.core.Factor.FIRE;
 import static eu.goodlike.oblivion.core.Factor.FROST;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
 import static eu.goodlike.oblivion.core.Factor.POISON;
 import static eu.goodlike.oblivion.core.Factor.SHOCK;
-import static eu.goodlike.oblivion.core.Source.SPELL;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 

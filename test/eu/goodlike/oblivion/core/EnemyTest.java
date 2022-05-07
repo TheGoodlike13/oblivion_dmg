@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 
 import static eu.goodlike.oblivion.Global.Settings.DIFFICULTY;
 import static eu.goodlike.oblivion.Global.Settings.LEVEL;
+import static eu.goodlike.oblivion.core.Effector.Factory.MELEE;
+import static eu.goodlike.oblivion.core.Effector.Factory.SPELL;
 import static eu.goodlike.oblivion.core.Factor.FIRE;
 import static eu.goodlike.oblivion.core.Factor.FROST;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
 import static eu.goodlike.oblivion.core.Factor.POISON;
 import static eu.goodlike.oblivion.core.Factor.SHOCK;
-import static eu.goodlike.oblivion.core.Source.MELEE;
-import static eu.goodlike.oblivion.core.Source.SPELL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.Assertions.within;

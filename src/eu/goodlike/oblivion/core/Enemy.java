@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static eu.goodlike.oblivion.Global.Settings.LEVEL;
 import static eu.goodlike.oblivion.Global.Settings.TICK;
-import static eu.goodlike.oblivion.core.Source.SPELL;
+import static eu.goodlike.oblivion.core.Effector.Factory.SPELL;
 
 /**
  * Target for all of the hits.
@@ -76,8 +76,8 @@ public final class Enemy implements Target {
    * Shorthand for {@link #hit(Hit)}, helps with testing.
    * The actual hit will be unique.
    */
-  public void hit(Source source, EffectText... effects) {
-    hit(source.create(effects));
+  public void hit(Category category, EffectText... effects) {
+    hit(category.create(effects));
   }
 
   /**

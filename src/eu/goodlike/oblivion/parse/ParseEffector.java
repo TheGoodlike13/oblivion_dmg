@@ -2,9 +2,9 @@ package eu.goodlike.oblivion.parse;
 
 import eu.goodlike.oblivion.NamedValue;
 import eu.goodlike.oblivion.Parse;
+import eu.goodlike.oblivion.core.Category;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Effector;
-import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.StructureException;
 
 import java.util.ArrayList;
@@ -23,10 +23,10 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * Only last label is considered, others ignored.
  * This input is optional.
  * <p/>
- * Inputs with '+' prefix are treated as sources.
- * Only last source is considered, others ignored.
+ * Inputs with '+' prefix are treated as categories.
+ * Only last category is considered, others ignored.
  * This input is required.
- * In practice, there should be only a single source at the beginning of input.
+ * In practice, there should be only a single category at the beginning of input.
  * <p/>
  * All other inputs are treated as effector effects.
  * They must be parsable.
@@ -38,9 +38,9 @@ public final class ParseEffector extends BaseParseInput<Effector> {
 
   @Override
   protected Effector parse() {
-    Source source = Parse.source(this.source);
+    Category category = Parse.category(this.source);
     List<EffectText> effects = Parse.effects(this.effects);
-    return source.create(label, effects);
+    return category.create(label, effects);
   }
 
   @Override
@@ -62,7 +62,7 @@ public final class ParseEffector extends BaseParseInput<Effector> {
     inputs.forEach(this::identify);
 
     if (source == null) {
-      throw new StructureException("Missing source param", isBlank(label) ? effects : label);
+      throw new StructureException("Missing category param", isBlank(label) ? effects : label);
     }
   }
 

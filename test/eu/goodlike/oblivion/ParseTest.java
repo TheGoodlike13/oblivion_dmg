@@ -1,8 +1,11 @@
 package eu.goodlike.oblivion;
 
+import eu.goodlike.oblivion.core.Category;
+import eu.goodlike.oblivion.core.Effector;
 import eu.goodlike.oblivion.core.Factor;
-import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.StructureException;
+import org.assertj.core.api.AssertionsForClassTypes;
+import org.assertj.core.api.ObjectAssert;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,14 +36,14 @@ class ParseTest {
 
   @Test
   void sources() {
-    assertThat(Parse.source("melee")).isEqualTo(Source.MELEE);
-    assertThat(Parse.source("bow")).isEqualTo(Source.BOW);
-    assertThat(Parse.source("arrow")).isEqualTo(Source.ARROW);
-    assertThat(Parse.source("poison")).isEqualTo(Source.POISON);
-    assertThat(Parse.source("spell")).isEqualTo(Source.SPELL);
-    assertThat(Parse.source("staff")).isEqualTo(Source.STAFF);
+    assertCategory(Parse.category("melee")).isEqualTo(Effector.Factory.MELEE);
+    assertCategory(Parse.category("bow")).isEqualTo(Effector.Factory.BOW);
+    assertCategory(Parse.category("arrow")).isEqualTo(Effector.Factory.ARROW);
+    assertCategory(Parse.category("poison")).isEqualTo(Effector.Factory.POISON);
+    assertCategory(Parse.category("spell")).isEqualTo(Effector.Factory.SPELL);
+    assertCategory(Parse.category("staff")).isEqualTo(Effector.Factory.STAFF);
 
-    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> Parse.source("Main.java"));
+    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> Parse.category("Main.java"));
   }
 
   @Test
@@ -63,8 +66,8 @@ class ParseTest {
     assertThat(Parse.factor("f")).isEqualTo(Factor.FIRE);
     assertThat(Parse.factor("fr")).isEqualTo(Factor.FROST);
 
-    assertThat(Parse.source("s")).isEqualTo(Source.SPELL);
-    assertThat(Parse.source("st")).isEqualTo(Source.STAFF);
+    assertCategory(Parse.category("s")).isEqualTo(Effector.Factory.SPELL);
+    assertCategory(Parse.category("st")).isEqualTo(Effector.Factory.STAFF);
   }
 
   @Test
@@ -101,6 +104,12 @@ class ParseTest {
     assertThatExceptionOfType(StructureException.class).isThrownBy(() -> Parse.effect("100wf10z"));
     assertThatExceptionOfType(StructureException.class).isThrownBy(() -> Parse.effect("100dd"));
     assertThatExceptionOfType(StructureException.class).isThrownBy(() -> Parse.effect("100ms"));
+  }
+
+  // required to avoid compilation issue due to Category now being a Predicate
+  // see http://joel-costigliola.github.io/assertj/assertj-core.html#ambiguous-compilation-error
+  private ObjectAssert<? extends Category<?>> assertCategory(Category<?> category) {
+    return AssertionsForClassTypes.assertThat(category);
   }
 
 }

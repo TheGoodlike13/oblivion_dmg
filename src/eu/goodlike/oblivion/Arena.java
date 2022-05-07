@@ -3,8 +3,8 @@ package eu.goodlike.oblivion;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Streams;
+import eu.goodlike.oblivion.core.Armament;
 import eu.goodlike.oblivion.core.Effect;
-import eu.goodlike.oblivion.core.Effector;
 import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Factor;
 import eu.goodlike.oblivion.core.Hit;
@@ -151,9 +151,9 @@ public final class Arena {
   }
 
   private final class PlayByPlay implements Enemy.Observer {
-    public void setInitialWeapon(Effector initialWeapon) {
+    public void setInitialWeapon(Armament initialWeapon) {
       equippedWeapon = initialWeapon;
-      play.combatLog("You begin equipped with " + initialWeapon.getLabel());
+      play.combatLog("You begin equipped with " + initialWeapon.getName());
     }
 
     public void next(Hit hit) {
@@ -171,9 +171,9 @@ public final class Arena {
 
       if (needsSwap) {
         combatLog("You begin to swap your weapon.");
-        double timeToSwap = equippedWeapon.getSource().timeToSwap();
+        double timeToSwap = equippedWeapon.timeToSwap();
         enemy.tick(timeToSwap, this);
-        combatLog("You equip " + equippedWeapon.getLabel());
+        combatLog("You equip " + equippedWeapon.getName());
       }
 
       combatLog("You " + hit.toPerformString());
@@ -245,7 +245,7 @@ public final class Arena {
       this.lastLog = -1;
     }
 
-    private Effector equippedWeapon;
+    private Armament equippedWeapon;
     private boolean needsSwap;
 
     private Hit lastHit;
@@ -389,7 +389,7 @@ public final class Arena {
       }
 
       private String whichEffect() {
-        return String.valueOf(lastHit.count(id.getType()) > 1 ? id : id.getType());
+        return String.valueOf(lastHit.hasMultiple(id.getType()) ? id : id.getType());
       }
 
       private String numbers(double magnitude, double duration) {

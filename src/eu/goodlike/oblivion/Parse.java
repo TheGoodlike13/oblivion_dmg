@@ -2,10 +2,10 @@ package eu.goodlike.oblivion;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Streams;
+import eu.goodlike.oblivion.core.Category;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Element;
 import eu.goodlike.oblivion.core.Factor;
-import eu.goodlike.oblivion.core.Source;
 import eu.goodlike.oblivion.core.StructureException;
 
 import java.util.List;
@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static eu.goodlike.oblivion.core.Effector.Factory.ALL_IN_ORDER;
 import static eu.goodlike.oblivion.core.Factor.FIRE;
 import static eu.goodlike.oblivion.core.Factor.FROST;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
@@ -65,9 +66,9 @@ public final class Parse {
       .orElseThrow(() -> new StructureException("Unknown element reference", input));
   }
 
-  public static Source source(String input) {
-    return firstMatch(input, Source.ALL_IN_ORDER)
-      .orElseThrow(() -> new StructureException("Unknown source reference", input));
+  public static Category<?> category(String input) {
+    return firstMatch(input, ALL_IN_ORDER)
+      .orElseThrow(() -> new StructureException("Unknown category reference", input));
   }
 
   /**
