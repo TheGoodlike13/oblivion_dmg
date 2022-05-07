@@ -117,11 +117,11 @@ public final class Hit implements Iterable<Effector>, HitPattern {
       .filter(Armament.class::isInstance)
       .map(Armament.class::cast)
       .findFirst()
-      .orElseThrow(() -> new IllegalStateException("Should be at least 1 armament"));
+      .orElseThrow(() -> new IllegalStateException("Every hit will have an armament, explicitly or implicitly."));
   }
 
-  private final Armament armament;
   private final List<Effector> allEffectors;
+  private final Armament armament;
 
   private List<Effector> ensureOrderAndEquipment(List<Effector> effectors) {
     List<Effector> mutableCopy = new ArrayList<>(effectors);
