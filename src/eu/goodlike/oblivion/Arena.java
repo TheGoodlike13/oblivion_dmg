@@ -171,46 +171,8 @@ public final class Arena {
     }
 
     public boolean next(Hit hit) {
-      needsSwap = false;
-      combo = hit.isCombo(lastHit) ? combo + 1 : 0;
-
-      hit.requiresSwap(equippedWeapon).ifPresent(newWeapon -> {
-        needsSwap = true;
-        equippedWeapon = newWeapon;
-      });
-
-      if (needsSwap || hit.requiresCooldownAfter(lastHit)) {
-        double cooldown = hit.cooldown(combo);
-        idleTime -= cooldown;
-        enemy.tick(cooldown, this);
-      }
-
-      if (needsSwap) {
-        combatLog("You begin to swap your weapon.");
-        double timeToSwap = equippedWeapon.timeToSwap();
-        idleTime -= timeToSwap;
-        enemy.tick(timeToSwap, this);
-        combatLog("You equip " + equippedWeapon.getName());
-      }
-
-      if (idleTime > 0) {
-        play.combatLog(String.format("You wait for %.2fs", idleTime));
-        enemy.tick(idleTime, this);
-        combo = 0;
-      }
-
-      combatLog("You " + hit.toPerformString());
-      double timeToHit = hit.timeToHit(combo);
-      enemy.tick(timeToHit, this);
-
-      combatLog("You hit with " + hit.toLabelString());
-      lastHit = hit;
-      isTicking = false;
-      enemy.hit(hit, this);
-      isTicking = true;
-
-      dumpModifiedFactors();
-      idleTime = pause - timeToHit;
+      prepare(hit);
+      idleTime = pause - perform(hit);
 
       return isAliveOrJustRecentlyDeceased();
     }
@@ -320,6 +282,50 @@ public final class Arena {
 
     private boolean isAliveOrJustRecentlyDeceased() {
       return deathStamp > duration - RAMPAGE;
+    }
+
+    private void prepare(Hit hit) {
+      needsSwap = false;
+      combo = hit.isCombo(lastHit) ? combo + 1 : 0;
+
+      hit.requiresSwap(equippedWeapon).ifPresent(newWeapon -> {
+        needsSwap = true;
+        equippedWeapon = newWeapon;
+      });
+
+      if (needsSwap || hit.requiresCooldownAfter(lastHit)) {
+        double cooldown = hit.cooldown(combo);
+        idleTime -= cooldown;
+        enemy.tick(cooldown, this);
+      }
+
+      if (needsSwap) {
+        combatLog("You begin to swap your weapon.");
+        double timeToSwap = equippedWeapon.timeToSwap();
+        idleTime -= timeToSwap;
+        enemy.tick(timeToSwap, this);
+        combatLog("You equip " + equippedWeapon.getName());
+      }
+
+      if (idleTime > 0) {
+        play.combatLog(String.format("You wait for %.2fs", idleTime));
+        enemy.tick(idleTime, this);
+        combo = 0;
+      }
+    }
+
+    private double perform(Hit hit) {
+      combatLog("You " + hit.toPerformString());
+      double timeToHit = hit.timeToHit(combo);
+      enemy.tick(timeToHit, this);
+
+      combatLog("You hit with " + hit.toLabelString());
+      lastHit = hit;
+      isTicking = false;
+      enemy.hit(hit, this);
+      isTicking = true;
+      dumpModifiedFactors();
+      return timeToHit;
     }
 
     private void dumpModifiedFactors() {
