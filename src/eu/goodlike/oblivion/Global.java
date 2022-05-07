@@ -98,6 +98,12 @@ public final class Global {
     public static double TICK = 0.001;
 
     /**
+     * How long to continue attacking after enemy has died in seconds.
+     * Must be a positive double.
+     */
+    public static double RAMPAGE = 1;
+
+    /**
      * Config files containing prepared entities which can be parsed and stored into caches for future use.
      */
     public static String PREPARED_ENEMIES = "prepared_enemies.txt";
@@ -142,7 +148,10 @@ public final class Global {
 
       LEVEL = StructureException.natOrThrow(properties.getProperty("level"), "player level");
       DIFFICULTY = StructureException.intOrThrow(properties.getProperty("difficulty"), "difficulty setting");
+
       TICK = StructureException.positiveOrThrow(properties.getProperty("tick"), "tick setting");
+      RAMPAGE = StructureException.positiveOrThrow(properties.getProperty("rampage"), "rampage setting");
+
       PREPARED_ENEMIES = properties.getProperty("prepared.enemies");
       PREPARED_ITEMS = properties.getProperty("prepared.items");
       PREPARED_SPELLS = properties.getProperty("prepared.spells");

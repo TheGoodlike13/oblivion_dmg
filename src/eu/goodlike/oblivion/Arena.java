@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static eu.goodlike.oblivion.Global.Settings.RAMPAGE;
 import static eu.goodlike.oblivion.Global.Settings.TICK;
 import static java.util.stream.Collectors.joining;
 
@@ -127,7 +128,11 @@ public final class Arena {
     equipFirstWeapon();
 
     for (Action action : actions) {
-      action.perform();
+      boolean shouldContinue = action.perform();
+      if (!shouldContinue) {
+        play.giveItARest();
+        break;
+      }
     }
 
     enemy.resolve(play);
@@ -159,8 +164,8 @@ public final class Arena {
 
   private final class NextHit implements Action {
     @Override
-    public void perform() {
-      play.next(nextHit);
+    public boolean perform() {
+      return play.next(nextHit);
     }
 
     @Override
@@ -182,8 +187,9 @@ public final class Arena {
 
   private final class Pause implements Action {
     @Override
-    public void perform() {
+    public boolean perform() {
       play.registerPause(waitTime);
+      return true;
     }
 
     public Pause(double waitTime) {
@@ -198,8 +204,16 @@ public final class Arena {
     }
   }
 
+  /**
+   * Simple wrapper for both a hit and a pause
+   */
   private interface Action {
-    void perform();
+    /**
+     * Do the next action.
+     *
+     * @return true if the actions should continue, false if we can stop now
+     */
+    boolean perform();
     default Optional<Armament> getWeapon() {
       return Optional.empty();
     }
@@ -215,7 +229,7 @@ public final class Arena {
       idleTime += waitTime;
     }
 
-    public void next(Hit hit) {
+    public boolean next(Hit hit) {
       needsSwap = false;
       combo = hit.isCombo(lastHit) ? combo + 1 : 0;
 
@@ -256,6 +270,12 @@ public final class Arena {
 
       dumpModifiedFactors();
       idleTime = -timeToHit;
+
+      return isAliveOrJustRecentlyDeceased();
+    }
+
+    public void giveItARest() {
+      combatLog("You stop beating the dead " + label);
     }
 
     @Override
@@ -314,6 +334,7 @@ public final class Arena {
 
       this.duration = 0;
       this.lastLog = -1;
+      this.deathStamp = Double.MAX_VALUE;
     }
 
     private Armament equippedWeapon;
@@ -335,6 +356,7 @@ public final class Arena {
 
     private double duration;
     private double lastLog;
+    private double deathStamp;
 
     private void combatLog(String text) {
       if (lastLog == duration) {
@@ -344,6 +366,10 @@ public final class Arena {
         lastLog = duration;
         Write.line("%06.3f %s", duration, text);
       }
+    }
+
+    private boolean isAliveOrJustRecentlyDeceased() {
+      return deathStamp > duration - RAMPAGE;
     }
 
     private void dumpModifiedFactors() {
@@ -356,6 +382,7 @@ public final class Arena {
 
     private void breakdownPossibleDeath() {
       if (!hasDeathBeenBrokenDown && !enemy.isAlive()) {
+        deathStamp = duration;
         hasDeathBeenBrokenDown = true;
         combatLog("The " + label + " has died. Breakdown:");
         writeDamageBreakdown();
