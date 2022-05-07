@@ -39,24 +39,22 @@ public final class Arena {
   }
 
   public void addHit(NamedValue<Hit> hit) {
-    Action action = new NextHit(hit.getValue());
-    actions.add(action);
-    Write.line("[#" + hit.getName() + "] Next hit: " + action);
+    hits.add(hit.getValue());
+    Write.line("[#" + hit.getName() + "] Next hit: " + hit.getValue());
   }
 
-  public void addPause(double waitTime) {
-    Action pause = new Pause(waitTime);
-    actions.add(pause);
-    Write.line("Next: " + pause);
+  public void setPause(double waitTime) {
+    this.pause = waitTime;
+    Write.line("You will wait at least %.2fs between hits", pause);
   }
 
   public void removeLastAction() {
-    if (actions.isEmpty()) {
-      Write.line("No actions to remove.");
+    if (hits.isEmpty()) {
+      Write.line("No hits to remove.");
     }
     else {
-      Action removed = actions.remove(actions.size() - 1);
-      Write.line("Removed action: " + removed);
+      Hit removed = hits.remove(hits.size() - 1);
+      Write.line("Removed hit: " + removed);
     }
   }
 
@@ -75,7 +73,7 @@ public final class Arena {
     Write.separator();
 
     play = new PlayByPlay();
-    actions = new ArrayList<>();
+    hits = new ArrayList<>();
     if (enemy != null) {
       enemy.updateLevel();
       announceOpponent();
@@ -84,7 +82,8 @@ public final class Arena {
 
   public void reset() {
     play = new PlayByPlay();
-    actions = new ArrayList<>();
+    hits = new ArrayList<>();
+    pause = 0;
     label = null;
     enemy = null;
   }
@@ -94,7 +93,8 @@ public final class Arena {
   }
 
   private PlayByPlay play;
-  private List<Action> actions;
+  private List<Hit> hits;
+  private double pause;
   private String label;
   private Enemy enemy;
 
@@ -108,7 +108,7 @@ public final class Arena {
   }
 
   private boolean ready() {
-    if (actions.isEmpty()) {
+    if (hits.isEmpty()) {
       String beholdee = enemy == null ? "void" : label;
       Write.line("You stare at the " + beholdee + ".");
       Write.line("The " + beholdee + " stares at you.");
@@ -127,8 +127,8 @@ public final class Arena {
   private void fight() {
     equipFirstWeapon();
 
-    for (Action action : actions) {
-      boolean shouldContinue = action.perform();
+    for (Hit hit : hits) {
+      boolean shouldContinue = play.next(hit);
       if (!shouldContinue) {
         play.giveItARest();
         break;
@@ -141,8 +141,8 @@ public final class Arena {
   }
 
   private void equipFirstWeapon() {
-    actions.stream()
-      .map(Action::getWeapon)
+    hits.stream()
+      .map(Hit::getWeapon)
       .filter(Optional::isPresent)
       .map(Optional::get)
       .findFirst()
@@ -162,71 +162,10 @@ public final class Arena {
       : String.format("%-6s x%.2f", factor, multiplier);
   }
 
-  private final class NextHit implements Action {
-    @Override
-    public boolean perform() {
-      return play.next(nextHit);
-    }
-
-    @Override
-    public Optional<Armament> getWeapon() {
-      return nextHit.getWeapon();
-    }
-
-    public NextHit(Hit nextHit) {
-      this.nextHit = nextHit;
-    }
-
-    private final Hit nextHit;
-
-    @Override
-    public String toString() {
-      return nextHit.toString();
-    }
-  }
-
-  private final class Pause implements Action {
-    @Override
-    public boolean perform() {
-      play.registerPause(waitTime);
-      return true;
-    }
-
-    public Pause(double waitTime) {
-      this.waitTime = waitTime;
-    }
-
-    private final double waitTime;
-
-    @Override
-    public String toString() {
-      return String.format("Pause %.2fs", waitTime);
-    }
-  }
-
-  /**
-   * Simple wrapper for both a hit and a pause
-   */
-  private interface Action {
-    /**
-     * Do the next action.
-     *
-     * @return true if the actions should continue, false if we can stop now
-     */
-    boolean perform();
-    default Optional<Armament> getWeapon() {
-      return Optional.empty();
-    }
-  }
-
   private final class PlayByPlay implements Enemy.Observer {
     public void setInitialWeapon(Armament initialWeapon) {
       equippedWeapon = initialWeapon;
       play.combatLog("You begin equipped with " + initialWeapon.getName());
-    }
-
-    public void registerPause(double waitTime) {
-      idleTime += waitTime;
     }
 
     public boolean next(Hit hit) {
@@ -269,7 +208,7 @@ public final class Arena {
       isTicking = true;
 
       dumpModifiedFactors();
-      idleTime = -timeToHit;
+      idleTime = pause - timeToHit;
 
       return isAliveOrJustRecentlyDeceased();
     }

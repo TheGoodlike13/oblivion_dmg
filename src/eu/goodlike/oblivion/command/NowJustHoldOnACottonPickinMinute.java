@@ -9,7 +9,7 @@ public final class NowJustHoldOnACottonPickinMinute extends BaseCommand {
   @Override
   protected void performTask() {
     double waitTime = StructureException.positiveOrThrow(input(1), "wait time");
-    THE_ARENA.addPause(waitTime);
+    THE_ARENA.setPause(waitTime);
   }
 
 }

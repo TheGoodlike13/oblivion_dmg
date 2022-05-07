@@ -311,7 +311,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "All your hits land on the wall.",
       "Good job.",
       "How about picking an enemy?",
-      "Removed action: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "You face the enemy (10 hp)",
       "You stare at the enemy.",
       "The enemy stares at you.",
@@ -341,7 +341,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
     assertOutput(
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "Removed action: <SPELL$1> {MAGIC DMG 10 for 1s}"
+      "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}"
     );
   }
 
@@ -352,8 +352,8 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     assertOutput(
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
       "[#2] Next hit: <SPELL$2> {MAGIC DMG 10 for 1s}",
-      "Removed action: <SPELL$2> {MAGIC DMG 10 for 1s}",
-      "Removed action: <SPELL$1> {MAGIC DMG 10 for 1s}"
+      "Removed hit: <SPELL$2> {MAGIC DMG 10 for 1s}",
+      "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}"
     );
   }
 
@@ -362,10 +362,10 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
     sendInput("undo", "+s 10m", "undo 2", "undo xxx");
 
     assertOutput(
-      "No actions to remove.",
+      "No hits to remove.",
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "Removed action: <SPELL$1> {MAGIC DMG 10 for 1s}",
-      "No actions to remove.",
+      "Removed hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
+      "No hits to remove.",
       "Bad input: Cannot parse undo amount <xxx>"
     );
   }
@@ -1126,12 +1126,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void holdOnWaitAMinute() {
-    sendInput("enemy 100", "+m 50m", "wait 1", "$1", "go");
+    sendInput("enemy 100", "wait 1", "+m 50m", "$1", "go");
 
     assertOutputSegment(
       "You face the enemy (100 hp)",
+      "You will wait at least 1.00s between hits",
       "[#1] Next hit: <MELEE$1> {MAGIC DMG 50 for 1s}",
-      "Next: Pause 1.00s",
       "[#2] Next hit: <MELEE$1> {MAGIC DMG 50 for 1s}",
       "00.000 You begin equipped with <MELEE$1>",
       "       You swing <MELEE$1>",
@@ -1159,12 +1159,12 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void noTimeToWait() {
-    sendInput("enemy 100", "+m 50m", "wait 1", "+m 50m", "go");
+    sendInput("enemy 100", "wait 1", "+m 50m", "+m 50m", "go");
 
     assertOutputSegment(
       "You face the enemy (100 hp)",
+      "You will wait at least 1.00s between hits",
       "[#1] Next hit: <MELEE$1> {MAGIC DMG 50 for 1s}",
-      "Next: Pause 1.00s",
       "[#2] Next hit: <MELEE$2> {MAGIC DMG 50 for 1s}",
       "00.000 You begin equipped with <MELEE$1>",
       "       You swing <MELEE$1>",
