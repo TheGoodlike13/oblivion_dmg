@@ -4,9 +4,9 @@ import com.google.common.collect.ImmutableList;
 import eu.goodlike.oblivion.core.effector.Arrow;
 import eu.goodlike.oblivion.core.effector.Bow;
 import eu.goodlike.oblivion.core.effector.Melee;
+import eu.goodlike.oblivion.core.effector.Spell;
 import eu.goodlike.oblivion.core.effector.Staff;
-import eu.goodlike.oblivion.core.special.Poison;
-import eu.goodlike.oblivion.core.special.Spell;
+import eu.goodlike.oblivion.core.method.Poison;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -41,7 +41,7 @@ public interface Effector extends Iterable<EffectText>, Comparable<Effector> {
     Category<Bow>   BOW    = new Category<>("BOW", Bow::new);
     Category<Arrow> ARROW  = new Category<>("ARROW", Arrow::new);
     Poison          POISON = Poison.getInstance();
-    Spell           SPELL  = new Spell();
+    Category<Spell> SPELL  = new Category<>("SPELL", Spell::new);
     Category<Staff> STAFF  = new Category<>("STAFF", Staff::new);
 
     List<Category> ALL_IN_ORDER = ImmutableList.of(ARROW, MELEE, POISON, BOW, SPELL, STAFF);

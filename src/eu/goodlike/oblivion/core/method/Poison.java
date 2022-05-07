@@ -1,4 +1,4 @@
-package eu.goodlike.oblivion.core.special;
+package eu.goodlike.oblivion.core.method;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;

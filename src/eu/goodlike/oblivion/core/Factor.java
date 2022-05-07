@@ -1,8 +1,8 @@
 package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ImmutableList;
-import eu.goodlike.oblivion.core.special.Magic;
-import eu.goodlike.oblivion.core.special.Poison;
+import eu.goodlike.oblivion.core.method.Magic;
+import eu.goodlike.oblivion.core.method.Poison;
 
 import java.util.List;
 

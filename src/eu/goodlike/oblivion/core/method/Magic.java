@@ -1,4 +1,4 @@
-package eu.goodlike.oblivion.core.special;
+package eu.goodlike.oblivion.core.method;
 
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.EffectText;
