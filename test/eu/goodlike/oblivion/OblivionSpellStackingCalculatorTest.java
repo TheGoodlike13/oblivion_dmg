@@ -1184,6 +1184,35 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
+  void comboBreaker___________________NOT() {
+    sendInput("enemy 100", "wait 0.75", "+m 50m", "$1", "go");
+
+    assertOutputSegment(
+      "You face the enemy (100 hp)",
+      "You will wait at least 0.75s between hits",
+      "[#1] Next hit: <MELEE$1> {MAGIC DMG 50 for 1s}",
+      "[#2] Next hit: <MELEE$1> {MAGIC DMG 50 for 1s}",
+      "00.000 You begin equipped with <MELEE$1>",
+      "       You swing <MELEE$1>",
+      "00.400 You hit with <MELEE$1>",
+      "       Applied MAGIC DMG 50.0 for 1s",
+      "       You wait for 0.35s",
+      "00.750 You swing <MELEE$1>",
+      "01.030 You hit with <MELEE$1>",
+      "       Replaced MAGIC DMG 50.0 for 1s",
+      "02.030 Expired <MELEE$1> MAGIC DMG",
+      "The enemy has survived 81.5 damage (18.5 hp left).",
+      "       Damage by effect:",
+      "           <MELEE$1> MAGIC DMG: 81.50",
+      "       Total damage wasted due to overlap:",
+      "       <MELEE$1> MAGIC DMG",
+      "            50.0 * 0.37s =   18.50",
+      "       Grand total: 18.50",
+      "-----"
+    );
+  }
+
+  @Test
   void stopTheMadman() {
     sendInput("enemy 100", "+m 50m", "hit 1 x20", "go");
 

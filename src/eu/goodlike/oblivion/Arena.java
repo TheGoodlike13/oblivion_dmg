@@ -310,7 +310,9 @@ public final class Arena {
       if (idleTime > 0) {
         play.combatLog(String.format("You wait for %.2fs", idleTime));
         enemy.tick(idleTime, this);
-        combo = 0;
+        if (idleTime >= hit.cooldown(combo)) {
+          combo = 0;
+        }
       }
     }
 
