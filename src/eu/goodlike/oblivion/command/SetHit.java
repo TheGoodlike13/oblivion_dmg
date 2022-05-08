@@ -63,10 +63,7 @@ public final class SetHit extends BaseCommand {
   private void parseDangleBerries(String input) {
     if (input.startsWith(":") && !effectors.isEmpty()) {
       String label = input.substring(1);
-      String copyRef = EFFECTORS.ensureRef(label);
-      Effector original = effectors.removeLast();
-      Effector copy = original.copy(copyRef);
-      EFFECTORS.put(copyRef, copy);
+      Effector copy = EFFECTORS.put(label, effectors.removeLast(), Effector::copy).getValue();
       effectors.add(copy);
     }
     else {

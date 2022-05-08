@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -48,11 +49,24 @@ public final class InputCache<T> {
    * @throws StructureException if the label is already taken
    */
   public NamedValue<T> put(String label, T value) {
+    return put(label, value, (v, any) -> v);
+  }
+
+  /**
+   * Puts the value into this cache under given label or a suitable replacement.
+   * The value is re-labeled using the labeling function.
+   * The returned value is the re-labeled one.
+   *
+   * @return value and its label as name
+   * @throws StructureException if the label is already taken
+   */
+  public NamedValue<T> put(String label, T value, BiFunction<T, String, T> labelingFunction) {
     String ref = ensureRef(label);
-    if (cache.putIfAbsent(ref, value) != null) {
+    T labeledValue = labelingFunction.apply(value, ref);
+    if (cache.putIfAbsent(ref, labeledValue) != null) {
       throw new StructureException("Name already in use", ref);
     }
-    return new InputCache.Entry<>(ref, value);
+    return new InputCache.Entry<>(ref, labeledValue);
   }
 
   /**

@@ -45,9 +45,7 @@ public final class ParseEffector extends BaseParseInput<Effector> {
 
   @Override
   public NamedValue<Effector> thenCache() {
-    String ref = EFFECTORS.ensureRef(label);
-    Effector effector = getValue().copy(ref);
-    return EFFECTORS.put(ref, effector);
+    return EFFECTORS.put(label, getValue(), Effector::copy);
   }
 
   public ParseEffector(String input) {
