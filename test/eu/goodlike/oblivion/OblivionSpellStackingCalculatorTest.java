@@ -612,6 +612,28 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
   }
 
   @Test
+  void letsNotThinkSoNegatively() {
+    // this test corresponds to a certain rat in a basement you can meet at any level (including 1)
+    // but all the way up to level 11 it will remain at 20 HP
+    // only starting with level 12 will it start scaling
+
+    sendInput(
+      "enemy :rat_(from_basement) 20 [11 *20",
+      "level 10",
+      "enemy $rat",
+      "level 1",
+      "enemy $rat");
+
+    assertOutput(
+      "You face the rat (from basement) (400 hp)",
+      "Player level has been set to <10>.",
+      "You face the rat (from basement) (20 hp)",
+      "Player level has been set to <1>.",
+      "You face the rat (from basement) (20 hp)"
+    );
+  }
+
+  @Test
   void overDrain() {
     sendInput("enemy 10", "+s 100d", "+s 100d", "go");
 
