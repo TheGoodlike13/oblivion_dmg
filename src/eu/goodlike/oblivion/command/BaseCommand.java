@@ -43,8 +43,12 @@ public abstract class BaseCommand implements Command {
     return inputs.length <= index ? "" : inputs[index];
   }
 
+  protected final Stream<String> inputs() {
+    return Stream.of(inputs);
+  }
+
   protected final Stream<String> inputs(int start) {
-    return Stream.of(inputs).skip(start);
+    return inputs().skip(start);
   }
 
   protected final Stream<String> inputs(int start, int end) {

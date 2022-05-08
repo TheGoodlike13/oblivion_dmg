@@ -32,14 +32,15 @@ public interface Command {
   /**
    * Identifiers for commands.
    * Most commands will be referenced using a prefix to their name.
-   * Only {@link SetHit} has no name, as it is recognized differently and parsed in its entirety as arguments.
+   * <p/>
+   * {@link SetHit} & {@link RepeatHit} have no names.
+   * They are recognized differently and parsed in its entirety as arguments.
    */
   enum Name {
     DIFFICULTY(SetDifficulty::new),
     ENEMY(SetEnemy::new),
     FORGET(JustForget::new),
     GO(LowerTheGates::new),
-    HIT(RepeatHit::new),
     LEVEL(SetLevel::new),
     QUIT(ItsAllOver::new),
     REFRESH(Refresh::new),

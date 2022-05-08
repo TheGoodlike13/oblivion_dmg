@@ -207,7 +207,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void definitionOfInsanity() {
-    sendInput("enemy 10", "+s 10m", "go", "+s 10m", "go", "hit #1", "go");
+    sendInput("enemy 10", "+s 10m", "go", "+s 10m", "go", "#1", "go");
 
     assertOutputSegment(
       "You face the enemy (10 hp)",
@@ -244,14 +244,14 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void watchYourHitting() {
-    sendInput("hit #1");
+    sendInput("#1");
 
     assertOutput("Bad input: Nothing matches <1>");
   }
 
   @Test
   void thisAintNoDatabaseBoy() {
-    sendInput("enemy 30", "+s 10m", "hit #1 #2", "go");
+    sendInput("enemy 30", "+s 10m", "#1 #2", "go");
 
     assertOutputSegment(
       "You face the enemy (30 hp)",
@@ -275,7 +275,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void couldYouRepeatThat() {
-    sendInput("+s 10m", "hit #1 x3");
+    sendInput("+s 10m", "#1 x3");
 
     assertOutput(
       "[#1] Next hit: <SPELL$1> {MAGIC DMG 10 for 1s}",
@@ -287,16 +287,16 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void repeatWhat() {
-    sendInput("hit x3");
+    sendInput("x3");
 
-    assertOutput("Bad input: Nothing matches <>");
+    assertOutput("No idea what <x3> is supposed to mean.");
   }
 
   @Test
   void whySoSerious() {
-    sendInput("hit xD");
+    sendInput("xD");
 
-    assertOutput("Bad input: Cannot parse repeat count <d>");
+    assertOutput("No idea what <xd> is supposed to mean.");
   }
 
   @Test
@@ -481,7 +481,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "enemy $skeleton_champion",
       "$divine_justice_apprentice",
       "$divine_justice_expert",
-      "hit #1 #2",
+      "#1 #2",
       "$aetherius",
       "go"
     );
@@ -824,7 +824,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void panic() {
-    sendInput("difficulty 100", "enemy 330 20rfr :bear", "$aetherius", "hit #1 x9", "go");
+    sendInput("difficulty 100", "enemy 330 20rfr :bear", "$aetherius", "#1 x9", "go");
 
     assertOutputSegment(
       "Difficulty slider has been set to <100.0>",
@@ -1243,7 +1243,7 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void stopTheMadman() {
-    sendInput("enemy 100", "+m 50m", "hit 1 x20", "go");
+    sendInput("enemy 100", "+m 50m", "#1 x20", "go");
 
     assertOutputSegment(
       "You face the enemy (100 hp)",

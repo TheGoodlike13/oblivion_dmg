@@ -20,7 +20,7 @@ public final class RepeatHit extends BaseCommand {
 
   @Override
   protected void performTask() {
-    args().forEach(this::addOrRepeat);
+    inputs().forEach(this::addOrRepeat);
   }
 
   private String lastRef = "";

@@ -1,5 +1,6 @@
 package eu.goodlike.oblivion;
 
+import eu.goodlike.oblivion.command.RepeatHit;
 import eu.goodlike.oblivion.command.SetHit;
 
 import java.util.Scanner;
@@ -60,8 +61,12 @@ public final class OblivionSpellStackingCalculator {
   }
 
   private Command newCommand(String input0) {
-    return input0.startsWith("+") || input0.startsWith("$")
-      ? new SetHit()
+    if (input0.startsWith("+") || input0.startsWith("$")) {
+      return new SetHit();
+    }
+
+    return input0.startsWith("#")
+      ? new RepeatHit()
       : Command.Name.find(input0).newCommand();
   }
 
