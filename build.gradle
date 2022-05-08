@@ -11,18 +11,18 @@ plugins {
 }
 
 dependencies {
+    // allows running gradle tasks from inside the app; used in 'restart' to ensure config files are refreshed
     implementation group: 'org.gradle', name: 'gradle-tooling-api', version: '6.9.2'
+    // avoids logger errors when using code in the above library; we don't do logging here, just System.out
     runtimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.36'
 
+    // minimal utility class libraries
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
+    // testing framework and assertions to help
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.8.2'
-
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.4.0'
-
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.22.0'
-    testImplementation group: 'org.assertj', name: 'assertj-guava', version: '3.4.0'
 }
 
 project.buildDir = '.build'
