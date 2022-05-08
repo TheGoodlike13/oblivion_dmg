@@ -11,12 +11,12 @@ import static eu.goodlike.oblivion.Global.Settings.DIFFICULTY;
 import static eu.goodlike.oblivion.Global.Settings.EFFECTIVENESS;
 import static eu.goodlike.oblivion.Global.Settings.LEVEL;
 
-public final class OblivionSpellStackingCalculator {
+public final class SpellStackingCalculator {
 
   public static void main(String... args) {
     Global.initializeEverything();
     try (Scanner scanner = new Scanner(System.in)) {
-      OblivionSpellStackingCalculator calc = new OblivionSpellStackingCalculator(scanner::nextLine);
+      SpellStackingCalculator calc = new SpellStackingCalculator(scanner::nextLine);
       calc.intro();
       calc.settings();
       calc.run();
@@ -44,7 +44,7 @@ public final class OblivionSpellStackingCalculator {
     Write.separator();
   }
 
-  public OblivionSpellStackingCalculator(Supplier<String> reader) {
+  public SpellStackingCalculator(Supplier<String> reader) {
     this.reader = reader;
   }
 

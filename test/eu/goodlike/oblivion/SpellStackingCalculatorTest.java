@@ -17,9 +17,9 @@ import static eu.goodlike.oblivion.Global.Settings.DIFFICULTY;
 import static org.apache.commons.lang3.StringUtils.split;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<String> {
+class SpellStackingCalculatorTest implements Supplier<String>, Consumer<String> {
 
-  private final OblivionSpellStackingCalculator calc = new OblivionSpellStackingCalculator(this);
+  private final SpellStackingCalculator calc = new SpellStackingCalculator(this);
 
   private Iterator<String> input;
   private List<String> output;
