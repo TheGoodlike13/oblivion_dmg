@@ -1,5 +1,5 @@
 # Values taken from the game or en.uesp.net wiki
-# These were done by hand, so some might be some errors
+# These were done by hand, so there might be some errors
 
 ### Animals ###
 
