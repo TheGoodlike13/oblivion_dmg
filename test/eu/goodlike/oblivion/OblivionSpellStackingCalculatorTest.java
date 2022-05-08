@@ -412,11 +412,10 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void gettingALittleWildHere() {
-    sendInput("+s 1m :seed", "$seed :not_seed", "$seed 1f");
+    sendInput("+s 1m :poke", "$poke 1f");
 
     assertOutput(
-      "[#1] Next hit: <SPELL$seed> {MAGIC DMG 1 for 1s}",
-      "Bad input: Dangling hit param <:not_seed>",
+      "[#1] Next hit: <SPELL$poke> {MAGIC DMG 1 for 1s}",
       "Bad input: Dangling hit param <1f>"
     );
   }
@@ -1371,6 +1370,65 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
       "       Damage by effect:",
       "           <SPELL$2> MAGIC DMG: 25.41",
       "           <MELEE$3> MAGIC DMG: 28.24",
+      "-----"
+    );
+  }
+
+  @Test
+  void imTired() {
+    sendInput(
+      "enemy 10000",
+      "+s 100wf5s 100ws5s 100wp5s 100wm5s :weakness1",
+      "$weakness1 :weakness2",
+      "+p 8m30s 9f37s 9s37s",
+      "go"
+    );
+
+    assertOutputSegment(
+      "You face the enemy (10000 hp)",
+      "[#1] Next hit: <SPELL$weakness1> {RESIST FIRE -100 for 5s + RESIST SHOCK -100 for 5s + RESIST POISON -100 for 5s + RESIST MAGIC -100 for 5s}",
+      "[#2] Next hit: <SPELL$weakness2> {RESIST FIRE -100 for 5s + RESIST SHOCK -100 for 5s + RESIST POISON -100 for 5s + RESIST MAGIC -100 for 5s}",
+      "[#3] Next hit: <MELEE> {NO EFFECTS} + <POISON$1> {MAGIC DMG 8 for 30s + FIRE DMG 9 for 37s + SHOCK DMG 9 for 37s}",
+      "00.000 You begin equipped with <MELEE>",
+      "       You cast <SPELL$weakness1>",
+      "00.410 You hit with <SPELL$weakness1>",
+      "       Applied RESIST FIRE -100.0",
+      "       Applied RESIST SHOCK -100.0",
+      "       Applied RESIST POISON -100.0",
+      "       Applied RESIST MAGIC -100.0",
+      "       Resulting multipliers: FIRE   x2.00, SHOCK  x2.00, POISON x2.00, MAGIC  x2.00",
+      "01.140 You cast <SPELL$weakness2>",
+      "01.550 You hit with <SPELL$weakness2>",
+      "       Applied RESIST FIRE -200.0",
+      "       Applied RESIST SHOCK -200.0",
+      "       Applied RESIST POISON -200.0",
+      "       Applied RESIST MAGIC -200.0",
+      "       Resulting multipliers: FIRE   x4.00, SHOCK  x4.00, POISON x4.00, MAGIC  x4.00",
+      "       You swing <MELEE> + <POISON$1>",
+      "01.950 You hit with <MELEE> + <POISON$1>",
+      "       Applied MAGIC DMG 128.0 for 30s",
+      "       Applied FIRE DMG 144.0 for 37s",
+      "       Applied SHOCK DMG 144.0 for 37s",
+      "05.410 Expired <SPELL$weakness1> RESIST FIRE",
+      "       Expired <SPELL$weakness1> RESIST SHOCK",
+      "       Expired <SPELL$weakness1> RESIST POISON",
+      "       Expired <SPELL$weakness1> RESIST MAGIC",
+      "06.550 Expired <SPELL$weakness2> RESIST FIRE",
+      "       Expired <SPELL$weakness2> RESIST SHOCK",
+      "       Expired <SPELL$weakness2> RESIST POISON",
+      "       Expired <SPELL$weakness2> RESIST MAGIC",
+      "25.989 The enemy has died. Breakdown:",
+      "           (1)<POISON$1> MAGIC DMG: 3076.99",
+      "           (1)<POISON$1> FIRE DMG: 3461.62",
+      "           (1)<POISON$1> SHOCK DMG: 3461.47",
+      "31.950 Expired (1)<POISON$1> MAGIC DMG",
+      "38.950 Expired (1)<POISON$1> FIRE DMG",
+      "       Expired (1)<POISON$1> SHOCK DMG",
+      "The enemy took a total of 14496.0 damage (4496.0 overkill).",
+      "       Overkill by effect:",
+      "           (1)<POISON$1> FIRE DMG: 1866.46",
+      "           (1)<POISON$1> SHOCK DMG: 1866.53",
+      "           (1)<POISON$1> MAGIC DMG: 763.01",
       "-----"
     );
   }

@@ -7,8 +7,8 @@ import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.StructureException;
 import eu.goodlike.oblivion.parse.ParseEffector;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 import static eu.goodlike.oblivion.Global.EFFECTORS;
 import static eu.goodlike.oblivion.Global.HITS;
@@ -33,7 +33,7 @@ public final class SetHit extends BaseCommand {
 
   private int cursor = -1;
   private int start = -1;
-  private final List<Effector> effectors = new ArrayList<>();
+  private final Deque<Effector> effectors = new ArrayDeque<>();
 
   private void parseEffectors() {
     while (++cursor < inputs.length) {
@@ -51,8 +51,8 @@ public final class SetHit extends BaseCommand {
       parseNextEffectorIfAny();
       start = cursor;
     }
-    else {
-      ensureNoDangleBerries(input);
+    else if (start < 0) {
+      parseDangleBerries(input);
     }
   }
 
@@ -60,8 +60,16 @@ public final class SetHit extends BaseCommand {
     effectors.add(EFFECTORS.getCached(ref).getValue());
   }
 
-  private void ensureNoDangleBerries(String input) {
-    if (start == -1) {
+  private void parseDangleBerries(String input) {
+    if (input.startsWith(":") && !effectors.isEmpty()) {
+      String label = input.substring(1);
+      String copyRef = EFFECTORS.ensureRef(label);
+      Effector original = effectors.removeLast();
+      Effector copy = original.copy(copyRef);
+      EFFECTORS.put(copyRef, copy);
+      effectors.add(copy);
+    }
+    else {
       throw new StructureException("Dangling hit param", input);
     }
   }

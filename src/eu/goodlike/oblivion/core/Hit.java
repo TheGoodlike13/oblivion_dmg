@@ -1,6 +1,7 @@
 package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Streams;
 
 import java.util.ArrayList;
@@ -108,7 +109,7 @@ public final class Hit implements Iterable<Effector>, HitPattern {
    *
    * @throws StructureException if the hit resulting from given effectors is completely invalid
    */
-  public Hit(List<Effector> effectors) {
+  public Hit(Iterable<Effector> effectors) {
     this.allEffectors = ensureOrderAndEquipment(effectors);
 
     StructureException.throwOnInvalidHit(hitTrace());
@@ -123,8 +124,8 @@ public final class Hit implements Iterable<Effector>, HitPattern {
   private final List<Effector> allEffectors;
   private final Armament armament;
 
-  private List<Effector> ensureOrderAndEquipment(List<Effector> effectors) {
-    List<Effector> mutableCopy = new ArrayList<>(effectors);
+  private List<Effector> ensureOrderAndEquipment(Iterable<Effector> effectors) {
+    List<Effector> mutableCopy = Lists.newArrayList(effectors);
 
     if (BOW.any(mutableCopy)) {
       ensure(ARROW, mutableCopy);
