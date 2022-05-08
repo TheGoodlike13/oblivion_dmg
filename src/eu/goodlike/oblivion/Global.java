@@ -145,13 +145,12 @@ public final class Global {
      * Repeated calls will act like a reset, unless the file has changed.
      */
     public static void load() {
-      InputStream settings = Settings.class.getClassLoader().getResourceAsStream(SETTINGS_FILE);
-      if (settings == null) {
-        throw new IllegalStateException("Cannot find '" + SETTINGS_FILE + "' on the classpath.");
-      }
-
       Properties properties = new Properties();
-      try {
+
+      try (InputStream settings = Settings.class.getClassLoader().getResourceAsStream(SETTINGS_FILE)) {
+        if (settings == null) {
+          throw new IllegalStateException("Cannot find '" + SETTINGS_FILE + "' on the classpath.");
+        }
         properties.load(settings);
       }
       catch (IOException e) {
