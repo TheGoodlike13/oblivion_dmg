@@ -94,8 +94,6 @@
 33rf 20ws 30wfr  75 :spiderling
 33rf 20ws       280 :daedroth
 
-
-
 33rf 20ws 240 *12 [22 :xivilai
 
 100rp 100rf  50wfr 150 :flame_atronach
