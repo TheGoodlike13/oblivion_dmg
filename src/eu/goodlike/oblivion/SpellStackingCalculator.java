@@ -15,11 +15,11 @@ public final class SpellStackingCalculator {
 
   public static void main(String... args) {
     Global.initializeEverything();
+    intro();
+    settings();
+
     try (Scanner scanner = new Scanner(System.in)) {
-      SpellStackingCalculator calc = new SpellStackingCalculator(scanner::nextLine);
-      calc.intro();
-      calc.settings();
-      calc.run();
+      new SpellStackingCalculator(scanner::nextLine).run();
     }
   }
 
@@ -29,14 +29,14 @@ public final class SpellStackingCalculator {
     }
   }
 
-  public void intro() {
+  public static void intro() {
     Write.line("Welcome to Oblivion spell stacking calculator!");
     Write.line("Please select an enemy, cast some spells or perform attacks and GO!");
     Write.line("You can quit any time ;)");
     Write.separator();
   }
 
-  public void settings() {
+  public static void settings() {
     Write.line("Configurable settings:");
     Write.line("Player level: " + LEVEL);
     Write.line("Difficulty slider: " + DIFFICULTY);

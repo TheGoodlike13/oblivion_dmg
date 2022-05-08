@@ -8,6 +8,7 @@ import eu.goodlike.oblivion.command.NowJustHoldOnACottonPickinMinute;
 import eu.goodlike.oblivion.command.Refresh;
 import eu.goodlike.oblivion.command.RepeatHit;
 import eu.goodlike.oblivion.command.Reset;
+import eu.goodlike.oblivion.command.Restart;
 import eu.goodlike.oblivion.command.SetDifficulty;
 import eu.goodlike.oblivion.command.SetEnemy;
 import eu.goodlike.oblivion.command.SetHit;
@@ -47,6 +48,7 @@ public interface Command {
     QUIT(ItsAllOver::new),
     REFRESH(Refresh::new),
     RESET(Reset::new),
+    RESTART(Restart::new),
     SPELL_EFFECT(SetSpellEffectiveness::new),
     UNDO(UndoLastHit::new),
     WAIT(NowJustHoldOnACottonPickinMinute::new),

@@ -1,2 +1,2 @@
 @echo off
-gradlew run --console=plain %*
+gradlew clean run --console=plain %*
