@@ -294,9 +294,13 @@ class OblivionSpellStackingCalculatorTest implements Supplier<String>, Consumer<
 
   @Test
   void whySoSerious() {
-    sendInput("xD");
+    sendInput("+s 1m", "#1 xD");
 
-    assertOutput("No idea what <xd> is supposed to mean.");
+    assertOutput(
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 1 for 1s}",
+      "[#1] Next hit: <SPELL$1> {MAGIC DMG 1 for 1s}",
+      "Bad input: Cannot parse repeat count <d>"
+    );
   }
 
   @Test
