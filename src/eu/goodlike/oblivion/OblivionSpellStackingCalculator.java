@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import static eu.goodlike.oblivion.Global.ITS_ALL_OVER;
 import static eu.goodlike.oblivion.Global.Settings.DIFFICULTY;
+import static eu.goodlike.oblivion.Global.Settings.EFFECTIVENESS;
 import static eu.goodlike.oblivion.Global.Settings.LEVEL;
 
 public final class OblivionSpellStackingCalculator {
@@ -39,6 +40,7 @@ public final class OblivionSpellStackingCalculator {
     Write.line("Configurable settings:");
     Write.line("Player level: " + LEVEL);
     Write.line("Difficulty slider: " + DIFFICULTY);
+    Write.line("Spell effectiveness: " + EFFECTIVENESS);
     Write.separator();
   }
 
