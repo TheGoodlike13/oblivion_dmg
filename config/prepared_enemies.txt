@@ -1,1 +1,341 @@
-350 100rp 70rfr :skeleton_champion
+# Values taken from the game or en.uesp.net wiki
+# These were done by hand, so some might be some errors
+
+### Animals ###
+
+20rfr  20 :wolf
+20rfr  60 :timber_wolf
+20rfr 150 :black_bear
+20rfr 160 :mountain_lion
+20rfr 330 :brown_bear
+
+20 :dog
+10 :mud_crab
+ 4 :rat
+13 :slaughterfish
+
+23 :buck_(deer)
+12 :doe_(deer)
+13 :sheep
+13 :ram_(sheep)
+
+150 :porkchop_(boar)
+150 :bacon_(boar)
+
+20   :bailey_(dog)
+5 *5 :charlotte_(dog)
+20   :crazed_dog
+5 *5 :daisy_(dog)
+5 *5 :duke_(dog)
+20   :jake_(dog)
+20   :kezune_(dog)
+5 *5 :luna_(dog)
+20   :mojo_(dog)
+5 *5 :pumpkin_(dog)
+40   :rohssan's_dog
+20   :sakeepa's_dog
+
+30 :starving_mountain_lion
+
+100rp 100rfr 78 *13 :spectral_mud_crab
+
+20 *20 [11 :rat_(test_basement)
+
+20 :rat_(problem)
+15 :rat_(moths_temple)
+25 :llevanas_tunnel_rat
+ 4 :schemer_(rat)
+ 1 :rat_(tutorial)
+
+50 :sheep_(weynon_priory)
+25 :sheep_(sea_tub)
+
+20 *20 :giant_slaughterfish
+
+50ws  40 :rumare_slaughterfish_spawn
+50ws  75 :young_rumare_slaughterfish
+50ws 100 :rumare_slaughterfish
+50ws 150 :adult_rumare_slaughterfish
+50ws 200 :rumare_slaughterfish_brood_mother
+
+20rfr 130 :redmaw_(wolf)
+       80 :hjalti_(wolf)
+
+### Horses ###
+
+300 :paint_horse
+200 :weynon_priory_horse
+250 :bay_horse
+200 :chestnut_horse
+400 :white_horse
+325 :black_horse
+500 :shadowmere
+
+50rm 100rp 300 :unicorn
+
+250 :armored_old_nag
+600 :armored_paint_horse
+500 :armored_bay_horse
+400 :armored_chestnut_horse
+750 :armored_white_horse
+650 :armored_black_horse
+750 :shadowmere_(armored)
+
+400: imperial_legion_horse
+200: blossom_(horse)
+
+### Daedra ###
+
+33rf 20ws        40 :stunted_scamp
+33rf 20ws        75 :clannfear_runt
+33rf 20ws        80 :scamp
+33rf 20ws       180 :clannfear
+33rf 20ws 30wfr 300 :spider_daedra
+33rf 20ws 30wfr  75 :spiderling
+33rf 20ws       280 :daedroth
+
+
+
+33rf 20ws 240 *12 [22 :xivilai
+
+100rp 100rf  50wfr 150 :flame_atronach
+100rp 100rfr 50wf  280 :frost_atronach
+100rp 100rs        350 :storm_atronach
+
+33rf 20ws        32 *16 4] :scamp_(summon)
+33rf 20ws       180        :clannfear_(summon)
+33rf 20ws       280        :daedroth_(summon)
+33rf 20ws 30wfr 300        :spider_daedra_(summon)
+33rf 20ws       240        :xivilai_(summon)
+
+100rp 100rf  50wfr 150 :flame_atronach_(summon)
+100rp 100rfr 50wf  280 :frost_atronach_(summon)
+100rp 100rs        350 :storm_atronach_(summon)
+
+33rf 20ws 180 *17 :clannfear_(lost_halls)
+
+100rp 100rfr 50wf 150 :frostfire_atronach_gladeling
+100rp 100rfr 50wf 250 :frostfire_atronach_gladeguard
+100rp 100rfr 50wf 350 :frostfire_atronach_gladewarden
+100rp 100rfr 50wf 450 :frostfire_atronach_gladelord
+
+33rf 20ws 10 :everscamp
+
+100rp 100rs 100 :the_sunken_one_(weak)
+100rp 100rs 200 :the_sunken_one_(normal)
+100rp 100rs 300 :the_sunken_one_(strong)
+100rp 100rs 450 :the_sunken_one_(max)
+
+33rf 20ws 12 *12 :anaxes_(xivilai)
+33rf 20ws 12 *12 :medrike_(xivilai)
+
+### Goblins ###
+
+      15         :goblin
+      75         :goblin_skirmisher
+     170         :goblin_berserker
+     143 *11 [18 :goblin_shaman
+25rm 540 *30 [18 :goblin_warlord
+
+ 15 :bitterfish_goblin
+ 75 :bitterfish_goblin_skirmisher
+120 :bitterfish_goblin_berserker
+ 90 :bitterfish_goblin_shaman
+
+15 *15 [2     :bloody_hand_goblin
+15 *15        :bloody_hand_goblin_skirmisher
+15 *15 [3     :bloody_hand_goblin_skirmisher_(patrol)
+36 *18        :bloody_hand_goblin_berserker
+44 *11 [4     :bloody_hand_goblin_shaman
+54 *18        :bloody_hand_goblin_war_chief
+15 *15 [4 11] :bloody_hand_chef
+15 *15 [4 11] :bloody_hand_rat_farmer
+
+15 *15 [2 :dust_eater_goblin
+15 *15    :dust_eater_goblin_skirmisher
+36 *18    :dust_eater_goblin_berserker
+11 *11 [5 :dust_eater_goblin_shaman
+54 *18    :dust_eater_goblin_war_chief
+
+15 *15 [2 :rock_biter_goblin
+15 *15    :rock_biter_goblin_skirmisher
+36 *18    :rock_biter_goblin_berserker
+11 *11    :rock_biter_goblin_shaman
+54 *18    :rock_biter_goblin_war_chief
+
+15 *15 [2     :sharp_tooth_goblin
+15 *15        :sharp_tooth_goblin_skirmisher
+36 *18        :sharp_tooth_goblin_berserker
+11 *11 [4     :sharp_tooth_goblin_shaman
+54 *18        :sharp_tooth_goblin_war_chief
+15 *15 [4 11] :sharp_tooth_chef
+
+15 *15 [2 :skull_breaker_goblin
+15 *15    :skull_breaker_goblin_skirmisher
+36 *18    :skull_breaker_goblin_berserker
+11 *11    :skull_breaker_goblin_shaman
+54 *18    :skull_breaker_goblin_war_chief
+
+15 *15 [2 :three_feather_goblin
+15 *15    :three_feather_goblin_skirmisher
+36 *18    :three_feather_goblin_berserker
+11 *11    :three_feathers_goblin_shaman
+54 *18    :three_feather_goblin_war_chief
+
+15 *15 [2 :white_skin_goblin
+15 *15    :white_skin_goblin_skirmisher
+36 *18    :white_skin_goblin_berserker
+54 *18    :white_skin_goblin_war_chief
+
+15 *15 [3 10] :goblin_chef
+12 *12 [3 10] :goblin_rat_farmer
+
+25     :goblin_(hist_sap)
+14 *14 :savage_goblin
+45 *15 :savage_goblin_(boss)
+200    :goblin_ambusher
+
+10 :goblin_(tutorial)
+10 :goblin_skirmisher_(tutorial)
+10 :goblin_berserker_(tutorial)
+15 :goblin_witch_(tutorial)
+
+ 75 :goblin_netherboss_(skirmisher)
+170 :goblin_netherboss_(berserker)
+ 90 :goblin_netherboss_(shaman)
+
+### Monsters ###
+
+            15 *15 [2 4] :imp
+      50wf  80           :troll
+100rp      220           :will-o-the-wisp
+ 30rs 30wf 175           :spriggan
+           300           :minotaur
+ 20rm      320           :land_dreugh
+      25wp 416 *26 [19   :ogre
+ 40rm      396 *22 [18   :minotaur_lord
+
+90 *15 :vault_guardian_(imp)
+15     :sparky_(imp)
+
+25 *25 [2 :dreamworld_minotaur
+25 *25    :savage_minotaur
+
+     15 *15 :minotaur_of_the_grove_(lesser)
+     18 *18 :minotaur_of_the_grove_(common)
+     20 *20 :minotaur_of_the_grove_(greater)
+40rm 22 *22 :minotaur_of_the_grove_(grand)
+
+25wp 208 *26 [11 :ogre_(mine_slave)
+25wp  26 *26 [4  :ogre_(potatoes)
+25wp  26 *26 [4  :savage_ogre
+
+25wp  60 :groundling_(ogre)
+25wp 120 :stonewrecker_(ogre)
+25wp 240 :rocksmasher_(ogre)
+25wp 350 :caveboss_(ogre)
+
+80 *20 :redguard_valley_ogre_chieftain
+
+50wf 25 *25 :painted_troll
+50wf 12 *12 :savage_troll
+50wf 13 *13 :swamp_troll
+
+100rfr 175wf 500 :uderfrykte_matron_(troll)
+
+50wf 12 *12 :azhklan_troll_(lesser)
+50wf 12 *12 :azhklan_troll_(common)
+50wf 15 *15 :azhklan_troll_(greater)
+50wf 20 *20 :azhklan_troll_(grand)
+
+50wf 12 *12 :kalperklan_troll_(lesser)
+50wf 12 *12 :kalperklan_troll_(common)
+50wf 15 *15 :kalperklan_troll_(greater)
+50wf 20 *20 :kalperklan_troll_(grand)
+
+100rp 24 *24 [3     :will-o-the-wisp_(harlun's_watch)
+100rp 22 *22 [3 11] :will-o-the-wisp_(passive)
+
+### Undead ###
+
+100rp 70rfr  20 :skeleton
+100rp 70rfr 170 :skeleton_guardian
+100rp 70rfr 280 :skeleton_hero
+100rp 70rfr 350 :skeleton_champion
+
+100rp 100rfr 25rm 25wf 255 *15 [24 :nether_lich
+100rp 100rfr 25rm 25wf 360 *15 [24 :lich
+
+100rp 100rfr  18 *18 [2 5] :ghost
+100rp 100rfr 170           :ancient_ghost
+100rp 100rfr 280           :faded_wraith
+100rp 100rfr 400           :wraith_(unarmed)
+100rp 100rfr 210           :wraith_(melee)
+100rp 100rfr  24 *24 [4    :gloom_wraith
+
+100rp 30rm 30rfr 60wf  80 :zombie
+100rp 30rm 30rfr 60wf 175 :headless_zombie
+100rp 30rm 30rfr 60wf 340 :dread_zombie
+
+100rp 70rfr  20 :skeleton_(summon)
+100rp 70rfr 170 :skeleton_guardian_(summon)
+100rp 70rfr 280 :skeleton_hero_(summon)
+100rp 70rfr 350 :skeleton_champion_(summon)
+
+100rp 100rfr 25rm 25wf 360 :lich_(summon)
+
+100rp 100rfr  15 *15 4] :ghost_(summon)
+100rp 100rfr  12 *12 4] :ancestor_guardian_(dunmer)
+100rp 100rfr  18 *18    :summoned_ghost_of_rufio
+
+200rp 200rfr 280 :faded_wraith_(summon)
+100rp 100rfr 400 :wraith_(summon)
+100rp 100rfr 500 :gloom_wraith_(summon)
+
+100rp 30rm 30rfr 60wf  80 :zombie_(summon)
+100rp 30rm 30rfr 60wf 175 :headless_zombie_(summon)
+
+100rp 70rfr 30 *30    :dark_guardian_(dark_brotherhood)
+100rp 70rfr 28 *28    :dark_guardian_(fort_farragut)
+100rp 70rfr 16 *16 [2 :undead_akaviri_soldier
+
+100rp 70rfr 26 *26 :undead_blade_(weaker_version)
+100rp 70rfr 28 *28 :undead_blade
+100rp 70rfr 22 *22 :warden_kastav_(skeleton)
+
+100rp 100rfr  18 *18 [2 5] :sanctified_dead
+100rp 100rfr 170           :ancient_sanctified_dead
+100rp 100rfr 280           :sanctified_ancient_spectre_(faded_wraith)
+100rp 100rfr 400           :sanctified_ancient_spectre_(wraith)
+100rp 100rfr 504 *24 [24   :sanctified_ancient_spectre_(gloom_wraith)
+
+100rp 100rfr  18 *18 [2  :llathasa's_spirit_(ghost)
+100rp 100rfr 170         :llathasa's_spirit_(ancient_ghost)
+100rp 100rfr 280         :llathasa's_spirit_(faded_wraith)
+100rp 100rfr 400         :llathasa's_spirit_(wraith)
+100rp 100rfr 504 *24 [24 :llathasa's_spirit_(gloom_wraith)
+
+100rp 100rfr 60 *30 :spectral_sailor
+100rp 100rfr 48 *24 :gable_the_traitor_(wraith)
+
+100rp 100rfr 215 :wrath_of_sithis_(first)
+100rp 100rfr 500 :wrath_of_sithis_(second)
+100rp 100rfr 700 :wrath_of_sithis_(third)
+
+100rp 30rm 30rfr 60wf 15 *15 10] :motierre_zombie_(first)
+100rp 30rm 30rfr 60wf 20 *20 10] :motierre_zombie_(second)
+100rp 30rm 30rfr 60wf 80         :motierre_zombie_(third)
+
+100rp 30rm 30rfr 60wf 18 *18 [4 :zombie_guardian
+
+100rp 30rm 30rfr 60wf  80 :deranged_zombie_(weakest)
+100rp 30rm 30rfr 60wf 112 :deranged_zombie_(very_weak)
+100rp 30rm 30rfr 60wf 144 :deranged_zombie_(weak)
+100rp 30rm 30rfr 60wf 175 :deranged_zombie_(normal)
+100rp 30rm 30rfr 60wf 207 :deranged_zombie_(strong)
+100rp 30rm 30rfr 60wf 240 :deranged_zombie_(very_strong)
+100rp 30rm 30rfr 60wf 260 :deranged_zombie_(strongest)
+
+### NPCS ###
+
+# TODO
