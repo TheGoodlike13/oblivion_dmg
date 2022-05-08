@@ -53,9 +53,21 @@ public final class StructureException extends RuntimeException {
     return positiveOrThrow(d, description);
   }
 
+  public static double positiveOrZeroOrThrow(String input, String description) {
+    double d = doubleOrThrow(input, description);
+    return positiveOrZeroOrThrow(d, description);
+  }
+
   public static double positiveOrThrow(double d, String description) {
     if (d <= 0) {
       throw new StructureException("Expected positive " + description + ", but was <" + d + ">");
+    }
+    return d;
+  }
+
+  public static double positiveOrZeroOrThrow(double d, String description) {
+    if (d < 0) {
+      throw new StructureException("Expected positive or zero " + description + ", but was <" + d + ">");
     }
     return d;
   }
