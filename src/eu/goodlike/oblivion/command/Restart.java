@@ -1,13 +1,15 @@
 package eu.goodlike.oblivion.command;
 
 import eu.goodlike.oblivion.Global;
-import eu.goodlike.oblivion.SpellStackingCalculator;
 import eu.goodlike.oblivion.Write;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ProjectConnection;
 
 import java.io.File;
 import java.nio.file.Paths;
+
+import static eu.goodlike.oblivion.SpellStackingCalculator.writeIntro;
+import static eu.goodlike.oblivion.SpellStackingCalculator.writeSettings;
 
 /**
  * Resets fucking everything, including the bloody configuration files!
@@ -32,8 +34,8 @@ public final class Restart extends BaseCommand {
     Write.line("Application restarted.");
 
     Write.separator();
-    SpellStackingCalculator.intro();
-    SpellStackingCalculator.settings();
+    writeIntro();
+    writeSettings();
   }
 
   private void manuallyRefreshTheConfigFiles() {

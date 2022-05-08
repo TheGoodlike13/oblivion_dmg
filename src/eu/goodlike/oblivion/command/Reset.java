@@ -1,8 +1,9 @@
 package eu.goodlike.oblivion.command;
 
 import eu.goodlike.oblivion.Global;
-import eu.goodlike.oblivion.SpellStackingCalculator;
 import eu.goodlike.oblivion.Write;
+
+import static eu.goodlike.oblivion.SpellStackingCalculator.writeSettings;
 
 /**
  * Resets fucking everything.
@@ -23,7 +24,7 @@ public final class Reset extends BaseCommand {
     Write.line("If you changed settings or prepared files, use 'restart' instead.");
 
     Write.separator();
-    SpellStackingCalculator.settings();
+    writeSettings();
   }
 
 }
