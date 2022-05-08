@@ -46,7 +46,7 @@ sourceSets {
 }
 
 application {
-    mainClassName = 'eu.goodlike.oblivion.SpellStackingCalculator'
+    mainClass = 'eu.goodlike.oblivion.SpellStackingCalculator'
 }
 
 tasks.run {
