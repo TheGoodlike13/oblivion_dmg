@@ -13,6 +13,7 @@ import eu.goodlike.oblivion.command.SetEnemy;
 import eu.goodlike.oblivion.command.SetHit;
 import eu.goodlike.oblivion.command.SetLevel;
 import eu.goodlike.oblivion.command.SetSpellEffectiveness;
+import eu.goodlike.oblivion.command.SomebodyHelp;
 import eu.goodlike.oblivion.command.UndoLastHit;
 
 import java.util.function.Supplier;
@@ -41,6 +42,7 @@ public interface Command {
     ENEMY(SetEnemy::new),
     FORGET(JustForget::new),
     GO(LowerTheGates::new),
+    HELP(SomebodyHelp::new),
     LEVEL(SetLevel::new),
     QUIT(ItsAllOver::new),
     REFRESH(Refresh::new),
