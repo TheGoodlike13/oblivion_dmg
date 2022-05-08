@@ -48,7 +48,9 @@ public final class SomebodyHelp extends BaseCommand {
     Write.line("'undo 5' -> removes 5 last added hits, if any");
     Write.line("'forget $mistake' -> removes everything from memory called exactly 'mistake' (enemies, spells & hits)");
     Write.line("'refresh' -> clears all added hits, updates the enemy (e.g. if player level was changed)");
-    Write.line("'reset' -> clears absolutely everything (equivalent to restarting the application)");
+    Write.line("'reset' -> clears absolutely everything (almost equivalent to restarting the application)");
+    Write.line("Note: if you change the settings or prepared files, they will not be re-loaded. Use 'restart' for that.");
+    Write.line("'restart' -> clears absolutely everything (equivalent to restarting the application)");
     Write.line("'go' -> do the calculation; after it is done, the hits are cleared and need to be set again");
     Write.line("'quit' -> close the application");
     Write.separator();
