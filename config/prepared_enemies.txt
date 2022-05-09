@@ -350,7 +350,7 @@
 30rm 33rf 20ws 104 :dremora_kynval
 35rm 33rf 20ws 124 :dremora_kynreeve
 40rm 33rf 20ws 145 :dremora_kynmarcher
-45rm 33rf 20ws 250 :dremora_markynaz
+45rm 33rf 20ws 172 :dremora_markynaz
 50rm 33rf 20ws 192 :dremora_valkynaz
 
 ### Generic ###
