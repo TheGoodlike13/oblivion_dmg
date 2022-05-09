@@ -12,13 +12,14 @@ import java.util.List;
 import static eu.goodlike.oblivion.Command.Name.ENEMY;
 import static eu.goodlike.oblivion.Global.ENEMIES;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNumeric;
 
 /**
  * Parses enemy input.
  * Ignores "enemy" command input if present.
  * Accepts any amount of inputs.
  * <p/>
- * For inputs with prefixes or suffixes, only the last one is considered, rest are ignored.
+ * For inputs matching any condition, only the last one is considered, rest are ignored.
  * <p/>
  * Inputs with ':' prefix are treated as labels.
  * If it is missing, the enemy is given the default label 'enemy'.
@@ -39,11 +40,11 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  * It's only considered if level multiplier is also present.
  * If it is missing in that case, the enemy is given the default maximum level of 2^31-1.
  * <p/>
- * First non-label input is treated as HP.
+ * First numeric input is treated as HP.
  * It must be a positive integer.
  * If the enemy is leveled, this is considered to be its HP at the lowest level.
  * <p/>
- * All other non-label inputs are treated as passive permanent effects.
+ * All other non-numeric inputs are treated as passive permanent effects.
  * They must be parsable.
  * <p/>
  * Enemies with default name 'enemy' is never cached.
@@ -104,7 +105,7 @@ public final class ParseEnemy extends BaseParseInput<Enemy> {
     else if (input.endsWith("]")) {
       maxLevel = input.substring(0, input.length() - 1);
     }
-    else if (isBlank(hp)) {
+    else if (isNumeric(input) && isBlank(hp)) {
       hp = input;
     }
     else {
