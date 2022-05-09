@@ -19,6 +19,15 @@
 13 :sheep
 13 :ram_(sheep)
 
+20rfr 330 :bear
+
+20rfr  20 :west_weald_black_bear_cub
+20rfr  75 :west_weald_brown_bear_cub
+20rfr 150 :west_weald_black_bear
+20rfr 250 :west_weald_black_bear_den_hunter
+20rfr 400 :west_weald_brown_bear
+20rfr 550 :west_weald_brown_bear_den_hunter
+
 150 :porkchop_(boar)
 150 :bacon_(boar)
 
@@ -334,6 +343,30 @@
 100rp 30rm 30rfr 60wf 240 :deranged_zombie_(very_strong)
 100rp 30rm 30rfr 60wf 260 :deranged_zombie_(strongest)
 
-### NPCS ###
+### NPCS ### Only those easy to categorize
 
-# TODO
+20rm 33rf 20ws  44 :dremora_churl
+25rm 33rf 20ws  84 :dremora_caitiff
+30rm 33rf 20ws 104 :dremora_kynval
+35rm 33rf 20ws 124 :dremora_kynreeve
+40rm 33rf 20ws 145 :dremora_kynmarcher
+45rm 33rf 20ws 250 :dremora_markynaz
+50rm 33rf 20ws 192 :dremora_valkynaz
+
+### Generic ###
+
+ 50rm                  100 :breton_(generic)
+                       100 :imperial_(generic)
+ 50rfr                 100 :nord_(generic)
+ 75rp                  100 :redguard_(generic)
+       25wf 25wfr 25ws 100 :high_elf_(generic)
+                       100 :wood_elf_(generic)
+ 75rf                  100 :dark_elf_(generic)
+ 25rm                  100 :orc_(generic)
+100rp                  100 :argonian_(generic)
+                       100 :khajiit_(generic)
+
+### Other ###
+
+100rf 1000 :mehrunes_dagon
+
