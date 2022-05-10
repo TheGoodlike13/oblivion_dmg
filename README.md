@@ -9,9 +9,9 @@ performing attacks with magical weapons & poisons.
 
 This is a command line application and requires JDK 8+ to build & run.
 
-## Usage examples
+## Usage example
 
-TO BE IMPLEMENTED
+TO BE EXPLAINED
 
 ## Motivation
 
@@ -45,7 +45,11 @@ Plus, it's been a while since I did some nice and refreshing JAVA programming.
 So that's a bonus.
 
 P.S. I may have gone a little insane half way through the project.
-Please excuse any code or comments that seems a little too avant-garde.
+Please excuse any code or comments that seem a little too avant-garde.
+
+## Commands
+
+TO BE EXPLAINED
 
 ## Limitations
 
@@ -61,6 +65,10 @@ Healing is not implemented.
 I feel like it would add to the complexity of the application needlessly.
 Passive effects like troll regeneration should be negligible in most scenarios.
 I'd expect them to be on par with physical damage, which is also ignored.
+
+Absorb health is not explicitly implemented.
+Magic damage is exactly the same from point of view of the calculations
+we are doing, so you can use that as stand-in.
 
 Permanent damage effects are ignored.
 They are simply not applicable to any real combat scenario.
@@ -83,3 +91,7 @@ The user is free to create whatever funky enemy they want.
 
 Calculations are done using double floating point precision.
 The resulting errors are trivial and unlikely to cause issues, but do keep it in mind.
+
+### Weapon & casting timing (speed, cooldowns, swapping)
+
+TO BE EXPLAINED
