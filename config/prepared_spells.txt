@@ -1,2 +1,126 @@
-+s 100wm6s 100ws6s 100wp6s :divine_justice_apprentice
-+s 100wm6s 100ws6s 100wp6s :divine_justice_expert
+# Values taken from the game, youtube or en.uesp.net wiki
+# These were done by hand, so there might be some errors
+
+### Standard ###
+
++s  5m :absorb_health
++s 10m :leech_health
++s 20m :consume_health
++s 40m :devour_health
+
++s  5m :entropic_touch
++s 10m :entropic_bolt
++s 30m :withering_touch
++s 40m :withering_bolt
+
++s  5d10s :minor_wound
++s 15d10s :major_wound
++s 30d10s :dire_wound
++s 50d10s :superior_wound
+
++s   6f   :flare
++s   5f3s :weak_fireball
++s  10f   :burning_touch
++s  25f   :flame_touch
++s  20f   :flash_bolt
++s  45f   :searing_grasp
++s  35f   :blazing_spear
++s  30f   :fire_ball
++s  80f   :scorching_blow
++s  70f   :heat_blast
++s  50f   :fire_storm
++s 110f   :immolating_blast
++s  75f   :flame_tempest
+
+# SO YOU HAVE CHOSEN DEATH
+# +s 5f5s 70f :enemies_explode
+
++s  10fr :snowball
++s  15fr :cold_touch
++s  25fr :frost_touch
++s  20fr :hailstone
++s  45fr :winter's_grasp
++s  35fr :frost_bolt
++s  30fr :hail_storm
++s  30fr :baronoff's_bloody_icicle
++s  20fr :black_winter
++s  80fr :arctic_blow
++s  70fr :ice_bolt
++s  50fr :ice_storm
++s 110fr :ice_blast
++s  75fr :blizzard
+
++s  10s   :shocking_touch
++s  10s   :spark
++s  25s   :electric_touch
++s  20s   :shock
++s  45s   :lightning_grasp
++s  35s   :lightning_bolt
++s  15s2s :shocking_burst
++s  80s   :lightning_surge
++s  20s2s :lightning_ball
++s  70s   :lightning_blast
++s  30s2s :lightning_storm
++s 110s   :electrocution
+
++s 25wf30s  :weakness_to_fire
++s 25wfr30s :weakness_to_frost
++s 25wp30s  :weakness_to_poison
++s 25ws30s  :weakness_to_shock
++s 25wm30s  :weakness_to_magicka
+
+### Leveled (max) ###
+
++s 15m10s :essence_drain
++s 200s   :finger_of_the_mountain
+
++s 10f15s 30fr 30s :wizard's_fury
+
+### Spell crafting (weakness only) ###
+
++s 100wf5s 100wm5s :weak_fire_1
++s 100wf5s 100wm5s :weak_fire_2
+
++s 100wfr5s 100wm5s :weak_frost_1
++s 100wfr5s 100wm5s :weak_frost_2
+
++s 100ws5s 100wm5s :weak_shock_1
++s 100ws5s 100wm5s :weak_shock_2
+
++s 100wf5s 100wfr5s 100wm5s :weak_fire_frost_1
++s 100wf5s 100wfr5s 100wm5s :weak_fire_frost_2
+
++s 100wf5s 100ws5s 100wm5s :weak_fire_shock_1
++s 100wf5s 100ws5s 100wm5s :weak_fire_shock_2
+
++s 100wfr5s 100ws5s 100wm5s :weak_frost_shock_1
++s 100wfr5s 100ws5s 100wm5s :weak_frost_shock_2
+
++s 100wp5s 100wf5s 100wfr5s 100wm5s :weak_fire_frost_poison_1
++s 100wp5s 100wf5s 100wfr5s 100wm5s :weak_fire_frost_poison_2
+
++s 100wp5s 100wf5s 100ws5s 100wm5s :weak_fire_shock_poison_1
++s 100wp5s 100wf5s 100ws5s 100wm5s :weak_fire_shock_poison_2
+
++s 100wp5s 100wfr5s 100ws5s 100wm5s :weak_frost_shock_poison_1
++s 100wp5s 100wfr5s 100ws5s 100wm5s :weak_frost_shock_poison_2
+
++s 100wf5s 100wfr5s 100ws5s 100wm5s :weak_elements_1
++s 100wf5s 100wfr5s 100ws5s 100wm5s :weak_elements_2
+
++s 100wp5s 100wf5s 100wfr5s 100ws5s 100wm5s :weak_elements_poison_1
++s 100wp5s 100wf5s 100wfr5s 100ws5s 100wm5s :weak_elements_poison_2
+
+### VoicesFromTheDark LP ###
+
++s 100wm5s 100wf5s       :daedric_blaze_(apprentice)
++s 100wm5s 100wf5s       :daedric_blaze_(journeyman)
++s                 3f10s :daedric_blaze_(master)
+
++s 100wm5s 100ws5s       :spear_of_shock_(apprentice)
++s 100wm5s 100ws5s       :spear_of_shock_(journeyman)
++s                 11s3s :spear_of_shock_(master)
+
++s 100wm6s 100ws6s 100wp6s          :divine_justice_(apprentice)
++s 100wm6s 100ws6s 100wp6s          :divine_justice_(expert)
++s                         35s 100d :divine_justice_(master)

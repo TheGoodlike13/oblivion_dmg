@@ -1,1 +1,274 @@
+# Values taken from the game, youtube or en.uesp.net wiki
+# These were done by hand, so there might be some errors
+
+### Generic ###
+
++m 12f  35wf10s  :blade_of_fiery_light
++m 14fr 35wfr10s :axe_of_icy_darkness
++m 16s  35ws10s  :voltag
+
++m 35wf15s 35wfr15s 35wp15s 35ws15s :axe_of_hazards
+
++m  4m4s  :mace_of_feeding
++b  8m    :bow_of_harm
++m  2m20s :sword_of_wounding
++m 15d6s  :dagger_of_pain
++b  8f    :dragon's_bow
++m 12f    :immolator
++m 10fr   :boreal
++b  8fr   :blizzard_bow
++b  8s    :storm_bow
++m 15s    :tempest
+
++b  5f :bow_of_embers
++b 10f :bow_of_scorching
++b 15f :bow_of_flames
++b 20f :bow_of_the_blaze
+
++m  5f :dagger_of_embers
++m 10f :dagger_of_scorching
++m 15f :dagger_of_flames
++m 20f :dagger_of_the_blaze
+
++b  5fr :bow_of_frost
++b 10fr :bow_of_cold
++b 15fr :bow_of_freezing
++b 20fr :bow_of_winter
+
++m  5fr :dagger_of_frost
++m 10fr :dagger_of_cold
++m 15fr :dagger_of_freezing
++m 20fr :dagger_of_winter
+
++b  5s :bow_of_sparks
++b 10s :bow_of_shocking
++b 15s :bow_of_voltage
++b 20s :bow_of_storms
+
++m  5s :dagger_of_sparks
++m 10s :dagger_of_shocking
++m 15s :dagger_of_voltage
++m 20s :dagger_of_storms
+
++st 10m :lesser_staff_of_sickness
++st 20m :staff_of_sickness
++st 30m :greater_staff_of_sickness
+
++st 20f :lesser_staff_of_fire
++st 40f :staff_of_fire
++st 80f :greater_staff_of_fire
++st 15f :lesser_staff_of_fireball
++st 30f :staff_of_fireball
++st 50f :greater_staff_of_fireball
+
++st 20fr :lesser_staff_of_frost
++st 40fr :staff_of_frost
++st 80fr :greater_staff_of_frost
++st 15fr :lesser_staff_of_ice_storm
++st 30fr :staff_of_ice_storm
++st 50fr :greater_staff_of_ice_storm
+
++st 20s   :lesser_staff_of_lightning
++st 40s   :staff_of_lightning
++st 80s   :greater_staff_of_lightning
++st 15s   :lesser_staff_of_storms
++st 30s   :staff_of_storms
++st 35s2s :greater_staff_of_storms
+
++st 20f2s  100wf2s  :staff_of_conflagration
++st 24fr2s 100wfr2s :staff_of_hoarfrost
++st         35wm25s :staff_of_the_mundane
++st 30s2s  100ws2s  :staff_of_thunderbolts
+
++st 35wf15s 35wfr15s 35wp15s 35ws15s :staff_of_vulnerability
+
++st 20f :mage's_staff_of_fire_(weak)
++st 40f :mage's_staff_of_fire_(normal)
++st 60f :mage's_staff_of_fire_(strong)
++st 80f :mage's_staff_of_fire_(max)
+
++st 20fr :mage's_staff_of_frost_(weak)
++st 40fr :mage's_staff_of_frost_(normal)
++st 60fr :mage's_staff_of_frost_(strong)
++st 80fr :mage's_staff_of_frost_(max)
+
++st 20s :mage's_staff_of_shock_(weak)
++st 40s :mage's_staff_of_shock_(normal)
++st 60s :mage's_staff_of_shock_(strong)
++st 80s :mage's_staff_of_shock_(max)
+
+### Dremora ###
+
++m 15d10s         :penance_of_faithlessness
++m  1f15s         :purging_flame
++m        50wf30s :heat_of_sinfulness
++m  1f10s 30wf10s :oblivion's_caress
++m 15m            :retaliation_of_blood
++m  5m            :retribution_of_treachery
++m  1f15s 75wf10s :oblivion's_embrace
++m 30d10s         :burden_of_flesh
++m  1f10s         :gift_of_flame
++m        20wf20s :nearness_of_evil
+
+### Unique ###
+
++m  5fr  :brusef_amelion's_sword
++m 15d6s :dagger_of_discipline
++m 17f5s :mace_of_doom
++m 15m   :akavari_warblade
++m 10f   :sinweaver
++m 10fr  :calliben's_grim_retort
++m 20f   :perdition's_wrath
+
++b 10f  10fr :bow_of_infernal_frost
++b 15fr      :frostwyrm_bow
+
++st 33f 33fr 33s :apotheosis
+
++st  5s :goblin_shaman_staff
++st 20s :goblin_totem_staff
+
++st 10fr :hrormir's_icestaff
+
++st 20d10s :ruma's_staff
+
++st 40f :staff_of_flame
+
++st 80s :staff_of_the_battlemage
+
++m 35m            :blade_of_woe
++m 20fr  35wfr20s :chillrend
++m 20fr           :northwind
++m 15d6s          :redwave
++m 35m            :sufferthorn
++m 35f            :hatreds_heart
++m 20s   35ws20s  :rockshatter
+
++b 35f      :hatreds_soul
++b 20m 20wp :shadowhunt
+
++st  7s :mankar_camoran's_staff
++st 70s :staff_of_indarys
+
++m  8m    :ebony_blade
++m 22f    :goldbrand
++m  5d20s :volendrung
+
+### Ammunition ###
+
++a 8m :arrow_of_harm
+
++a  5f   :arrow_of_embers
++a 10f   :arrow_of_scorching
++a 15f   :arrow_of_fire
++a 20f   :arrow_of_the_blaze
++a 40f2s :arrow_of_cleansing
++a 65f   :arrow_of_immolation
+
++a  5fr   :arrow_of_frost
++a 10fr   :arrow_of_cold
++a 15fr   :arrow_of_freezing
++a 20fr   :arrow_of_winter
++a 40fr2s :arrow_of_savage_frost
++a 60fr   :arrow_of_the_north_winds
+
++a  5s   :arrow_of_jolts
++a 10s   :arrow_of_shocking
++a 15s   :arrow_of_voltage
++a 20s   :arrow_of_storms
++a 30s2s :stormcall_arrow
++a 40s2s :arrow_of_storm_strike
+
+### Poison ###
+
++p  5m :weak_poison_of_illness
++p 10m :poison_of_illness
++p 30m :strong_poison_of_illness
+
++p 15d15s :weak_poison_of_sickness
++p 20d30s :poison_of_sickness
++p 30d30s :strong_poison_of_sickness
+
+### Sigil stones (transcendent) ###
+
++m 25m  :mtss_absorb
++m 30m  :mtss_damage
++m 25f  :mtss_fire
++m 25fr :mtss_frost
++m 25s  :mtss_shock
+
++b 25m  :btss_absorb
++b 30m  :btss_damage
++b 25f  :btss_fire
++b 25fr :btss_frost
++b 25s  :btss_shock
+
+### Grand soul crafts ###
+
++m 40f  :mgs_fire_max
++m 41fr :mgs_frost_max
++m 39s  :mgs_shock_max
+
++m 36f  100wf 100wm :mgs_fire_weak_max
++m 36fr 100wf 100wm :mgs_frost_weak_max
++m 35s  100wf 100wm :mgs_shock_weak_max
+
++m 24f  23fr :mgs_fire_frost_max
++m 23f  23s  :mgs_fire_shock_max
++m 23fr 23s  :mgs_frost_shock_max
+
++m 21f  20fr 100wf  100wfr 100wm :mgs_fire_frost_weak_max
++m 20f  20s  100wf  100ws  100wm :mgs_fire_shock_weak_max
++m 20fr 20s  100wfr 100ws  100wm :mgs_frost_shock_weak_max
+
++m 17f 17fr 17s :mgs_elemental_max
+
++m 15f 14fr 14s 100wf 100wfr 100ws 100wm :mgs_elemental_weak_max
+
+# these include quality of life (soul trap, silence, undead fear for 1s)
++m 13f 12fr 12s      :mgs_ql_max
++m  7f  6fr  6s 100d :mgs_ql_drain_max
+
++b 40f  :bgs_fire_max
++b 41fr :bgs_frost_max
++b 39s  :bgs_shock_max
+
++b 36f  100wf 100wm :bgs_fire_weak_max
++b 36fr 100wf 100wm :bgs_frost_weak_max
++b 35s  100wf 100wm :bgs_shock_weak_max
+
++b 24f  23fr :bgs_fire_frost_max
++b 23f  23s  :bgs_fire_shock_max
++b 23fr 23s  :bgs_frost_shock_max
+
++b 21f  20fr 100wf  100wfr 100wm :bgs_fire_frost_weak_max
++b 20f  20s  100wf  100ws  100wm :bgs_fire_shock_weak_max
++b 20fr 20s  100wfr 100ws  100wm :bgs_frost_shock_weak_max
+
++b 17f 17fr 17s :bgs_elemental_max
+
++b 15f 14fr 14s 100wf 100wfr 100ws 100wm :bgs_elemental_weak_max
+
+# these include quality of life (soul trap, silence, undead fear for 1s)
++b 13f 12fr 12s      :bgs_ql_max
++b  7f  6fr  6s 100d :bgs_ql_drain_max
+
+### Alchemy crafts (max) ###
+
++p 8m30s  :poison_magic
++p 9f37s  :poison_fire
++p 9fr37s :poison_frost
++p 9s37s  :poison_shock
+
++p 8m30s 9f37s  :poison_magic_fire
++p 8m30s 9fr37s :poison_magic_frost
++p 8m30s 9s37s  :poison_magic_shock
+
++p 8m30s 9f37s  9fr37s :poison_magic_fire_frost
++p 8m30s 9f37s  9s37s  :poison_magic_fire_shock
++p 8m30s 9fr37s 9s37s  :poison_magic_frost_shock
+
+### VoicesFromTheDark LP ###
+
++m 24s 100d             :dagger_of_extreme_pain
 +m 18s 100d 100wm 100ws :aetherius
