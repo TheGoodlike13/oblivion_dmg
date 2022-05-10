@@ -144,18 +144,16 @@ public final class InputCache<T> {
 
   private void parseResource(String prepFile) {
     ensureParserFactory();
+
     try (InputStream file = InputCache.class.getClassLoader().getResourceAsStream(prepFile)) {
-      if (file != null) {
+      if (file == null) {
+        Write.line("Failed to load prepared file '" + prepFile + "'. Please check config directory or settings.");
+      }
+      else {
         parse(file);
-        return;
       }
     } catch (Exception e) {
-      Write.line("Exception: " + e);
-    }
-    Write.line("Failed to load prepared file '" + prepFile + "'. Please check config directory or settings.");
-    Write.line("State:");
-    for (Map.Entry<String, T> e : cache.entrySet()) {
-      Write.line(e.getKey() + ": " + e.getValue());
+      Write.line("Exception while parsing <" + prepFile + ">: " + e);
     }
   }
 
@@ -174,7 +172,13 @@ public final class InputCache<T> {
   }
 
   private void parse(String line) {
-    parserFactory.apply(line).thenCache();
+    try {
+      parserFactory.apply(line).thenCache();
+    }
+    catch (Exception e) {
+      Write.line("Line: " + line);
+      throw e;
+    }
   }
 
   private static final class Entry<T> implements NamedValue<T> {

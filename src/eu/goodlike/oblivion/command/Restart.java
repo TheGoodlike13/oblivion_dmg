@@ -22,6 +22,9 @@ public final class Restart extends BaseCommand {
 
   @Override
   protected void performTask() {
+    Write.line("Application restarting.");
+    Write.separator();
+
     try {
       manuallyRefreshTheConfigFiles();
     }
@@ -29,11 +32,8 @@ public final class Restart extends BaseCommand {
       throw new IllegalStateException("Well, we tried to process the config files, didn't work.", e);
     }
 
-    Write.separator();
     Global.initializeEverything();
-    Write.line("Application restarted.");
 
-    Write.separator();
     writeIntro();
     writeSettings();
   }

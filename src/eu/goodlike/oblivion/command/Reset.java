@@ -19,6 +19,7 @@ public final class Reset extends BaseCommand {
   protected void performTask() {
     Write.separator();
     Global.initializeEverything();
+    Write.separator();
     Write.line("Everything has been reset.");
     Write.line("Warning: using original config files.");
     Write.line("If you changed settings or prepared files, use 'restart' instead.");

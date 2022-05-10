@@ -24,6 +24,7 @@ public final class SpellStackingCalculator {
   }
 
   public static void writeIntro() {
+    Write.separator();
     Write.line("Welcome to Oblivion spell stacking calculator!");
     Write.line("Please select an enemy, cast some spells or perform attacks and GO!");
     Write.line("You can quit any time ;)");
