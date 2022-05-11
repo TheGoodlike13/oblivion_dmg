@@ -111,7 +111,7 @@ public final class Global {
 
     /**
      * How long to continue attacking after enemy has died in seconds.
-     * Must be a positive double.
+     * Must be a positive double or zero.
      */
     public static double RAMPAGE = 1;
 
@@ -162,7 +162,7 @@ public final class Global {
       EFFECTIVENESS = StructureException.natOrThrow(properties.getProperty("effectiveness"), "spell effectiveness");
 
       TICK = StructureException.positiveOrThrow(properties.getProperty("tick"), "tick setting");
-      RAMPAGE = StructureException.positiveOrThrow(properties.getProperty("rampage"), "rampage setting");
+      RAMPAGE = StructureException.positiveOrZeroOrThrow(properties.getProperty("rampage"), "rampage setting");
 
       PREPARED_ENEMIES = properties.getProperty("prepared.enemies");
       PREPARED_ITEMS = properties.getProperty("prepared.items");
