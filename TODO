@@ -1,6 +1,3 @@
-Add support for multiple of same effect per effector
-  Enemies explode has 2 fire damage components that stack...
-
 Add support for instant damage
   Most in-game spells or pre-enchanted items do instant damage, not over 1s
   Should still remain 1s by default on parsing; add 0s as option

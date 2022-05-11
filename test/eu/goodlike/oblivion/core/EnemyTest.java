@@ -562,6 +562,13 @@ class EnemyTest {
     assertHealthRemaining(1000);
   }
 
+  @Test
+  void dontBrickOnMeNow() {
+    target.hit(FIRE.damage(5).forSecs(5), FIRE.damage(70).forSecs(1));
+
+    assertDamageTaken(95);
+  }
+
   @SuppressWarnings("unused")
   private void resurrect(String description, EffectText... baseEffects) {
     target = new Enemy(1000, baseEffects);

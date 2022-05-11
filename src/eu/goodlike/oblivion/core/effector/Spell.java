@@ -11,7 +11,7 @@ import java.util.Iterator;
 import static eu.goodlike.oblivion.Global.Settings.CAST;
 import static eu.goodlike.oblivion.core.Effector.Factory.SPELL;
 
-public final class Spell extends BaseEffector implements Armament {
+public final class Spell extends EffectorSkeleton implements Armament {
 
   @Override
   public boolean isEquipment() {

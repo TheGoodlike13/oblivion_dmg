@@ -9,7 +9,7 @@ import static eu.goodlike.oblivion.Global.Settings.SHOOT;
 import static eu.goodlike.oblivion.Global.Settings.SWAP_BOW;
 import static eu.goodlike.oblivion.core.Effector.Factory.BOW;
 
-public final class Bow extends BaseEffector implements Armament {
+public final class Bow extends EffectorSkeleton implements Armament {
 
   @Override
   public boolean isEquipment() {

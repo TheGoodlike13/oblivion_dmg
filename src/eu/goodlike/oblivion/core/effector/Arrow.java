@@ -6,7 +6,7 @@ import eu.goodlike.oblivion.core.Effector;
 
 import static eu.goodlike.oblivion.core.Effector.Factory.ARROW;
 
-public final class Arrow extends BaseEffector {
+public final class Arrow extends EffectorSkeleton {
 
   @Override
   public Category<?> getCategory() {

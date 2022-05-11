@@ -9,7 +9,7 @@ import static eu.goodlike.oblivion.Global.Settings.EMIT;
 import static eu.goodlike.oblivion.Global.Settings.SWAP_STAFF;
 import static eu.goodlike.oblivion.core.Effector.Factory.STAFF;
 
-public final class Staff extends BaseEffector implements Armament {
+public final class Staff extends EffectorSkeleton implements Armament {
 
   @Override
   public boolean isEquipment() {

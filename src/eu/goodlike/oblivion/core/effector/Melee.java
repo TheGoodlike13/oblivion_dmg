@@ -9,7 +9,7 @@ import static eu.goodlike.oblivion.Global.Settings.STRIKE;
 import static eu.goodlike.oblivion.Global.Settings.SWAP_MELEE;
 import static eu.goodlike.oblivion.core.Effector.Factory.MELEE;
 
-public final class Melee extends BaseEffector implements Armament {
+public final class Melee extends EffectorSkeleton implements Armament {
 
   @Override
   public boolean isEquipment() {

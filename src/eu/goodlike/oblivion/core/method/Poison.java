@@ -8,7 +8,7 @@ import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Effector;
 import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.effect.Resist;
-import eu.goodlike.oblivion.core.effector.BaseEffector;
+import eu.goodlike.oblivion.core.effector.EffectorSkeleton;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public final class Poison extends Category<Poison.Bottle> implements Method {
 
   private static Poison INSTANCE;
 
-  public static final class Bottle extends BaseEffector {
+  public static final class Bottle extends EffectorSkeleton {
     @Override
     public Category<?> getCategory() {
       return Poison.getInstance();
