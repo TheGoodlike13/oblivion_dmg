@@ -7,11 +7,13 @@ import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Element;
 import eu.goodlike.oblivion.core.Factor;
 import eu.goodlike.oblivion.core.StructureException;
+import eu.goodlike.oblivion.parse.ParseEffector;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static eu.goodlike.oblivion.core.Effector.Factory.ALL_IN_ORDER;
 import static eu.goodlike.oblivion.core.Factor.FIRE;
@@ -21,9 +23,11 @@ import static eu.goodlike.oblivion.core.Factor.SHOCK;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.getCommonPrefix;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.remove;
 import static org.apache.commons.lang3.StringUtils.split;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
+import static org.gradle.internal.impldep.org.apache.commons.lang.StringUtils.isNotBlank;
 
 /**
  * Parses various inputs into usable objects.
@@ -40,12 +44,25 @@ public final class Parse {
    * The first value whose {@link #toString} has the given prefix is returned, if any.
    */
   public static <T> Optional<T> firstMatch(String prefix, Iterable<T> values) {
-    for (T value : values) {
-      if (startsWithIgnoreCase(value.toString(), prefix)) {
-        return Optional.of(value);
+    if (isNotBlank(prefix)) {
+      for (T value : values) {
+        if (startsWithIgnoreCase(value.toString(), prefix)) {
+          return Optional.of(value);
+        }
       }
     }
     return Optional.empty();
+  }
+
+  /**
+   * Checks enums values in natural order.
+   * The first value whose {@link Enum#name()} has the given prefix is returned, if any.
+   * Both the name and prefix ignore all '_' symbols when matching.
+   */
+  public static <E extends Enum<E>> Optional<E> firstMatch(String prefix, Class<E> enumClass) {
+    Iterable<EnumMatch<E>> values = Stream.of(enumClass.getEnumConstants()).map(EnumMatch::new)::iterator;
+    return firstMatch(remove(prefix, "_"), values)
+      .map(EnumMatch::getValue);
   }
 
   /**
@@ -54,6 +71,11 @@ public final class Parse {
    */
   public static String[] line(String input) {
     return split(input.trim().toLowerCase());
+  }
+
+  public static ParseEffector.Mode mode(String input) {
+    return firstMatch(input, ParseEffector.Mode.class)
+      .orElseThrow(() -> new StructureException("Unknown parse mode reference", input));
   }
 
   public static Factor factor(String input) {
@@ -172,6 +194,23 @@ public final class Parse {
     }
 
     private static final Pattern EFFECT_PATTERN = Pattern.compile("(\\d+)([a-zA-Z]+)(?:(\\d+)s?)?");
+  }
+
+  private static final class EnumMatch<E extends Enum<E>> {
+    public E getValue() {
+      return value;
+    }
+
+    public EnumMatch(E value) {
+      this.value = value;
+    }
+
+    private final E value;
+
+    @Override
+    public String toString() {
+      return remove(value.name(), '_');
+    }
   }
 
 }

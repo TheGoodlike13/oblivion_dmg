@@ -1,8 +1,9 @@
 package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Streams;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -16,13 +17,13 @@ public final class StructureException extends RuntimeException {
     }
   }
 
-  public static void throwOnDuplicateEffectTypes(List<EffectText> effects) {
-    long uniqueTypeCount = effects.stream()
+  public static void throwOnDuplicateEffectTypes(Iterable<EffectText> effects) {
+    long uniqueTypeCount = Streams.stream(effects)
       .map(EffectText::getType)
       .distinct()
       .count();
 
-    if (uniqueTypeCount < effects.size()) {
+    if (uniqueTypeCount < Iterables.size(effects)) {
       throw new StructureException("Effect types must be unique! Instead: " + effects);
     }
   }

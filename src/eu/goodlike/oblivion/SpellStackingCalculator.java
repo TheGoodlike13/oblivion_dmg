@@ -10,6 +10,7 @@ import static eu.goodlike.oblivion.Global.ITS_ALL_OVER;
 import static eu.goodlike.oblivion.Global.Settings.DIFFICULTY;
 import static eu.goodlike.oblivion.Global.Settings.EFFECTIVENESS;
 import static eu.goodlike.oblivion.Global.Settings.LEVEL;
+import static eu.goodlike.oblivion.Global.Settings.PARSE_MODE;
 
 public final class SpellStackingCalculator {
 
@@ -36,6 +37,7 @@ public final class SpellStackingCalculator {
     Write.line("Player level: " + LEVEL);
     Write.line("Difficulty slider: " + DIFFICULTY);
     Write.line("Spell effectiveness: " + EFFECTIVENESS);
+    Write.line("Parse mode: " + PARSE_MODE);
     Write.separator();
   }
 
@@ -67,10 +69,12 @@ public final class SpellStackingCalculator {
     if (input0.startsWith("+") || input0.startsWith("$")) {
       return new SetHit();
     }
-
-    return input0.startsWith("#")
-      ? new RepeatHit()
-      : Command.Name.find(input0).newCommand();
+    if (input0.startsWith("#")) {
+      return new RepeatHit();
+    }
+    return Parse.firstMatch(input0, Command.Name.class)
+      .orElse(Command.Name.WHAT)
+      .newCommand();
   }
 
 }

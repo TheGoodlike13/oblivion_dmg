@@ -28,15 +28,29 @@ public final class Global {
    * Initializes all global values.
    * Loads all configuration files.
    * Repeat calls to this method will act like a reset, unless file contents have changed.
+   * <p/>
+   * Note: files must change in the classpath.
+   * Full restart is required to update config files.
    */
   public static void initializeEverything() {
     Settings.load();
     WRITER = System.out::print;
     THE_ARENA.reset();
+    reloadCaches();
+    ITS_ALL_OVER = false;
+  }
+
+  /**
+   * Clears the caches and reloads their configuration from files.
+   * Repeat calls to this method will act like a cache reset, unless file contents have changed.
+   * <p/>
+   * Note: files must change in the classpath.
+   * Full restart is required to update config files.
+   */
+  public static void reloadCaches() {
     ENEMIES.reset(Settings.PREPARED_ENEMIES);
     EFFECTORS.reset(Settings.PREPARED_ITEMS, Settings.PREPARED_SPELLS);
     HITS.reset();
-    ITS_ALL_OVER = false;
   }
 
   /**
@@ -53,7 +67,7 @@ public final class Global {
    * Caches which holds prepared entities as well as references created as part of parsing user input.
    */
   public static final InputCache<Enemy> ENEMIES = new InputCache<>(ParseEnemy::new);
-  public static final InputCache<Effector> EFFECTORS = new InputCache<>(ParseEffector::new);
+  public static final InputCache<Effector> EFFECTORS = new InputCache<>(ParseEffector::forFile);
   public static final InputCache<Hit> HITS = new InputCache<>();
   public static final List<InputCache<?>> CACHES = ImmutableList.of(ENEMIES, EFFECTORS, HITS);
 
@@ -102,6 +116,13 @@ public final class Global {
      * effectiveness (unless it is exactly 100).
      */
     public static int EFFECTIVENESS = 100;
+
+    /**
+     * The leniency of parsing for effectors.
+     * <p/>
+     * See {@link ParseEffector.Mode} for details.
+     */
+    public static ParseEffector.Mode PARSE_MODE = ParseEffector.Mode.MIXED;
 
     /**
      * Tick rate in seconds.
@@ -160,6 +181,7 @@ public final class Global {
       LEVEL = StructureException.natOrThrow(properties.getProperty("level"), "player level");
       DIFFICULTY = StructureException.doubleOrThrow(properties.getProperty("difficulty"), "difficulty setting");
       EFFECTIVENESS = StructureException.natOrThrow(properties.getProperty("effectiveness"), "spell effectiveness");
+      PARSE_MODE = Parse.mode(properties.getProperty("parse.mode"));
 
       TICK = StructureException.positiveOrThrow(properties.getProperty("tick"), "tick setting");
       RAMPAGE = StructureException.positiveOrZeroOrThrow(properties.getProperty("rampage"), "rampage setting");

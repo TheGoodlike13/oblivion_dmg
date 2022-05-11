@@ -6,6 +6,7 @@ import eu.goodlike.oblivion.command.JustForget;
 import eu.goodlike.oblivion.command.LowerTheGates;
 import eu.goodlike.oblivion.command.NowJustHoldOnACottonPickinMinute;
 import eu.goodlike.oblivion.command.Refresh;
+import eu.goodlike.oblivion.command.Reload;
 import eu.goodlike.oblivion.command.RepeatHit;
 import eu.goodlike.oblivion.command.Reset;
 import eu.goodlike.oblivion.command.Restart;
@@ -13,12 +14,12 @@ import eu.goodlike.oblivion.command.SetDifficulty;
 import eu.goodlike.oblivion.command.SetEnemy;
 import eu.goodlike.oblivion.command.SetHit;
 import eu.goodlike.oblivion.command.SetLevel;
+import eu.goodlike.oblivion.command.SetParseMode;
 import eu.goodlike.oblivion.command.SetSpellEffectiveness;
 import eu.goodlike.oblivion.command.SomebodyHelp;
 import eu.goodlike.oblivion.command.UndoLastHit;
 
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import static org.apache.commons.lang3.StringUtils.remove;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
@@ -45,8 +46,10 @@ public interface Command {
     GO(LowerTheGates::new),
     HELP(SomebodyHelp::new),
     LEVEL(SetLevel::new),
+    PARSE(SetParseMode::new),
     QUIT(ItsAllOver::new),
     REFRESH(Refresh::new),
+    RELOAD(Reload::new),
     RESET(Reset::new),
     RESTART(Restart::new),
     SPELL_EFFECT(SetSpellEffectiveness::new),
@@ -54,19 +57,12 @@ public interface Command {
     WAIT(NowJustHoldOnACottonPickinMinute::new),
     WHAT(ButWhatDoesThisMean::new);
 
-    public static Name find(String input) {
-      return Stream.of(Name.values())
-        .filter(name -> name.matches(input))
-        .findFirst()
-        .orElse(WHAT);
-    }
-
     public Command newCommand() {
       return factory.get();
     }
 
     public boolean matches(String input) {
-      return startsWithIgnoreCase(name(), input) || startsWithIgnoreCase(remove(name(), '_'), input);
+      return startsWithIgnoreCase(remove(name(), '_'), remove(input, '_'));
     }
 
     Name(Supplier<Command> factory) {

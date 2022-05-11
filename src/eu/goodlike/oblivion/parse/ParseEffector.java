@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static eu.goodlike.oblivion.Global.EFFECTORS;
+import static eu.goodlike.oblivion.Global.Settings.PARSE_MODE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
@@ -36,11 +37,33 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  */
 public final class ParseEffector extends BaseParseInput<Effector> {
 
+  /**
+   * Leniency for accepting duplicate effect types in an effector.
+   * <p/>
+   * In-game it is not possible to create spells with duplicate effect types.
+   * However, some pre-built spells *cough* Enemies Explode *cough* do have this uncanny property.
+   * As a result, the code itself allows duplicate effects.
+   * To avoid confusion when parsing user input, an appropriate mode should be selected.
+   */
+  public enum Mode {
+    LENIENT,  // allows duplicates for both files and users
+    MIXED,    // allows duplicates for files, but not for users
+    STRICT;   // forbids duplicates for both files and users
+
+    public boolean demandsUniqueTypesFor(boolean isPrivileged) {
+      return this == STRICT || this == MIXED && !isPrivileged;
+    }
+  }
+
   @Override
   protected Effector parse() {
     Category<?> category = Parse.category(this.source);
     List<EffectText> effects = Parse.effects(this.effects);
-    return category.create(label, effects);
+    Effector effector = category.create(label, effects);
+    if (PARSE_MODE.demandsUniqueTypesFor(isPrivileged)) {
+      StructureException.throwOnDuplicateEffectTypes(effector);
+    }
+    return effector;
   }
 
   @Override
@@ -48,21 +71,25 @@ public final class ParseEffector extends BaseParseInput<Effector> {
     return EFFECTORS.put(label, getValue(), Effector::copy);
   }
 
-  public ParseEffector(String input) {
-    this(Parse.line(input));
+  public static ParseEffector forFile(String input) {
+    return new ParseEffector(true, Stream.of(Parse.line(input)));
   }
 
-  public ParseEffector(String[] inputs) {
-    this(Stream.of(inputs));
+  public static ParseEffector forUser(Stream<String> inputs) {
+    return new ParseEffector(false, inputs);
   }
 
-  public ParseEffector(Stream<String> inputs) {
+  private ParseEffector(boolean isPrivileged, Stream<String> inputs) {
+    this.isPrivileged = isPrivileged;
+
     inputs.forEach(this::identify);
 
     if (source == null) {
       throw new StructureException("Missing category param", isBlank(label) ? effects : label);
     }
   }
+
+  private final boolean isPrivileged;
 
   private String source;
   private final List<String> effects = new ArrayList<>();

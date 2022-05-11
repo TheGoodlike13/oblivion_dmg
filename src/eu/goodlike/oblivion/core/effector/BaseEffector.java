@@ -6,7 +6,6 @@ import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Effector;
 import eu.goodlike.oblivion.core.Method;
-import eu.goodlike.oblivion.core.StructureException;
 
 import java.util.Iterator;
 import java.util.List;
@@ -49,8 +48,6 @@ public abstract class BaseEffector implements Effector {
   protected BaseEffector(String label, Iterable<EffectText> effects) {
     this.label = label;
     this.effects = ImmutableList.copyOf(effects);
-
-    StructureException.throwOnDuplicateEffectTypes(this.effects);
   }
 
   private final String label;

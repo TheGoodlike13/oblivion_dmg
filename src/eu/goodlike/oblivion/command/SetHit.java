@@ -73,7 +73,7 @@ public final class SetHit extends BaseCommand {
 
   private void parseNextEffectorIfAny() {
     if (start >= 0) {
-      NamedValue<Effector> effector = new ParseEffector(inputs(start, cursor)).thenCache();
+      NamedValue<Effector> effector = ParseEffector.forUser(inputs(start, cursor)).thenCache();
       effectors.add(effector.getValue());
     }
 

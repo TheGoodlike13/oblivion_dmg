@@ -18,22 +18,20 @@
 +s 30d10s :dire_wound
 +s 50d10s :superior_wound
 
-+s   6f   :flare
-+s   5f3s :weak_fireball
-+s  10f   :burning_touch
-+s  25f   :flame_touch
-+s  20f   :flash_bolt
-+s  45f   :searing_grasp
-+s  35f   :blazing_spear
-+s  30f   :fire_ball
-+s  80f   :scorching_blow
-+s  70f   :heat_blast
-+s  50f   :fire_storm
-+s 110f   :immolating_blast
-+s  75f   :flame_tempest
-
-# SO YOU HAVE CHOSEN DEATH
-# +s 5f5s 70f :enemies_explode
++s   6f       :flare
++s   5f3s     :weak_fireball
++s  10f       :burning_touch
++s  25f       :flame_touch
++s  20f       :flash_bolt
++s  45f       :searing_grasp
++s  35f       :blazing_spear
++s  30f       :fire_ball
++s  80f       :scorching_blow
++s  70f       :heat_blast
++s  50f       :fire_storm
++s 110f       :immolating_blast
++s  75f       :flame_tempest
++s   5f5s 70f :enemies_explode
 
 +s  10fr :snowball
 +s  15fr :cold_touch

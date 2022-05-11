@@ -1459,6 +1459,59 @@ class SpellStackingCalculatorTest implements Supplier<String>, Consumer<String> 
     );
   }
 
+  @Test
+  void parseMixed() {
+    sendInput("parse mixed", "reload", "$enemies_explode", "+s 1f 1f");
+
+    assertOutput(
+      "Parse mode has been set to <MIXED>",
+      "-----",
+      "-----",
+      "Caches have been reset.",
+      "Warning: using original config files.",
+      "If you changed settings or prepared files, use 'restart' instead.",
+      "-----",
+      "[#1] Next hit: <SPELL$enemies_explode> {FIRE DMG 5 for 5s + FIRE DMG 70 for 1s}",
+      "Bad input: Effect types must be unique! Instead: <SPELL> {FIRE DMG 1 for 1s + FIRE DMG 1 for 1s}"
+    );
+  }
+
+  @Test
+  void parseLenient() {
+    sendInput("parse lenient", "reload", "$enemies_explode", "+s 1f 1f");
+
+    assertOutput(
+      "Parse mode has been set to <LENIENT>",
+      "-----",
+      "-----",
+      "Caches have been reset.",
+      "Warning: using original config files.",
+      "If you changed settings or prepared files, use 'restart' instead.",
+      "-----",
+      "[#1] Next hit: <SPELL$enemies_explode> {FIRE DMG 5 for 5s + FIRE DMG 70 for 1s}",
+      "[#2] Next hit: <SPELL$1> {FIRE DMG 1 for 1s + FIRE DMG 1 for 1s}"
+    );
+  }
+
+  @Test
+  void parseStrict() {
+    sendInput("parse strict", "reload", "$enemies_explode", "+s 1f 1f");
+
+    assertOutput(
+      "Parse mode has been set to <STRICT>",
+      "-----",
+      "Line: +s 5f5s 70f :enemies_explode",
+      "Exception while parsing <prepared_spells.txt>: eu.goodlike.oblivion.core.StructureException: Effect types must be unique! Instead: <SPELL$enemies_explode> {FIRE DMG 5 for 5s + FIRE DMG 70 for 1s}",
+      "-----",
+      "Caches have been reset.",
+      "Warning: using original config files.",
+      "If you changed settings or prepared files, use 'restart' instead.",
+      "-----",
+      "Bad input: Nothing matches <enemies_explode>",
+      "Bad input: Effect types must be unique! Instead: <SPELL> {FIRE DMG 1 for 1s + FIRE DMG 1 for 1s}"
+    );
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);
