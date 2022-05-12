@@ -104,9 +104,108 @@ So that's a bonus.
 P.S. I may have gone a little insane half way through the project.
 Please excuse any code or comments that seem a little too avant-garde.
 
+## Setup & running
+
+As long as you have successfully installed JDK 8+, running 'run' in command line
+should work. Gradle will download itself and run the application.
+
+You can adjust files in /config directory to change settings or add your own
+prepared enemies, items or spells. However, if you do this while the application
+is running, you will have to restart (manually or via 'restart' command).
+See [limitations](#limitations) below.
+
+In most cases, anything you can add to the file you can also manually enter
+when application is running. The only exception is duplicate effect types,
+which are allowed for files only by default. See [parse mode](#parse.mode) setting.
+
+## Settings
+
+#### level
+
+Default player level. Leveled enemies will use this to adjust their HP.
+Should be a positive integer.
+
+#### difficulty
+
+Equivalent to in-game difficulty slider.
+Any double is allowed.
+To be faithful to the game, it should be in range [0, 100].
+
+#### effectiveness
+
+Spell effectiveness, which usually lowers due to wearing armor.
+Should be a positive integer.
+To be faithful to the game, it should never exceed 100.
+
+#### parse.mode
+
+Determines whether duplicate effect types are allowed for items and spells.
+Should match 'lenient', 'mixed' or 'strict'.
+Lenient allows duplicate effect types everywhere.
+Strict forbids them everywhere.
+Mixed, the default, allows them in files, but forbids them for user input.
+
+#### tick
+
+Simulation tick speed in seconds.
+Should be a small positive double.
+
+#### rampage
+
+How many seconds to continue attacking after target is dead.
+Should be a non-negative integer.
+
+#### prepared.{type}
+
+Config filename for a certain type of prepared input.
+Blank filenames will be ignored.
+
+Types: 'enemies', 'items', 'spells'.
+
+#### {armament}.swap
+#### {armament}.combo
+
+Timing configuration for weapon types or spells.
+
+Swap indicates how long it takes to switch to that type of weapon.
+Should be a positive double.
+Spells ignore swap - it is always 0.
+
+Combo indicates swing and cooldown timings.
+Should be a list of positive double pairs.
+The pairs should be separated by '_': (speed_cooldown).
+The items of the list should be separated by ';': (combo1; combo2).
+
+See bottom of [limitations](#limitations) for more explanation.
+
+Armaments: 'melee', 'bow', 'staff', 'spell'.
+
 ## Commands
 
-TO BE EXPLAINED
+All commands (and references to anything in general) use prefix matching.
+That means that 'e', 'en', 'ene', 'enem' and 'enemy' are treated the same as inputs.
+If multiple things match some prefix, alphabetic order takes precedence.
+This means 'f' will match 'fire' before 'frost'.
+
+Arguments for commands are handled one of a few ways:
+1. No arguments are expected. They are ignored.
+2. A specific amount of arguments are expected. They may be optional. The rest are ignored.
+3. There is no limit to arguments. All of them are parsed and interpreted in some way.
+
+When all arguments are considered, but multiple of them match some pattern,
+the last argument will be taken and the rest ignored.
+The only exception to this is enemy HP, which will only ever accept one numeric argument.
+
+Arguments are often identified by prefix or suffix.
+Commonly used argument types:
+1. ':' for names when saving them.
+2. '$' for names when retrieving them.
+3. '#' for referencing hits specifically.
+
+In all cases names should be unique within their category:
+1. Enemies.
+2. Effectors. This includes both items and spells with effects.
+3. Hits. This is automatic, as all hits are assigned a unique number.
 
 ## Limitations
 
@@ -163,4 +262,33 @@ The resulting errors are trivial and unlikely to cause issues, but do keep it in
 
 ### Weapon & casting timing (speed, cooldowns, swapping)
 
-TO BE EXPLAINED
+Because all crafted item effects take at least 1 second to fully appreciate,
+repeated attacks with the same weapon or spell can overlap with itself.
+This application uses a very basic and simplified model to achieve this effect.
+Each type of weapon is given an attack duration, cooldown and swap duration.
+These are periods of time where the effects are allowed to tick on the enemy
+before a follow-up hit is made.
+
+Swap duration is incurred when you've attacked using one weapon, but a follow-up
+hit must use a different weapon. Intuitively it's the amount of time it takes
+to switch to the weapon in-game.
+
+Attack duration is always incurred right before the hit. This is the amount of
+time between user input and the weapon actually hitting the enemy.
+
+Cooldown is incurred following an attack. This is the amount of time it takes
+your weapon to 'reset' to normal position after the enemy has been hit.
+As a result, there are cases where this cooldown will be ignored (for example,
+a weapon attack immediately after casting a spell).
+
+I tried to time various weapons and spells, their swap durations, attack animations
+and so on using recorded video and sound cues. I've come to the conclusion that
+these must be some factor (likely weight) that influences these durations.
+Furthermore they seemed a little random, although only within a few frames.
+
+In any case, I decided to use one set of timings for melee weapons, one for bows,
+one for staffs and one for spells. The durations are approximate averages from my
+timing attempts. I used a steel dagger for melee, although a good case can be
+made that a 2-handed weapon would be preferable as a mage due to how shields
+work with 2-handers. In any case, if the timings are too fast for you, feel free
+to time them yourself and adjust the settings :)
