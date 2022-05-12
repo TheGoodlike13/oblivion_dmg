@@ -10,12 +10,71 @@ This is a command line application and requires JDK 8+ to build & run.
 
 ## Usage example
 
-TO BE EXPLAINED
+>     run
+>>     > Task :clean
+>>     > Task :compileJava
+>>     > Task :processResources
+>>     > Task :classes
+>>
+>>     > Task :run
+>>     -----
+>>     Welcome to Oblivion Spell Stacking Calculator!
+>>     Please select an enemy, cast some spells or perform attacks and GO!
+>>     You can quit any time ;)
+>>     -----
+>>     Configurable settings:
+>>     Player level: 30
+>>     Difficulty slider: 100.0
+>>     Spell effectiveness: 100
+>>     Parse mode: MIXED
+>>     -----
+>     >> difficulty 50
+>>     Difficulty slider has been set to <50.0>
+>     >> enemy $meh
+>>     You face the mehrunes dagon (1000 hp)
+>>     FIRE   x0.00
+>     >> $finger
+>>     [#1] Next hit: <SPELL$finger_of_the_mountain> {SHOCK DMG 200 (instant)}
+>     >> #1 x5
+>>     [#1] Next hit: <SPELL$finger_of_the_mountain> {SHOCK DMG 200 (instant)}
+>>     [#1] Next hit: <SPELL$finger_of_the_mountain> {SHOCK DMG 200 (instant)}
+>>     [#1] Next hit: <SPELL$finger_of_the_mountain> {SHOCK DMG 200 (instant)}
+>>     [#1] Next hit: <SPELL$finger_of_the_mountain> {SHOCK DMG 200 (instant)}
+>>     [#1] Next hit: <SPELL$finger_of_the_mountain> {SHOCK DMG 200 (instant)}
+>     >> go
+>>     00.000 You cast <SPELL$finger_of_the_mountain>
+>>     00.410 You hit with <SPELL$finger_of_the_mountain>
+>>            Applied SHOCK DMG 200.0 (instant)
+>>     01.140 You cast <SPELL$finger_of_the_mountain>
+>>     01.550 You hit with <SPELL$finger_of_the_mountain>
+>>            Applied SHOCK DMG 200.0 (instant)
+>>     02.280 You cast <SPELL$finger_of_the_mountain>
+>>     02.690 You hit with <SPELL$finger_of_the_mountain>
+>>            Applied SHOCK DMG 200.0 (instant)
+>>     03.420 You cast <SPELL$finger_of_the_mountain>
+>>     03.830 You hit with <SPELL$finger_of_the_mountain>
+>>            Applied SHOCK DMG 200.0 (instant)
+>>     04.560 You cast <SPELL$finger_of_the_mountain>
+>>     04.970 You hit with <SPELL$finger_of_the_mountain>
+>>            Applied SHOCK DMG 200.0 (instant)
+>>            The mehrunes dagon has died. Breakdown:
+>>                <SPELL$finger_of_the_mountain> SHOCK DMG: 1000.00
+>>     05.700 You cast <SPELL$finger_of_the_mountain>
+>>     06.110 You hit with <SPELL$finger_of_the_mountain>
+>>            Applied SHOCK DMG 200.0 (instant)
+>>     The mehrunes dagon took a total of 1200.0 damage (200.0 overkill).
+>>            Overkill by effect:
+>>                <SPELL$finger_of_the_mountain> SHOCK DMG: 200.00
+>>     -----
+>>     You face the mehrunes dagon (1000 hp)
+>>     FIRE   x0.00
+>     >> q
+>>     BUILD SUCCESSFUL in 39s
+>>     4 actionable tasks: 4 executed
 
 ## Motivation
 
-I was watching a let's play of Oblivion by VoicesFromTheDark:
-https://www.youtube.com/playlist?list=PLayzTpaf6B4BGUFgskpn5vmV1RXXH3Wgt
+I was watching a [let's play of Oblivion by VoicesFromTheDark](https://www.youtube.com/playlist?list=PLayzTpaf6B4BGUFgskpn5vmV1RXXH3Wgt).
 
 It's a challenge run, done at 100% difficulty from the start, trying to complete
 most unique interactions in the game (quests, clear caves, collect nirnroots, etc.)
@@ -25,8 +84,7 @@ difficulty of enemies was to create spells which weaken the enemy and stack with
 each other.
 I was interested by this mechanic, so I looked it up on the wiki.
 While I found some information, it was not as extensive as I'd have liked.
-Ideally, I'd love some sort of an online calculator, like the neat alchemy one here:
-https://en.uesp.net/oblivion/alchemy/alc_calc.php
+Ideally, I'd love some sort of an online calculator, like the [neat alchemy one](https://en.uesp.net/oblivion/alchemy/alc_calc.php).
 
 I could not find anything that fit the bill, so I wrote my own command line app.
 In particular, I was interested in questions like:
