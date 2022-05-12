@@ -184,7 +184,7 @@ public final class Arena {
 
     @Override
     public Target observing(Target actual) {
-      return isTicking ? new TickStats(actual) : new HitStats(actual);
+      return isTicking ? new Stats(actual) : new HitStats(actual);
     }
 
     @Override
@@ -409,9 +409,6 @@ public final class Arena {
       public boolean drain(double hp) {
         boolean wasApplied = super.drain(hp);
         breakdownPossibleDeath();
-        if (!hasDeathBeenBrokenDown) {
-          writeDrainStatus(hp < 0 ? "restored" : "drained");
-        }
         return wasApplied;
       }
 
@@ -459,22 +456,7 @@ public final class Arena {
       }
     }
 
-    private final class TickStats extends Stats {
-      @Override
-      public boolean drain(double hp) {
-        boolean wasApplied = super.drain(hp);
-        if (wasApplied) {
-          writeDrainStatus("restored");
-        }
-        return wasApplied;
-      }
-
-      public TickStats(Target actual) {
-        super(actual);
-      }
-    }
-
-    private abstract class Stats implements Target {
+    private class Stats implements Target {
       @Override
       public void modifyResist(Factor factor, double percent) {
         actual.modifyResist(factor, percent);
@@ -494,9 +476,11 @@ public final class Arena {
         if (wasApplied) {
           if (hp > 0) {
             damageTotals.put(id, hp);
+            writeDrainStatus("drained");
           }
           else {
             damageTotals.remove(id);
+            writeDrainStatus("restored");
           }
         }
         return wasApplied;
