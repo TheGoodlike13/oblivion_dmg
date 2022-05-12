@@ -109,9 +109,9 @@ Please excuse any code or comments that seem a little too avant-garde.
 As long as you have successfully installed JDK 8+, running 'run' in command line
 should work. Gradle will download itself and run the application.
 
-You can adjust files in /config directory to change settings or add your own
+You can adjust files in 'config' directory to change settings or add your own
 prepared enemies, items or spells. However, if you do this while the application
-is running, you will have to restart (manually or via 'restart' command).
+is running, you will have to restart (manually or via [restart](#restart)).
 See [limitations](#limitations) below.
 
 In most cases, anything you can add to the file you can also manually enter
@@ -187,13 +187,15 @@ That means that 'e', 'en', 'ene', 'enem' and 'enemy' are treated the same as inp
 If multiple things match some prefix, alphabetic order takes precedence.
 This means 'f' will match 'fire' before 'frost'.
 
+### Arguments
+
 Arguments for commands are handled one of a few ways:
 1. No arguments are expected. They are ignored.
 2. A specific amount of arguments are expected. They may be optional. The rest are ignored.
 3. There is no limit to arguments. All of them are parsed and interpreted in some way.
 
 When all arguments are considered, but multiple of them match some pattern,
-the last argument will be taken and the rest ignored.
+the last argument will be used and the rest ignored.
 The only exception to this is enemy HP, which will only ever accept one numeric argument.
 
 Arguments are often identified by prefix or suffix.
@@ -206,6 +208,201 @@ In all cases names should be unique within their category:
 1. Enemies.
 2. Effectors. This includes both items and spells with effects.
 3. Hits. This is automatic, as all hits are assigned a unique number.
+
+Effects are parsed as arguments like this:
+
+{magnitude}(effect type}{duration}
+
+Magnitude is just a positive integer indicating the strength of the effect.
+
+Effect type is either 'drain', 'weakness/resist' or damage indicated by element.
+All of these can be referred to by prefixes:
+1. 100d: 100 drain life 
+2. 25wm: 25% weakness to magic 
+3. 50rp: 50% resist poison 
+4.  6fr:   6 frost damage 
+
+Finally, duration is optional and defaults to 1s.
+You can use '0s' to indicate instant spells.
+The number should always be an integer.
+'s' itself is optional.
+
+### List of commands
+
+#### enemy :name *hp* **multiplier [min max] effect*...
+
+Sets the enemy to attack.
+
+':' prefix indicates enemy name.
+Giving enemy a name will store it in memory for use within the session.
+
+First numeric value is considered enemy HP.
+It must be positive integer and is required.
+For leveled enemies this is their HP for levels in range [1, min].
+
+'*' prefix indicates the HP multiplier for leveling.
+It must be a positive integer, but is optional.
+Enemies without this argument are simply not leveled.
+
+'[' prefix indicates minimum level.
+It must be a positive integer. Defaults to 1.
+
+']' suffix indicates maximum level.
+It must be a positive integer larger than minimum level. Defaults to 2^31 - 1.
+For level above this one, enemy HP will simply cease to increase.
+
+All remaining arguments will be parsed as permanent effects on the enemy.
+Damage effects will be ignored. Drain effects will just reduce max HP.
+This should be used for innate resistances and weaknesses.
+
+#### enemy *$name*
+
+Same command as above, but instead of using custom values, fetches enemy from
+the memory using given name. The name is required.
+
+#### *$name :copy_name*... *+category :name effect*... ...
+
+Enqueues the next hit by combining effectors.
+An effector is an item or a spell which can have effects.
+
+If the effector is referred to by name, it is fetched from memory.
+If a different name is provided for this effector, it is copied and stored
+into memory as well.
+
+In the other case, a new effector is created.
+It will be stored into memory with either a given name, or a generated integer.
+
+The resulting hit must be a valid combination in-game:
+1. Melee strike.
+2. Melee strike with poison.
+3. Bow shot with arrow.
+4. Bow shot with arrow and poison.
+5. Staff invocation.
+6. Spell cast.
+
+For poisons, bows and arrows, the other effectors are optional.
+If none were provided, the application will assume they simply have no
+magic effects.
+
+To use exactly the same effector as part of the hit, either duplicate the hit
+itself, or refer to it by its name.
+
+If this is unclear, consider using [help](#help) command for some examples.
+
+#### *#hit*... *xTimes*... ...
+
+Repeats hits by reference.
+
+'#' prefix indicates a hit to repeat.
+
+'x' prefix indicates how many times should the previous reference be repeated:
+>     #1      repeat first hit in the session
+>     #1 x1   repeat first hit in the session once (same as above)
+
+>     #1 #1   repeat first hit in the session twice
+>     #1 x2   repeat first hit in the session twice (same as above)
+
+#### level *player_level*
+
+Sets the level of the player.
+It must be positive integer and is required.
+This will not affect the settings file, only this specific session.
+
+This adjusts HP of leveled enemies to match.
+Does not affect already selected enemies.
+Use [refresh](#refresh) to achieve this.
+
+#### difficulty *slider_position*
+
+Sets the in-game difficulty slider.
+It can be any double, but is required.
+To be faithful to the game, it should be in range [0, 100].
+This will not affect the settings file, only this specific session.
+
+This adjusts all damage which comes from the player itself.
+Notably does not affect poisons.
+
+#### spell_effect *spell_effectiveness*
+
+Sets the effectiveness of spells.
+It must be a positive integer and is required.
+To be faithful to the game, it should never exceed 100.
+This will not affect the settings file, only this specific session.
+
+This adjusts magnitudes of all spells as if the player was wearing armor.
+Queued spells also get adjusted.
+
+#### parse *mode*
+
+Sets the parse mode for duplicate effect types.
+It must match 'lenient', 'mixed' or 'strict'.
+This will not affect the settings file, only this specific session.
+
+Lenient allows duplicate effect types everywhere.
+Strict forbids them everywhere.
+Mixed, the default, allows them in files, but forbids them for user input.
+
+#### wait *duration*
+
+Ensures at least some time passes between hits.
+Useful when spamming attacks with a very fast weapon.
+Takes into account time wasted by swapping and cooldowns.
+
+The duration should be a non-negative double.
+
+#### go
+
+Proceeds with the simulation using selected enemy and queued hits.
+After it is done, the hits are no longer queued,
+but the enemy is still selected & refreshed.
+
+#### help
+
+Gives a rough explanation of all commands and gives a few examples.
+
+#### quit
+
+Closes the application.
+
+#### undo *amount*
+
+Removes previously enqueued hits, if any.
+
+Amount allows removing multiple hits at once.
+It must be a positive integer and is optional, defaulting to 1.
+
+#### forget *$name*...
+
+Removes everything with exact 'name' from memory.
+This includes hits, enemies and effectors.
+This does not include things whose 'name' is merely a prefix.
+Avoid using with integers, as that might cause unexpected results.
+
+#### refresh
+
+Removes all enqueued hits and updates selected enemy level (if applicable).
+
+#### reload
+
+Reloads all caches.
+This clears the memory completely, then re-fills it with prepared files.
+
+If you've made changes to the files before using this command, they will not
+be visible. Use [restart](#restart) for that.
+
+#### reset
+
+Reloads all caches, settings, etc.
+
+If you've made changes to the files before using this command, they will not
+be visible. Use [restart](#restart) for that.
+
+#### restart
+
+Reloads all caches, settings, etc.
+
+If you're using 'gradle' or 'run' to run the application, this will also
+load all changes done to 'config' files while the application was running.
 
 ## Limitations
 
