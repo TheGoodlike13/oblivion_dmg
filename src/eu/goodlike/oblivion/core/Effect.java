@@ -78,6 +78,11 @@ public interface Effect {
   double remainingDuration();
 
   /**
+   * @return true if the original duration of this effect was always 0, false otherwise
+   */
+  boolean isInstant();
+
+  /**
    * @return false if this effect still has duration remaining, true otherwise
    */
   default boolean hasExpired() {

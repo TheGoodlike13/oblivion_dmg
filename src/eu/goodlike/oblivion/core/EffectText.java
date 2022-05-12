@@ -18,13 +18,19 @@ import static eu.goodlike.oblivion.Global.Settings.EFFECTIVENESS;
  */
 public final class EffectText {
 
+  public EffectText instant() {
+    return forSecs(0);
+  }
+
   /**
    * @return copy of this effect, but with given duration instead
+   * @throws StructureException if duration is < 0
    */
   public EffectText forSecs(int duration) {
+    StructureException.natOrZeroOrThrow(duration, "effect duration");
     return this.duration == duration
       ? this
-      : new EffectText(factor, type, magnitude, duration);
+      : new EffectText(factor, type, magnitude, duration, unscaled);
   }
 
   /**
@@ -106,11 +112,15 @@ public final class EffectText {
 
   @Override
   public String toString() {
-    return String.format("%s %d%s for %ds", type, magnitude, scaleIndicator(), duration);
+    return type + " " + magnitude + scaleIndicator() + durationIndicator();
   }
 
   private String scaleIndicator() {
     return unscaled == null ? "" : "*";
+  }
+
+  private String durationIndicator() {
+    return duration == 0 ? " (instant)" : " for " + duration + "s";
   }
 
   @Override

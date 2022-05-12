@@ -44,9 +44,16 @@ public final class Damage extends BaseEffect {
     }
   }
 
+  public static boolean matches(Id id) {
+    return id.getType() instanceof OfElement;
+  }
+
   @Override
   public void onApply(Target target) {
     target.poke(effectiveMagnitude(), remainingDuration());
+    if (isInstant()) {
+      target.damage(effectiveMagnitude());
+    }
   }
 
   @Override

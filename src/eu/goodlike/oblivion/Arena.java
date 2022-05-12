@@ -9,6 +9,7 @@ import eu.goodlike.oblivion.core.Enemy;
 import eu.goodlike.oblivion.core.Factor;
 import eu.goodlike.oblivion.core.Hit;
 import eu.goodlike.oblivion.core.Target;
+import eu.goodlike.oblivion.core.effect.Damage;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayDeque;
@@ -200,7 +201,7 @@ public final class Arena {
     @Override
     public void markExpired(Effect effect) {
       this.expired = effect;
-      if (effect.hasExpired()) {
+      if (effect.hasExpired() && !effect.isInstant()) {
         combatLog("Expired " + id);
       }
     }
@@ -240,7 +241,7 @@ public final class Arena {
 
       this.modifiedFactors = new LinkedHashSet<>();
       this.damageTotals = new LinkedHashMap<>();
-      this.wastedEffects = ArrayListMultimap.create();
+      this.wastedDamage = ArrayListMultimap.create();
 
       this.hasDeathBeenBrokenDown = false;
 
@@ -264,7 +265,7 @@ public final class Arena {
 
     private final Set<Factor> modifiedFactors;
     private final Map<Effect.Id, Double> damageTotals;
-    private final ListMultimap<Effect.Id, Effect> wastedEffects;
+    private final ListMultimap<Effect.Id, Effect> wastedDamage;
 
     private double duration;
     private double lastLog;
@@ -373,10 +374,10 @@ public final class Arena {
     }
 
     private void writeWastedDamageBreakdown() {
-      if (!wastedEffects.isEmpty()) {
+      if (!wastedDamage.isEmpty()) {
         combatLog("Total damage wasted due to overlap:");
       }
-      double total = wastedEffects.asMap().entrySet()
+      double total = wastedDamage.asMap().entrySet()
         .stream()
         .mapToDouble(e -> writeWastedEffect(e.getKey(), e.getValue()))
         .sum();
@@ -405,18 +406,11 @@ public final class Arena {
 
     private final class HitStats extends Stats {
       @Override
-      public void modifyResist(Factor factor, double percent) {
-        super.modifyResist(factor, percent);
-        combatLog(newEffect(percent));
-      }
-
-      @Override
       public boolean drain(double hp) {
         boolean wasApplied = super.drain(hp);
-        combatLog(newEffect(hp));
         breakdownPossibleDeath();
         if (!hasDeathBeenBrokenDown) {
-          writeDrainStatus("drained");
+          writeDrainStatus(hp < 0 ? "restored" : "drained");
         }
         return wasApplied;
       }
@@ -425,17 +419,13 @@ public final class Arena {
       public void poke(double magnitude, double duration) {
         super.poke(magnitude, duration);
         combatLog(newEffect(magnitude, duration));
-        if (expired != null) {
-          wastedEffects.put(id, expired);
+        if (expired != null && Damage.matches(id)) {
+          wastedDamage.put(id, expired);
         }
       }
 
       public HitStats(Target actual) {
         super(actual);
-      }
-
-      private String newEffect(double magnitude) {
-        return newEffect(magnitude, 0);
       }
 
       private String newEffect(double magnitude, double duration) {
@@ -451,15 +441,21 @@ public final class Arena {
       }
 
       private String numbers(double magnitude, double duration) {
-        return duration > 0
-          ? String.format("%.1f for %.0fs", magnitude, duration)
-          : magnitudesOnly(magnitude);
+        return replacement(magnitude) + decimal(magnitude) + indicator(duration);
       }
 
-      private String magnitudesOnly(double magnitude) {
-        return expired == null
-          ? String.format("%.1f", magnitude)
-          : String.format("%.1f with %.1f", expired.effectiveMagnitude(), magnitude);
+      private String replacement(double updated) {
+        return expired == null || expired.effectiveMagnitude() == updated
+          ? ""
+          : String.format("%.1f with ", expired.effectiveMagnitude());
+      }
+
+      private String decimal(double magnitude) {
+        return String.format("%.1f", magnitude);
+      }
+
+      private String indicator(double duration) {
+        return duration > 0 ? String.format(" for %.0fs", duration) : " (instant)";
       }
     }
 
@@ -495,7 +491,6 @@ public final class Arena {
       @Override
       public boolean drain(double hp) {
         boolean wasApplied = actual.drain(hp);
-
         if (wasApplied) {
           if (hp > 0) {
             damageTotals.put(id, hp);

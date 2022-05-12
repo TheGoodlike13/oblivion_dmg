@@ -116,6 +116,13 @@ public final class Enemy implements Target {
       }
     }
 
+    new Neaterator<>(activeEffects).forEach((i, id, effect) -> {
+      if (effect.hasExpired()) {
+        i.remove();
+        observer.markExpired(effect);
+        effect.onRemove(target);
+      }
+    });
     dummy.applyResistModsAtOnce(this);
   }
 

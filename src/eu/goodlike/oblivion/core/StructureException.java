@@ -87,9 +87,21 @@ public final class StructureException extends RuntimeException {
     return natOrThrow(i, description);
   }
 
+  public static int natOrZeroOrThrow(String input, String description) {
+    int d = intOrThrow(input, description);
+    return natOrZeroOrThrow(d, description);
+  }
+
   public static int natOrThrow(int i, String description) {
-    if (i < 1) {
+    if (i <= 0) {
       throw new StructureException("Expected positive " + description + ", but was <" + i + ">");
+    }
+    return i;
+  }
+
+  public static int natOrZeroOrThrow(int i, String description) {
+    if (i < 0) {
+      throw new StructureException("Expected positive or zero " + description + ", but was <" + i + ">");
     }
     return i;
   }

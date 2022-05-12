@@ -36,21 +36,30 @@ public abstract class BaseEffect implements Effect {
   }
 
   @Override
-  public double effectiveMagnitude() {
+  public final double effectiveMagnitude() {
     return magnitude;
   }
 
   @Override
-  public double remainingDuration() {
+  public final double remainingDuration() {
     return remaining;
+  }
+
+  @Override
+  public final boolean isInstant() {
+    return duration == 0;
   }
 
   protected BaseEffect(double magnitude, double duration) {
     this.magnitude = magnitude;
+    this.duration = duration;
+
     this.remaining = duration;
   }
 
   private final double magnitude;
+  private final double duration;
+
   private double remaining;
 
   /**

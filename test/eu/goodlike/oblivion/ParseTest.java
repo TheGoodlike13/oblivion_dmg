@@ -72,26 +72,33 @@ class ParseTest {
 
   @Test
   void weakness() {
-    assertThat(Parse.effect("100wfr")).isEqualTo(Factor.FROST.weakness(100));
+    assertThat(Parse.effect("100wfr")).isEqualTo(Factor.FROST.weakness(100).forSecs(1));
     assertThat(Parse.effect("25weaknessshock10s")).isEqualTo(Factor.SHOCK.weakness(25).forSecs(10));
   }
 
   @Test
   void resist() {
-    assertThat(Parse.effect("50rp")).isEqualTo(Factor.POISON.resist(50));
+    assertThat(Parse.effect("50rp")).isEqualTo(Factor.POISON.resist(50).forSecs(1));
     assertThat(Parse.effect("99resistm90")).isEqualTo(Factor.MAGIC.resist(99).forSecs(90));
   }
 
   @Test
   void drain() {
-    assertThat(Parse.effect("30d")).isEqualTo(Factor.MAGIC.drain(30));
+    assertThat(Parse.effect("30d")).isEqualTo(Factor.MAGIC.drain(30).forSecs(1));
     assertThat(Parse.effect("55d9s")).isEqualTo(Factor.MAGIC.drain(55).forSecs(9));
   }
 
   @Test
   void damage() {
-    assertThat(Parse.effect("6s")).isEqualTo(Factor.SHOCK.damage(6));
+    assertThat(Parse.effect("6s")).isEqualTo(Factor.SHOCK.damage(6).forSecs(1));
     assertThat(Parse.effect("13fr37")).isEqualTo(Factor.FROST.damage(13).forSecs(37));
+  }
+
+  @Test
+  void instant() {
+    assertThat(Parse.effect("6s0s")).isEqualTo(Factor.SHOCK.damage(6).instant());
+    assertThat(Parse.effect("6ws0s")).isEqualTo(Factor.SHOCK.weakness(6).instant());
+    assertThat(Parse.effect("6d0s")).isEqualTo(Factor.MAGIC.drain(6).instant());
   }
 
   @Test
