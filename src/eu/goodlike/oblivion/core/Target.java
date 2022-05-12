@@ -24,13 +24,13 @@ public interface Target {
   void modifyResist(Factor factor, double percent);
 
   /**
-   * Damage the target's hp by given amount.
+   * Damage the target's HP by given amount.
    * Negative values are undefined.
    */
   void damage(double dmg);
 
   /**
-   * Drain this target's hp by given amount.
+   * Drain this target's HP by given amount.
    * Negative values can be used to remove the drain.
    * Does not affect dead targets.
    *

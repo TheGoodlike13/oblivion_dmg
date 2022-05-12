@@ -34,7 +34,7 @@ public interface Effect {
     Effect activate(double magnitude, double duration);
 
     /**
-     * @return true if this type of effect influences or damages hp, false otherwise
+     * @return true if this type of effect influences or damages HP, false otherwise
      */
     boolean affectsHp();
   }

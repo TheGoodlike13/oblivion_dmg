@@ -21,7 +21,7 @@ public final class Enemy implements Target {
 
   /**
    * This method will sometimes return a number equivalent to a floating point calculation error.
-   * Such targets are still considered dead, but for clarity, will only have 0 hp when rounded.
+   * Such targets are still considered dead, but for clarity, will only have 0 HP when rounded.
    *
    * @return exact amount of health remaining, never less than 0
    */
@@ -164,9 +164,7 @@ public final class Enemy implements Target {
   }
 
   /**
-   * Wipes all active effects and sets hp back to max.
-   *
-   * @return this enemy
+   * @return this enemy with all active effects wiped and HP reset
    */
   public Enemy resurrect() {
     resolve();
@@ -174,6 +172,17 @@ public final class Enemy implements Target {
     return this;
   }
 
+  /**
+   * Sets this enemy as leveled, allowing it to scale with {@link Settings#LEVEL} of the player.
+   * Only HP is scaled with the level.
+   * Scaling is not automatic - you must call {@link #updateLevel} to scale the enemy.
+   *
+   * @return this enemy, leveled to player; wipes all active effects and resets HP as well
+   * @throws StructureException if this enemy is already leveled
+   * @throws StructureException if level multiplier is not positive
+   * @throws StructureException if min level is not positive
+   * @throws StructureException if max level is not larger than min level
+   */
   public Enemy setLeveled(int levelMultiplier, int minLevel, int maxLevel) {
     if (level > 0) {
       throw new StructureException("Enemy is already leveled: " + this);
@@ -193,6 +202,9 @@ public final class Enemy implements Target {
     return updateLevel();
   }
 
+  /**
+   * @return this enemy, leveled to player (if leveled); wipes all active effects and resets HP as well
+   */
   public Enemy updateLevel() {
     int diff = confine(LEVEL) - confine(level);
 
@@ -232,7 +244,7 @@ public final class Enemy implements Target {
 
   /**
    * Creates a new enemy with given max health and given permanent effects.
-   * The enemy starts at max hp.
+   * The enemy starts at max HP.
    * The effects are equivalent to racial or passive equipment bonuses that various characters can have.
    * Damage effects are ignored.
    *

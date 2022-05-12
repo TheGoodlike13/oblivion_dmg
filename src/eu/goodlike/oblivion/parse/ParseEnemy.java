@@ -47,7 +47,7 @@ import static org.apache.commons.lang3.StringUtils.isNumeric;
  * All other non-numeric inputs are treated as passive permanent effects.
  * They must be parsable.
  * <p/>
- * Enemies with default name 'enemy' is never cached.
+ * Enemies with default name 'enemy' are never cached.
  */
 public final class ParseEnemy extends BaseParseInput<Enemy> {
 

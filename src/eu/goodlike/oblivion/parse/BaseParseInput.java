@@ -4,7 +4,7 @@ import eu.goodlike.oblivion.Parse;
 
 /**
  * Common logic for parsers as named values.
- * Ensures the object is parsed exactly once.
+ * Ensures the object is parsed exactly once, unless an error occurs.
  */
 public abstract class BaseParseInput<T> implements Parse.Input<T> {
 

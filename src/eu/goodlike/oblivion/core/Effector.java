@@ -17,7 +17,7 @@ import java.util.SortedSet;
  * Bundle of effects associated with a single item or spell.
  * Equivalent to any in-game weapon, ammo, poison or spell.
  * <p/>
- * Each effect has a unique type and should be processed in iteration order.
+ * Effects should be processed in iteration order.
  * <p/>
  * Effectors are ordered the same as their {@link Category}.
  * However, unlike {@link Category}, their equality is not consistent with this ordering.

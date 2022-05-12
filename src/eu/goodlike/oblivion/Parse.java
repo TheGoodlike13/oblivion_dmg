@@ -190,10 +190,11 @@ public final class Parse {
 
     private int duration() {
       String duration = matcher.group(3);
-      return isBlank(duration) ? 1 : Integer.parseInt(duration);
+      return isBlank(duration) ? DEFAULT_DURATION : Integer.parseInt(duration);
     }
 
     private static final Pattern EFFECT_PATTERN = Pattern.compile("(\\d+)([a-zA-Z]+)(?:(\\d+)s?)?");
+    private static final int DEFAULT_DURATION = 1;
   }
 
   private static final class EnumMatch<E extends Enum<E>> {
