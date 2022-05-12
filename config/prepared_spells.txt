@@ -3,63 +3,63 @@
 
 ### Standard ###
 
-+s  5m :absorb_health
-+s 10m :leech_health
-+s 20m :consume_health
-+s 40m :devour_health
++s  5m0s :absorb_health
++s 10m0s :leech_health
++s 20m0s :consume_health
++s 40m0s :devour_health
 
-+s  5m :entropic_touch
-+s 10m :entropic_bolt
-+s 30m :withering_touch
-+s 40m :withering_bolt
++s  5m0s :entropic_touch
++s 10m0s :entropic_bolt
++s 30m0s :withering_touch
++s 40m0s :withering_bolt
 
 +s  5d10s :minor_wound
 +s 15d10s :major_wound
 +s 30d10s :dire_wound
 +s 50d10s :superior_wound
 
-+s   6f       :flare
++s   6f0s     :flare
 +s   5f3s     :weak_fireball
-+s  10f       :burning_touch
-+s  25f       :flame_touch
-+s  20f       :flash_bolt
-+s  45f       :searing_grasp
-+s  35f       :blazing_spear
-+s  30f       :fire_ball
-+s  80f       :scorching_blow
-+s  70f       :heat_blast
-+s  50f       :fire_storm
-+s 110f       :immolating_blast
-+s  75f       :flame_tempest
++s  10f0s     :burning_touch
++s  25f0s     :flame_touch
++s  20f0s     :flash_bolt
++s  45f0s     :searing_grasp
++s  35f0s     :blazing_spear
++s  30f0s     :fire_ball
++s  80f0s     :scorching_blow
++s  70f0s     :heat_blast
++s  50f0s     :fire_storm
++s 110f0s     :immolating_blast
++s  75f0s     :flame_tempest
 +s   5f5s 70f :enemies_explode
 
-+s  10fr :snowball
-+s  15fr :cold_touch
-+s  25fr :frost_touch
-+s  20fr :hailstone
-+s  45fr :winter's_grasp
-+s  35fr :frost_bolt
-+s  30fr :hail_storm
-+s  30fr :baronoff's_bloody_icicle
-+s  20fr :black_winter
-+s  80fr :arctic_blow
-+s  70fr :ice_bolt
-+s  50fr :ice_storm
-+s 110fr :ice_blast
-+s  75fr :blizzard
++s  10fr0s :snowball
++s  15fr0s :cold_touch
++s  25fr0s :frost_touch
++s  20fr0s :hailstone
++s  45fr0s :winter's_grasp
++s  35fr0s :frost_bolt
++s  30fr0s :hail_storm
++s  30fr0s :baronoff's_bloody_icicle
++s  20fr0s :black_winter
++s  80fr0s :arctic_blow
++s  70fr0s :ice_bolt
++s  50fr0s :ice_storm
++s 110fr0s :ice_blast
++s  75fr0s :blizzard
 
-+s  10s   :shocking_touch
-+s  10s   :spark
-+s  25s   :electric_touch
-+s  20s   :shock
-+s  45s   :lightning_grasp
-+s  35s   :lightning_bolt
++s  10s0s :shocking_touch
++s  10s0s :spark
++s  25s0s :electric_touch
++s  20s0s :shock
++s  45s0s :lightning_grasp
++s  35s0s :lightning_bolt
 +s  15s2s :shocking_burst
-+s  80s   :lightning_surge
++s  80s0s :lightning_surge
 +s  20s2s :lightning_ball
-+s  70s   :lightning_blast
++s  70s0s :lightning_blast
 +s  30s2s :lightning_storm
-+s 110s   :electrocution
++s 110s0s :electrocution
 
 +s 25wf30s  :weakness_to_fire
 +s 25wfr30s :weakness_to_frost
@@ -70,9 +70,9 @@
 ### Leveled (max) ###
 
 +s 15m10s :essence_drain
-+s 200s   :finger_of_the_mountain
++s 200s0s :finger_of_the_mountain
 
-+s 10f15s 30fr 30s :wizard's_fury
++s 10f15s 30fr0s 30s0s :wizard's_fury
 
 ### Spell crafting (weakness only) ###
 
