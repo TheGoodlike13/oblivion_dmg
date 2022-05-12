@@ -13,6 +13,13 @@ import static eu.goodlike.oblivion.Global.Settings.TICK;
 public abstract class BaseEffect implements Effect {
 
   /**
+   * Called by {@link #onApply} after performing a poke.
+   * <p/>
+   * Undefined if target is null.
+   */
+  protected abstract void onApplyEffect(Target target);
+
+  /**
    * Called by {@link #onTick)} to influence the target in proportion to the exact amount of time
    * used in the last {@link Settings#TICK}.
    * In most cases, given tick will be equal to {@link Settings#TICK}.
@@ -25,6 +32,12 @@ public abstract class BaseEffect implements Effect {
    * Undefined if target is null or tick is negative.
    */
   protected abstract void onEffectiveTick(Target target, double tick);
+
+  @Override
+  public final void onApply(Target target) {
+    target.poke(effectiveMagnitude(), duration);
+    onApplyEffect(target);
+  }
 
   @Override
   public final void onTick(Target target) {

@@ -49,8 +49,7 @@ public final class Damage extends BaseEffect {
   }
 
   @Override
-  public void onApply(Target target) {
-    target.poke(effectiveMagnitude(), remainingDuration());
+  protected void onApplyEffect(Target target) {
     if (isInstant()) {
       target.damage(effectiveMagnitude());
     }

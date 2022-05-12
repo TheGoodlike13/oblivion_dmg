@@ -45,8 +45,7 @@ public final class Resist extends BaseEffect {
   }
 
   @Override
-  public void onApply(Target target) {
-    target.poke(effectiveMagnitude(), remainingDuration());
+  protected void onApplyEffect(Target target) {
     target.modifyResist(resist.factor, effectiveMagnitude());
   }
 

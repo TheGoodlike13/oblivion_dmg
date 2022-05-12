@@ -23,8 +23,7 @@ public final class Drain extends BaseEffect {
   };
 
   @Override
-  public void onApply(Target target) {
-    target.poke(effectiveMagnitude(), remainingDuration());
+  protected void onApplyEffect(Target target) {
     target.drain(effectiveMagnitude());
   }
 
