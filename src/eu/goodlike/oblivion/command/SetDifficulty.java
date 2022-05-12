@@ -5,6 +5,10 @@ import eu.goodlike.oblivion.core.StructureException;
 
 import static eu.goodlike.oblivion.Global.Settings.DIFFICULTY;
 
+/**
+ * Sets the in-game difficulty slider.
+ * This affects damage done to enemies.
+ */
 public final class SetDifficulty extends BaseCommand {
 
   @Override

@@ -15,14 +15,12 @@ import static eu.goodlike.oblivion.SpellStackingCalculator.writeSettings;
  * Resets fucking everything, including the bloody configuration files!
  * <p/>
  * Use this command when you have made some changes to the settings or prepared files.
- * Equivalent to restarting the application.
- * Hence the name.
  */
 public final class Restart extends BaseCommand {
 
   @Override
   protected void performTask() {
-    Write.line("Application restarting.");
+    Write.line("Reloading everything.");
     Write.separator();
 
     try {

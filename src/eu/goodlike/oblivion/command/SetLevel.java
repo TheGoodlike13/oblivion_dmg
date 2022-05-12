@@ -5,6 +5,11 @@ import eu.goodlike.oblivion.core.StructureException;
 
 import static eu.goodlike.oblivion.Global.Settings.LEVEL;
 
+/**
+ * Sets player level.
+ * This affects enemy HP.
+ * Any already selected enemy must still be refreshed using {@link Refresh} before it updates.
+ */
 public final class SetLevel extends BaseCommand {
 
   @Override

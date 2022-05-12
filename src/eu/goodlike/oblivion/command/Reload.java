@@ -3,6 +3,9 @@ package eu.goodlike.oblivion.command;
 import eu.goodlike.oblivion.Global;
 import eu.goodlike.oblivion.Write;
 
+/**
+ * Reloads all caches.
+ */
 public final class Reload extends BaseCommand {
 
   @Override

@@ -6,6 +6,10 @@ import eu.goodlike.oblivion.parse.ParseEffector;
 
 import static eu.goodlike.oblivion.Global.Settings.PARSE_MODE;
 
+/**
+ * Sets the parsing mode for effectors.
+ * See {@link ParseEffector.Mode} for more info.
+ */
 public final class SetParseMode extends BaseCommand {
 
   @Override

@@ -9,8 +9,8 @@ import static eu.goodlike.oblivion.SpellStackingCalculator.writeSettings;
  * Resets fucking everything.
  * <p/>
  * Use this command when you done fucked up.
- * Almost equivalent to restarting the application.
- * However, does not refresh the project configuration (e.g. modifications to settings or prepared files).
+ * <p/>
+ * This command doesn't see changes to 'config' files.
  * To do that, use {@link Restart}.
  */
 public final class Reset extends BaseCommand {

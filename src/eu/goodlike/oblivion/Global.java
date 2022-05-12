@@ -107,7 +107,7 @@ public final class Global {
     public static double DIFFICULTY = 50;
 
     /**
-     * Multiplier for spell magnitude.
+     * Multiplier for spell magnitude as a result of wearing light or heavy armor.
      * Must be a positive integer.
      * Unlike other multipliers, this one adjusts the magnitude at {@link EffectText} level.
      * This means the magnitude must remain an integer, and will be rounded down.
