@@ -1,8 +1,7 @@
 # Oblivion spell stacking calculator
 
 Calculates the amount of damage done by magical effects and poisons when using
-the mechanic of spell stacking as described here:
-https://en.uesp.net/wiki/Oblivion:Spell_Making#Spell_Stacking
+the mechanic of spell stacking as described [here](https://en.uesp.net/wiki/Oblivion:Spell_Making#Spell_Stacking).
 
 Strictly speaking, it performs a quick simulation of casting spells and/or
 performing attacks with magical weapons & poisons.
@@ -53,6 +52,11 @@ TO BE EXPLAINED
 
 ## Limitations
 
+I use Windows. This means the experience of using the application is tailored for that.
+Since I had setup a linux VM recently, I tried it there, but the console is atrocious.
+It treats arrow keys like some kind of text input... Anyway, I'm not going to waste
+time fixing a limitation on an entire OS I don't use. It works fine for me.
+
 Physical damage is ignored.
 The focus is on spell stacking and using enchanted weapons or poisons as finishers.
 
@@ -75,8 +79,9 @@ They are simply not applicable to any real combat scenario.
 Similar to healing, it would only add to the complexity of the code.
 
 Resist and weakness are treated as the same type of effect.
-As a result, items or spells cannot have both.
-It could be possible to make such a spell in-game, but it would be of no practical use.
+As a result, items or spells cannot have both under strict parsing rules.
+It is possible to make such a spell in-game, but it would be of no practical use.
+Also, due to the way effects are processed, it is very non-intuitive.
 
 All items and spells must have a unique name.
 This allows them to be uniquely referenced without issue when planning attacks.
