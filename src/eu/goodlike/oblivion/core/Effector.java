@@ -70,11 +70,10 @@ public interface Effector extends Iterable<EffectText>, Comparable<Effector> {
    * When hitting a target multiple times with the same effector (e.g. spell), effects tend to not stack.
    * Instead, their durations are refreshed.
    * The id from this method allows us to identify effects which should be overridden rather than stacked.
-   * <p/>
-   * Result is undefined if the effect did not come from this effector.
    *
    * @param effect effect which we must uniquely identify
    * @return id which uniquely identifies the given effect
+   * @throws StructureException if effect is not from this effector
    */
   Effect.Id toId(EffectText effect);
 

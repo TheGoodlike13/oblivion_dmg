@@ -1,7 +1,5 @@
 package eu.goodlike.oblivion.core.method;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import eu.goodlike.oblivion.core.Category;
 import eu.goodlike.oblivion.core.Effect;
 import eu.goodlike.oblivion.core.EffectText;
@@ -68,9 +66,10 @@ public final class Poison extends Category<Poison.Bottle> implements Method {
 
     @Override
     public Effect.Id toId(EffectText effect) {
-      Effect.Type type = effect.getType();
-      useCounter.add(type);
-      return new AlwaysUnique(this, type, useCounter.count(type));
+      if (getIndex(effect) == 0) {
+        uses++;
+      }
+      return new AlwaysUnique(this, effect.getType(), uses);
     }
 
     @Override
@@ -82,7 +81,7 @@ public final class Poison extends Category<Poison.Bottle> implements Method {
       super(label, effects);
     }
 
-    private final Multiset<Effect.Type> useCounter = HashMultiset.create();
+    private int uses = 0;
   }
 
   private static final class AlwaysUnique implements Effect.Id {
