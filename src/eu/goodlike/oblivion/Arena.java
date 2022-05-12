@@ -394,10 +394,6 @@ public final class Arena {
       return sum;
     }
 
-    private void writeDrainStatus(String status) {
-      combatLog(String.format("The " + label + " hp %s [%s]", status, enemy.healthStatus()));
-    }
-
     private static final double BASICALLY_NO_OVERKILL = 0.005;
 
     private final class Stats implements Target {
@@ -445,6 +441,10 @@ public final class Arena {
       }
 
       private final Target actual;
+
+      private void writeDrainStatus(String status) {
+        combatLog(String.format("The " + label + " hp %s [%s]", status, enemy.healthStatus()));
+      }
 
       private String newEffect(double magnitude, double duration) {
         return String.join(" ", howNew(), whichEffect(), numbers(magnitude, duration));
