@@ -184,7 +184,7 @@ public final class Arena {
 
     @Override
     public Target observing(Target actual) {
-      return isTicking ? new Stats(actual) : new HitStats(actual);
+      return new Stats(actual);
     }
 
     @Override
@@ -235,7 +235,6 @@ public final class Arena {
       this.lastHit = null;
       this.combo = 0;
 
-      this.isTicking = true;
       this.id = null;
       this.expired = null;
 
@@ -257,7 +256,6 @@ public final class Arena {
     private Hit lastHit;
     private int combo;
 
-    private boolean isTicking;
     private Effect.Id id;
     private Effect expired;
 
@@ -323,9 +321,7 @@ public final class Arena {
 
       combatLog("You hit with " + hit.toLabelString());
       lastHit = hit;
-      isTicking = false;
       enemy.hit(hit, this);
-      isTicking = true;
       combo += 1;
 
       dumpModifiedFactors();
@@ -404,26 +400,51 @@ public final class Arena {
 
     private static final double BASICALLY_NO_OVERKILL = 0.005;
 
-    private final class HitStats extends Stats {
+    private final class Stats implements Target {
+      @Override
+      public void modifyResist(Factor factor, double percent) {
+        actual.modifyResist(factor, percent);
+        modifiedFactors.add(factor);
+      }
+
+      @Override
+      public void damage(double dmg) {
+        actual.damage(dmg);
+        damageTotals.merge(id, dmg, Double::sum);
+        breakdownPossibleDeath();
+      }
+
       @Override
       public boolean drain(double hp) {
-        boolean wasApplied = super.drain(hp);
-        breakdownPossibleDeath();
+        boolean wasApplied = actual.drain(hp);
+        if (wasApplied) {
+          if (hp > 0) {
+            damageTotals.put(id, hp);
+            writeDrainStatus("drained");
+          }
+          else {
+            damageTotals.remove(id);
+            writeDrainStatus("restored");
+          }
+          breakdownPossibleDeath();
+        }
         return wasApplied;
       }
 
       @Override
       public void poke(double magnitude, double duration) {
-        super.poke(magnitude, duration);
+        actual.poke(magnitude, duration);
         combatLog(newEffect(magnitude, duration));
         if (expired != null && Damage.matches(id)) {
           wastedDamage.put(id, expired);
         }
       }
 
-      public HitStats(Target actual) {
-        super(actual);
+      protected Stats(Target actual) {
+        this.actual = actual;
       }
+
+      private final Target actual;
 
       private String newEffect(double magnitude, double duration) {
         return String.join(" ", howNew(), whichEffect(), numbers(magnitude, duration));
@@ -454,48 +475,6 @@ public final class Arena {
       private String indicator(double duration) {
         return duration > 0 ? String.format(" for %.0fs", duration) : " (instant)";
       }
-    }
-
-    private class Stats implements Target {
-      @Override
-      public void modifyResist(Factor factor, double percent) {
-        actual.modifyResist(factor, percent);
-        modifiedFactors.add(factor);
-      }
-
-      @Override
-      public void damage(double dmg) {
-        actual.damage(dmg);
-        damageTotals.merge(id, dmg, Double::sum);
-        breakdownPossibleDeath();
-      }
-
-      @Override
-      public boolean drain(double hp) {
-        boolean wasApplied = actual.drain(hp);
-        if (wasApplied) {
-          if (hp > 0) {
-            damageTotals.put(id, hp);
-            writeDrainStatus("drained");
-          }
-          else {
-            damageTotals.remove(id);
-            writeDrainStatus("restored");
-          }
-        }
-        return wasApplied;
-      }
-
-      @Override
-      public void poke(double magnitude, double duration) {
-        actual.poke(magnitude, duration);
-      }
-
-      protected Stats(Target actual) {
-        this.actual = actual;
-      }
-
-      private final Target actual;
     }
   }
 
