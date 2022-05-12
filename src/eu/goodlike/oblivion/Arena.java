@@ -105,7 +105,7 @@ public final class Arena {
   }
 
   private void writeResists() {
-    factorMods(Factor.ALL, false).forEach(Write::line);
+    factorMods(Factor.ALL, true).forEach(Write::line);
   }
 
   private boolean ready() {
@@ -152,15 +152,15 @@ public final class Arena {
       .ifPresent(play::setInitialWeapon);
   }
 
-  private Stream<String> factorMods(Iterable<Factor> factors, boolean includeAll) {
+  private Stream<String> factorMods(Iterable<Factor> factors, boolean ignoreTrivial) {
     return Streams.stream(factors)
-      .map(factor -> factorMod(factor, includeAll))
+      .map(factor -> factorMod(factor, ignoreTrivial))
       .filter(StringUtils::isNotBlank);
   }
 
-  private String factorMod(Factor factor, boolean includeAll) {
+  private String factorMod(Factor factor, boolean ignoreTrivial) {
     double multiplier = enemy.getMultiplier(factor);
-    return !includeAll && multiplier == 1
+    return ignoreTrivial && multiplier == 1
       ? ""
       : String.format("%-6s x%.2f", factor, multiplier);
   }
@@ -330,7 +330,7 @@ public final class Arena {
 
     private void dumpModifiedFactors() {
       if (enemy.isAlive() && !modifiedFactors.isEmpty()) {
-        String factorMods = factorMods(modifiedFactors, true).collect(joining(", "));
+        String factorMods = factorMods(modifiedFactors, false).collect(joining(", "));
         combatLog("Resulting multipliers: " + factorMods);
         modifiedFactors.clear();
       }
