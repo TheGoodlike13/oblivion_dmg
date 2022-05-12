@@ -116,7 +116,7 @@ See [limitations](#limitations) below.
 
 In most cases, anything you can add to the file you can also manually enter
 when application is running. The only exception is duplicate effect types,
-which are allowed for files only by default. See [parse mode](#parse.mode) setting.
+which are allowed for files only by default. See [parse mode](#parsemode) setting.
 
 ## Settings
 
@@ -229,7 +229,7 @@ The number should always be an integer.
 
 ### List of commands
 
-#### enemy :name *hp* **multiplier [min max] effect*...
+#### enemy *:name hp* **multiplier [min max] effect*...
 
 Sets the enemy to attack.
 
