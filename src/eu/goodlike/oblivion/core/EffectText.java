@@ -1,5 +1,6 @@
 package eu.goodlike.oblivion.core;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 
 import java.util.Objects;
@@ -18,6 +19,9 @@ import static eu.goodlike.oblivion.Global.Settings.EFFECTIVENESS;
  */
 public final class EffectText {
 
+  /**
+   * @return copy of this effect, but with 0 duration instead
+   */
   public EffectText instant() {
     return forSecs(0);
   }
@@ -79,7 +83,12 @@ public final class EffectText {
 
     return scaledMagnitude == magnitude
       ? this
-      : new EffectText(factor, type, magnitude, duration, unscaled);
+      : new EffectText(factor, type, scaledMagnitude, duration, unscaled);
+  }
+
+  @VisibleForTesting
+  double getMagnitude() {
+    return magnitude;
   }
 
   public EffectText(Factor factor, Effect.Type type, int magnitude) {
