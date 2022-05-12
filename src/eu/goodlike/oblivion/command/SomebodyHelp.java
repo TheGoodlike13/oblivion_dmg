@@ -84,7 +84,7 @@ public final class SomebodyHelp extends BaseCommand {
     Write.line("'reload'            reloads caches");                                             //
     Write.line("'reset'             reloads everything, changes in 'config' ignored");            //
     Write.line("'restart'           reloads everything, ensures 'config' changes are visible");   //
-    Write.line("                    Only works when using gradle or run.bat");                    //
+    Write.line("                    Only works when using 'gradle' or 'run'");                    //
     Write.separator();                                                                            //
     Write.line("For more details, please refer to README.md file.");                              //
     Write.line("That's about it, have fun!");                                                     //

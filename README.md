@@ -56,8 +56,7 @@ Updating settings or prepared files requires a restart.
 This is due to the way the application is run by gradle.
 It copies the files elsewhere and uses those copies.
 It is possible to manually force gradle to re-copy the files.
-If you are using gradle (or run.bat) to run the application, 'restart' command does this
-automatically.
+If you are using 'gradle' (or 'run'), 'restart' command does this automatically.
 
 I use Windows. This means the experience of using the application is tailored for that.
 Since I had setup a linux VM recently, I tried it there, but the console is atrocious.
