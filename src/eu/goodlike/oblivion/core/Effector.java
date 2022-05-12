@@ -38,7 +38,7 @@ public interface Effector extends Iterable<EffectText>, Comparable<Effector> {
    */
   interface Factory<E extends Effector> {
     Category<Melee> MELEE  = new Category<>("MELEE", Melee::new);
-    Category<Bow>   BOW    = new Category<>("BOW", Bow::new);
+    Category<Bow>   BOW    = new Category<>("BOW",   Bow::new);
     Category<Arrow> ARROW  = new Category<>("ARROW", Arrow::new);
     Poison          POISON = Poison.getInstance();
     Category<Spell> SPELL  = new Category<>("SPELL", Spell::new);
