@@ -45,7 +45,7 @@ public final class Damage extends BaseEffect {
   }
 
   public static boolean matches(Id id) {
-    return id.getType() instanceof OfElement;
+    return id.getType() instanceof Damage.OfElement;
   }
 
   @Override
