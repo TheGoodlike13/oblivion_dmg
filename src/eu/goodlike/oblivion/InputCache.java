@@ -175,9 +175,9 @@ public final class InputCache<T> {
     try {
       parserFactory.apply(line).thenCache();
     }
-    catch (Exception e) {
-      Write.line("Line: " + line);
-      throw e;
+    catch (StructureException e) {
+      Write.line("Error in line: " + line);
+      Write.line(e.getMessage());
     }
   }
 

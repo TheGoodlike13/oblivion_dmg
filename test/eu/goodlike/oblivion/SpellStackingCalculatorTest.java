@@ -1505,8 +1505,10 @@ class SpellStackingCalculatorTest implements Supplier<String>, Consumer<String> 
     assertOutput(
       "Parse mode has been set to <STRICT>",
       "-----",
-      "Line: +s 5f5s 70f :enemies_explode",
-      "Exception while parsing <prepared_spells.txt>: eu.goodlike.oblivion.core.StructureException: Effect types must be unique! Instead: <SPELL$enemies_explode> {FIRE DMG 5 for 5s + FIRE DMG 70 for 1s}",
+      "Error in line: +s 5f5s 70f :enemies_explode",
+      "Effect types must be unique! Instead: <SPELL$enemies_explode> {FIRE DMG 5 for 5s + FIRE DMG 70 for 1s}",
+      "Error in line: +s 1s 1s :not_a_real_spell",
+      "Effect types must be unique! Instead: <SPELL$not_a_real_spell> {SHOCK DMG 1 for 1s + SHOCK DMG 1 for 1s}",
       "-----",
       "Caches have been reset.",
       "Warning: using original config files.",
