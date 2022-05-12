@@ -116,14 +116,8 @@ public final class Enemy implements Target {
       }
     }
 
-    new Neaterator<>(activeEffects).forEach((i, id, effect) -> {
-      if (effect.hasExpired()) {
-        i.remove();
-        observer.markExpired(effect);
-        effect.onRemove(target);
-      }
-    });
     dummy.applyResistModsAtOnce(this);
+    cleanupEffects(observer, false);
   }
 
   public void tick() {
@@ -136,20 +130,8 @@ public final class Enemy implements Target {
    * Tick length is configured in {@link Settings#TICK}.
    */
   public void tick(Observer observer) {
-    Target target = observer.observing(this);
     observer.tick();
-
-    new Neaterator<>(activeEffects).forEach((i, id, effect) -> {
-      observer.next(id);
-
-      effect.onTick(target);
-
-      if (effect.hasExpired()) {
-        i.remove();
-        observer.markExpired(effect);
-        effect.onRemove(target);
-      }
-    });
+    cleanupEffects(observer, true);
   }
 
   public void tick(double seconds) {
@@ -282,6 +264,24 @@ public final class Enemy implements Target {
   private int maxLevel;
 
   private int level;
+
+  private void cleanupEffects(Observer observer, boolean isTicking) {
+    Target target = observer.observing(this);
+
+    new Neaterator<>(activeEffects).forEach((i, id, effect) -> {
+      observer.next(id);
+
+      if (isTicking) {
+        effect.onTick(target);
+      }
+
+      if (effect.hasExpired()) {
+        i.remove();
+        observer.markExpired(effect);
+        effect.onRemove(target);
+      }
+    });
+  }
 
   private double getWeakness(Factor factor) {
     return weaknessPercent.computeIfAbsent(factor, any -> NO_WEAKNESS);
