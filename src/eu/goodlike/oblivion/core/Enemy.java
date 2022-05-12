@@ -8,7 +8,6 @@ import eu.goodlike.oblivion.Neaterator;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import static eu.goodlike.oblivion.Global.Settings.LEVEL;
@@ -83,7 +82,7 @@ public final class Enemy implements Target {
   /**
    * Shorthand for {@link #hit(Hit)}, helps with testing.
    * If the effector is not an armament, it will be supplemented with one.
-   * See {@link Hit#Hit(List)} for details.
+   * See {@link Hit#Hit(Iterable)} for details.
    */
   public void hit(Effector byItself) {
     hit(new Hit(byItself));
