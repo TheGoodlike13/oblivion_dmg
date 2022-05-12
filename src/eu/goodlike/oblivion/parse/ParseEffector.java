@@ -57,7 +57,7 @@ public final class ParseEffector extends BaseParseInput<Effector> {
 
   @Override
   protected Effector parse() {
-    Category<?> category = Parse.category(this.source);
+    Category<?> category = Parse.category(this.category);
     List<EffectText> effects = Parse.effects(this.effects);
     Effector effector = category.create(label, effects);
     if (PARSE_MODE.demandsUniqueTypesFor(isPrivileged)) {
@@ -84,14 +84,14 @@ public final class ParseEffector extends BaseParseInput<Effector> {
 
     inputs.forEach(this::identify);
 
-    if (source == null) {
+    if (category == null) {
       throw new StructureException("Missing category param", isBlank(label) ? effects : label);
     }
   }
 
   private final boolean isPrivileged;
 
-  private String source;
+  private String category;
   private final List<String> effects = new ArrayList<>();
 
   private void identify(String input) {
@@ -99,7 +99,7 @@ public final class ParseEffector extends BaseParseInput<Effector> {
       label = input.substring(1);
     }
     else if (input.startsWith("+")) {
-      source = input.substring(1);
+      category = input.substring(1);
     }
     else {
       effects.add(input);
