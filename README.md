@@ -1,4 +1,4 @@
-# Oblivion spell stacking calculator
+# Oblivion Spell Stacking Calculator
 
 Calculates the amount of damage done by magical effects and poisons when using
 the mechanic of spell stacking as described [here](https://en.uesp.net/wiki/Oblivion:Spell_Making#Spell_Stacking).
