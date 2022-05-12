@@ -105,6 +105,8 @@ class ParseTest {
   void badEffects() {
     assertThatExceptionOfType(StructureException.class).isThrownBy(() -> Parse.effect(""));
     assertThatExceptionOfType(StructureException.class).isThrownBy(() -> Parse.effect("wf"));
+    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> Parse.effect("100r"));
+    assertThatExceptionOfType(StructureException.class).isThrownBy(() -> Parse.effect("100e"));
     assertThatExceptionOfType(StructureException.class).isThrownBy(() -> Parse.effect("-100wf"));
     assertThatExceptionOfType(StructureException.class).isThrownBy(() -> Parse.effect("100ww"));
     assertThatExceptionOfType(StructureException.class).isThrownBy(() -> Parse.effect("100wf-10"));
