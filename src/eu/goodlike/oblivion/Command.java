@@ -1,6 +1,7 @@
 package eu.goodlike.oblivion;
 
 import eu.goodlike.oblivion.command.ButWhatDoesThisMean;
+import eu.goodlike.oblivion.command.EnqueueHit;
 import eu.goodlike.oblivion.command.ItsAllOver;
 import eu.goodlike.oblivion.command.JustForget;
 import eu.goodlike.oblivion.command.LowerTheGates;
@@ -12,7 +13,6 @@ import eu.goodlike.oblivion.command.Reset;
 import eu.goodlike.oblivion.command.Restart;
 import eu.goodlike.oblivion.command.SetDifficulty;
 import eu.goodlike.oblivion.command.SetEnemy;
-import eu.goodlike.oblivion.command.SetHit;
 import eu.goodlike.oblivion.command.SetLevel;
 import eu.goodlike.oblivion.command.SetParseMode;
 import eu.goodlike.oblivion.command.SetSpellEffectiveness;
@@ -36,7 +36,7 @@ public interface Command {
    * Identifiers for commands.
    * Most commands will be referenced using a prefix to their name.
    * <p/>
-   * {@link SetHit} & {@link RepeatHit} have no names.
+   * {@link EnqueueHit} & {@link RepeatHit} have no names.
    * They are recognized differently and parsed in its entirety as arguments.
    */
   enum Name {

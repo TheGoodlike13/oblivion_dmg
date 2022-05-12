@@ -40,7 +40,7 @@ public final class Arena {
     announceOpponent();
   }
 
-  public void addHit(NamedValue<Hit> hit) {
+  public void enqueueHit(NamedValue<Hit> hit) {
     hits.add(hit.getValue());
     Write.line("[#" + hit.getName() + "] Next hit: " + hit.getValue());
   }

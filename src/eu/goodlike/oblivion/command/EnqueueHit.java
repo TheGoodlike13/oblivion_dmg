@@ -15,20 +15,20 @@ import static eu.goodlike.oblivion.Global.HITS;
 import static eu.goodlike.oblivion.Global.THE_ARENA;
 
 /**
- * Sets the next hit for the next calculation.
+ * Enqueues the next hit for the next calculation.
  * All the inputs are parsed as a list of effectors.
  * Args that start with '$' are treated as references to effectors in cache.
  * Args that start with '+' indicate a new effector.
  * All args following that will be parsed as a effector until the next one is indicated.
  * For details, see {@link ParseEffector}.
  */
-public final class SetHit extends BaseCommand {
+public final class EnqueueHit extends BaseCommand {
 
   @Override
   protected void performTask() {
     parseEffectors();
     Hit hit = hitFromParsedEffectors();
-    THE_ARENA.addHit(HITS.put(hit));
+    THE_ARENA.enqueueHit(HITS.put(hit));
   }
 
   private int cursor = -1;

@@ -1,7 +1,7 @@
 package eu.goodlike.oblivion;
 
+import eu.goodlike.oblivion.command.EnqueueHit;
 import eu.goodlike.oblivion.command.RepeatHit;
-import eu.goodlike.oblivion.command.SetHit;
 
 import java.util.Scanner;
 import java.util.function.Supplier;
@@ -67,7 +67,7 @@ public final class SpellStackingCalculator {
 
   private Command newCommand(String input0) {
     if (input0.startsWith("+") || input0.startsWith("$")) {
-      return new SetHit();
+      return new EnqueueHit();
     }
     if (input0.startsWith("#")) {
       return new RepeatHit();

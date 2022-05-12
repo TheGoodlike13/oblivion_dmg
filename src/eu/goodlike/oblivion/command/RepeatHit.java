@@ -32,16 +32,16 @@ public final class RepeatHit extends BaseCommand {
     }
     else {
       lastRef = ref.startsWith("#") ? ref.substring(1) : ref;
-      addHit();
+      enqueueHit();
     }
   }
 
   private void repeatLastHit(int times) {
-    IntStream.range(1, times).forEach(any -> addHit());
+    IntStream.range(1, times).forEach(any -> enqueueHit());
   }
 
-  private void addHit() {
-    THE_ARENA.addHit(HITS.getCached(lastRef));
+  private void enqueueHit() {
+    THE_ARENA.enqueueHit(HITS.getCached(lastRef));
   }
 
 }
