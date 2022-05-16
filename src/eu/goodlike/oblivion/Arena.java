@@ -194,13 +194,13 @@ public final class Arena {
 
     @Override
     public void next(Effect.Id id) {
-      this.expired = null;
+      this.removed = null;
       this.id = id;
     }
 
     @Override
-    public void markExpired(Effect effect) {
-      this.expired = effect;
+    public void markForRemoval(Effect effect) {
+      this.removed = effect;
       if (effect.hasExpired() && !effect.isInstant()) {
         combatLog("Expired " + id);
       }
@@ -236,7 +236,7 @@ public final class Arena {
       this.combo = 0;
 
       this.id = null;
-      this.expired = null;
+      this.removed = null;
 
       this.modifiedFactors = new LinkedHashSet<>();
       this.damageTotals = new LinkedHashMap<>();
@@ -257,7 +257,7 @@ public final class Arena {
     private int combo;
 
     private Effect.Id id;
-    private Effect expired;
+    private Effect removed;
 
     private boolean hasDeathBeenBrokenDown;
 
@@ -431,8 +431,8 @@ public final class Arena {
       public void poke(double magnitude, double duration) {
         actual.poke(magnitude, duration);
         combatLog(newEffect(magnitude, duration));
-        if (expired != null && Damage.matches(id)) {
-          wastedDamage.put(id, expired);
+        if (removed != null && Damage.matches(id)) {
+          wastedDamage.put(id, removed);
         }
       }
 
@@ -451,7 +451,7 @@ public final class Arena {
       }
 
       private String howNew() {
-        return expired == null ? "Applied" : "Replaced";
+        return removed == null ? "Applied" : "Replaced";
       }
 
       private String whichEffect() {
@@ -463,9 +463,9 @@ public final class Arena {
       }
 
       private String replacement(double updated) {
-        return expired == null || expired.effectiveMagnitude() == updated
+        return removed == null || removed.effectiveMagnitude() == updated
           ? ""
-          : String.format("%.1f with ", expired.effectiveMagnitude());
+          : String.format("%.1f with ", removed.effectiveMagnitude());
       }
 
       private String decimal(double magnitude) {

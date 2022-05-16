@@ -109,7 +109,7 @@ public final class Enemy implements Target {
         observer.next(id);
         Effect original = activeEffects.put(id, effect);
         if (original != null) {
-          observer.markExpired(original);
+          observer.markForRemoval(original);
           original.onRemove(this);
         }
         effect.onApply(target);
@@ -289,7 +289,7 @@ public final class Enemy implements Target {
 
       if (effect.hasExpired()) {
         i.remove();
-        observer.markExpired(effect);
+        observer.markForRemoval(effect);
         effect.onRemove(target);
       }
     });
@@ -360,7 +360,7 @@ public final class Enemy implements Target {
      *
      * @param effect active effect associated with the effect being processed
      */
-    void markExpired(Effect effect);
+    void markForRemoval(Effect effect);
 
     /**
      * Non-observing observer, stand-in for null.
@@ -380,7 +380,7 @@ public final class Enemy implements Target {
       }
 
       @Override
-      public void markExpired(Effect effect) {
+      public void markForRemoval(Effect effect) {
       }
     };
   }
