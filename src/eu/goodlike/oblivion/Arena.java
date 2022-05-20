@@ -128,7 +128,7 @@ public final class Arena {
   private void fight() {
     equipFirstWeapon();
 
-    int totalHits = hits.size();
+    int planned = hits.size();
     for (Hit hit : whileConsuming(hits)) {
       boolean shouldContinue = play.next(hit);
       if (!shouldContinue && !hits.isEmpty()) {
@@ -139,7 +139,7 @@ public final class Arena {
 
     enemy.resolve(play);
 
-    play.writeRemainingHits(totalHits);
+    play.writeRemainingHits(planned);
     play.writeObituary();
   }
 
@@ -206,9 +206,9 @@ public final class Arena {
       }
     }
 
-    public void writeRemainingHits(int totalHits) {
+    public void writeRemainingHits(int planned) {
       if (!hits.isEmpty()) {
-        Write.line("Performed %d hits out of total %d prepared", totalHits - hits.size(), totalHits);
+        Write.line("Performed %d hits out of total %d prepared", planned - hits.size(), planned);
         for (Hit hit : hits) {
           Write.line("Skipped: " + hit);
         }
