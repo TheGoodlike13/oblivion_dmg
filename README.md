@@ -251,7 +251,7 @@ It must be a positive integer. Defaults to 1.
 
 ']' suffix indicates maximum level.
 It must be a positive integer larger than minimum level. Defaults to 2^31 - 1.
-For level above this one, enemy HP will simply cease to increase.
+For levels above this one, enemy HP will simply cease to increase.
 
 All remaining arguments will be parsed as permanent effects on the enemy.
 Damage effects will be ignored. Drain effects will just reduce max HP.
