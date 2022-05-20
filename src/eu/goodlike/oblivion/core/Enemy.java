@@ -116,7 +116,7 @@ public final class Enemy implements Target {
       }
     }
 
-    dummy.applyResistModsAtOnce(this);
+    dummy.applyResistModsAtOnce();
     cleanupEffects(observer, false);
   }
 
@@ -401,8 +401,8 @@ public final class Enemy implements Target {
       return Enemy.this.drain(hp);
     }
 
-    public void applyResistModsAtOnce(Target target) {
-      allMods.forEach(target::modifyResist);
+    public void applyResistModsAtOnce() {
+      allMods.forEach(Enemy.this::modifyResist);
     }
 
     private final ListMultimap<Factor, Double> allMods = ArrayListMultimap.create();
