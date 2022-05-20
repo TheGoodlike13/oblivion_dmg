@@ -262,7 +262,7 @@ This should be used for innate resistances and weaknesses.
 Same command as above, but instead of using custom values, fetches enemy from
 the memory using given name. The name is required.
 
-#### *$name :copy_name*... *+category :name effect*... ...
+#### *$name :copy_name* ... *+category :name effect*... ...
 
 Enqueues the next hit by combining effectors.
 An effector is an item or a spell which can have effects.
