@@ -219,10 +219,10 @@ Magnitude is just a positive integer indicating the strength of the effect.
 
 Effect type is either 'drain', 'weakness/resist' or damage indicated by element.
 All of these can be referred to by prefixes:
-1. 100d: 100 drain life 
-2. 25wm: 25% weakness to magic 
-3. 50rp: 50% resist poison 
-4.  6fr:   6 frost damage 
+1. 100d : 100 drain life 
+2. 25wfr: 25% weakness to frost 
+3. 50rp : 50% resist poison 
+4.  6m  :   6 magic damage 
 
 Finally, duration is optional and defaults to 1s.
 You can use '0s' to indicate instant spells.
