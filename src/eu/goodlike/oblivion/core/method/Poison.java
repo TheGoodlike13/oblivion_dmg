@@ -8,8 +8,6 @@ import eu.goodlike.oblivion.core.Method;
 import eu.goodlike.oblivion.core.effect.Resist;
 import eu.goodlike.oblivion.core.effector.EffectorSkeleton;
 
-import java.util.List;
-
 public final class Poison extends Category<Poison.Bottle> implements Method {
 
   @Override
@@ -20,11 +18,6 @@ public final class Poison extends Category<Poison.Bottle> implements Method {
   @Override
   public Effect.Type resist() {
     return resistPoison;
-  }
-
-  @Override
-  public Bottle create(String label, List<EffectText> effects) {
-    return new Bottle(label, effects);
   }
 
   @Override

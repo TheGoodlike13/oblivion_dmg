@@ -16,17 +16,17 @@ public class Category<E extends Effector> implements Effector.Factory<E>, Compar
   /**
    * @return equivalent to {@link #create} with no params, but always returns the same instance
    */
-  public E withNoEffect() {
+  public final E withNoEffect() {
     return noEffect;
   }
 
   @Override
-  public E create(String label, List<EffectText> effects) {
+  public final E create(String label, List<EffectText> effects) {
     return factory.create(label, effects);
   }
 
   @Override
-  public int compareTo(Category<?> other) {
+  public final int compareTo(Category<?> other) {
     return ALL_IN_ORDER.indexOf(this) - ALL_IN_ORDER.indexOf(other);
   }
 
@@ -34,14 +34,14 @@ public class Category<E extends Effector> implements Effector.Factory<E>, Compar
    * @return true if the effector matches this category, false if it's of a different type
    */
   @Override
-  public boolean test(Effector effector) {
+  public final boolean test(Effector effector) {
     return noEffect.getClass().isInstance(effector);
   }
 
   /**
    * @return true if any of the given effectors are of this category, false otherwise
    */
-  public boolean any(Iterable<? extends Effector> effectors) {
+  public final boolean any(Iterable<? extends Effector> effectors) {
     return Streams.stream(effectors).anyMatch(this);
   }
 
