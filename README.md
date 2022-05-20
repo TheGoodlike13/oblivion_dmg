@@ -213,7 +213,7 @@ In all cases names should be unique within their category:
 
 Effects are parsed as arguments like this:
 
-{magnitude}(effect type}{duration}
+{magnitude}{effect type}{duration}
 
 Magnitude is just a positive integer indicating the strength of the effect.
 
