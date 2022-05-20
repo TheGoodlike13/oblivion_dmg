@@ -133,6 +133,7 @@ public final class Global {
     /**
      * How long to continue attacking after enemy has died in seconds.
      * Must be a positive double or zero.
+     * Values in the vicinity of {@link Double#MAX_VALUE} may produce unexpected results.
      */
     public static double RAMPAGE = 1;
 

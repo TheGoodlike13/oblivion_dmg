@@ -153,7 +153,9 @@ Should be a small positive double.
 #### rampage
 
 How many seconds to continue attacking after target is dead.
-Should be a non-negative integer.
+Should be zero or any positive double.
+Values in the vicinity of Double#MAX_VALUE may produce unexpected results.
+Please keep it reasonable.
 
 #### prepared.{type}
 

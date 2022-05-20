@@ -280,7 +280,7 @@ public final class Arena {
     }
 
     private boolean isAliveOrJustRecentlyDeceased() {
-      return deathStamp > duration - RAMPAGE;
+      return deathStamp + RAMPAGE > duration;
     }
 
     private void prepare(Hit hit) {
