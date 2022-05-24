@@ -54,10 +54,11 @@ public final class EffectText {
   }
 
   /**
-   * @return permanent active effect (i.e. racial bonus, equipment, etc.); unaffected by any multipliers
+   * @return active effect that is unaffected by any multipliers (as if it's a racial bonus, equipment, etc.)
+   * it is intended to applied only, never removed; effects which apply only during duration will do nothing
    */
   public Effect permanent() {
-    return type.activate(magnitude, -1);
+    return type.activate(magnitude, duration);
   }
 
   public Effect.Type getType() {

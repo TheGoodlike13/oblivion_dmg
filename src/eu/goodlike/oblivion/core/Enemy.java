@@ -2,17 +2,20 @@ package eu.goodlike.oblivion.core;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Streams;
 import eu.goodlike.oblivion.Global.Settings;
 import eu.goodlike.oblivion.Neaterator;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import static eu.goodlike.oblivion.Global.Settings.LEVEL;
 import static eu.goodlike.oblivion.Global.Settings.TICK;
 import static eu.goodlike.oblivion.core.Effector.Factory.SPELL;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Target for all of the hits.
@@ -167,8 +170,10 @@ public final class Enemy implements Target {
    * @return this enemy with all active effects wiped and HP reset
    */
   public Enemy resurrect() {
-    resolve();
     this.health = maxHealth;
+    this.weaknessPercent.clear();
+    this.activeEffects.clear();
+    permanentEffects.forEach(effect -> effect.onApply(this));
     return this;
   }
 
@@ -246,22 +251,19 @@ public final class Enemy implements Target {
    * Creates a new enemy with given max health and given permanent effects.
    * The enemy starts at max HP.
    * The effects are equivalent to racial or passive equipment bonuses that various characters can have.
-   * Damage effects are ignored.
+   * Damage over time effects are ignored.
+   * Instant damage effects are applied, but they only reduce the starting HP, just like drain.
    *
    * @throws StructureException if maxHealth is too low to be considered alive
    */
   public Enemy(int maxHealth, Iterable<EffectText> bonus) {
     this.maxHealth = maxHealth;
-    this.health = maxHealth;
-    StructureException.throwOnAlreadyDead(this);
-
     this.weaknessPercent = new HashMap<>();
-
     this.activeEffects = new LinkedHashMap<>();
+    this.permanentEffects = Streams.stream(bonus).map(EffectText::permanent).collect(toList());
 
-    for (EffectText effect : bonus) {
-      effect.permanent().onApply(this);
-    }
+    resurrect();
+    StructureException.throwOnAlreadyDead(this);
   }
 
   private int maxHealth;
@@ -270,6 +272,7 @@ public final class Enemy implements Target {
   private final Map<Factor, Double> weaknessPercent;
 
   private final Map<Effect.Id, Effect> activeEffects;
+  private final List<Effect> permanentEffects;
 
   private int levelMultiplier;
   private int minLevel;

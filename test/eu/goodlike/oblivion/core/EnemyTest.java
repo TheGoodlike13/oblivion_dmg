@@ -33,7 +33,7 @@ class EnemyTest {
 
   @BeforeEach
   void setup() {
-    resurrect("Standard enemy");
+    nextEnemy("Standard enemy");
   }
 
   @AfterEach
@@ -411,7 +411,7 @@ class EnemyTest {
   void enchantsSuck_breton() {
     DIFFICULTY = 100;
 
-    resurrect("Breton", MAGIC.resist(50));
+    nextEnemy("Breton", MAGIC.resist(50));
 
     Effector usedGrandSoul = MELEE.create(FIRE.damage(5).forSecs(14));
 
@@ -437,7 +437,7 @@ class EnemyTest {
   void poisonOP_journeyman_argonian() {
     DIFFICULTY = 100;
 
-    resurrect("Argonian", POISON.resist(100));
+    nextEnemy("Argonian", POISON.resist(100));
 
     target.hit(POISON_WEAK_1);
     target.hit(POISON_WEAK_2);
@@ -450,7 +450,7 @@ class EnemyTest {
   void poisonOP_journeyman_breton() {
     DIFFICULTY = 100;
 
-    resurrect("Breton", MAGIC.resist(50));
+    nextEnemy("Breton", MAGIC.resist(50));
 
     target.hit(POISON_WEAK_1);
     target.hit(POISON_WEAK_2);
@@ -511,9 +511,9 @@ class EnemyTest {
 
   @Test
   void noPermanentDamageEffect() {
-    resurrect("This is fine. No, really.", FIRE.damage(10));
+    nextEnemy("This is fine. No, really.", FIRE.damage(10));
 
-    target.tick(1);
+    target.tick(10);
 
     assertDamageTaken(0);
   }
@@ -569,8 +569,55 @@ class EnemyTest {
     assertDamageTaken(95);
   }
 
+  @Test
+  void itsAGhost() {
+    assertThatExceptionOfType(StructureException.class)
+      .isThrownBy(() -> nextEnemy("Dead due to drain", MAGIC.drain(2000)));
+
+    assertThatExceptionOfType(StructureException.class)
+      .isThrownBy(() -> nextEnemy("Dead due to permanent damage", MAGIC.damage(2000).instant()));
+  }
+
+  @Test
+  void alrightFineHaveYourPermanentInstantEffects() {
+    nextEnemy("Drain & instant damage should persist I guess", MAGIC.drain(100), MAGIC.damage(100).instant());
+
+    assertHealthRemaining(800);
+
+    target.resurrect();
+
+    assertHealthRemaining(800);
+  }
+
+  @Test
+  void permanentDamageEffectsIgnoreResists() {
+    nextEnemy("Not resisting these", MAGIC.resist(50), MAGIC.drain(100), MAGIC.damage(100).instant());
+
+    assertHealthRemaining(800);
+
+    target.resurrect();
+
+    assertHealthRemaining(800);
+  }
+
+  @Test
+  void resurrectionKeepsOnlyPermanentResists() {
+    nextEnemy("Breton", MAGIC.resist(50));
+
+    target.hit(MAGIC.resist(50));
+    target.hit(MAGIC.damage(100));
+
+    assertDamageTaken(25);
+
+    target.resurrect();
+
+    target.hit(MAGIC.damage(100));
+
+    assertDamageTaken(50);
+  }
+
   @SuppressWarnings("unused")
-  private void resurrect(String description, EffectText... baseEffects) {
+  private void nextEnemy(String description, EffectText... baseEffects) {
     target = new Enemy(1000, baseEffects);
   }
 

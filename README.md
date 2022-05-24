@@ -255,8 +255,9 @@ It must be a positive integer larger than minimum level. Defaults to 2^31 - 1.
 For levels above this one, enemy HP will simply cease to increase.
 
 All remaining arguments will be parsed as permanent effects on the enemy.
-Damage effects will be ignored. Drain effects will just reduce max HP.
-This should be used for innate resistances and weaknesses.
+Damage over time effects will do nothing.
+Instant damage and drain effects will just reduce starting HP.
+This should be used for innate resistances and weaknesses instead.
 
 #### enemy *$name*
 
@@ -437,7 +438,7 @@ Absorb health is not explicitly implemented.
 Magic damage is exactly the same from point of view of the calculations
 we are doing, so you can use that as stand-in.
 
-Permanent damage effects are ignored.
+Permanent damage over time effects are ignored.
 They are simply not applicable to any real combat scenario.
 Similar to healing, it would only add to the complexity of the code.
 
