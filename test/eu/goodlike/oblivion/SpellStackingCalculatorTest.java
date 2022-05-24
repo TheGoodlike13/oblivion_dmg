@@ -1558,6 +1558,13 @@ class SpellStackingCalculatorTest implements Supplier<String>, Consumer<String> 
     );
   }
 
+  @Test
+  void limp() {
+    sendInput("enemy 100 10d 10m0s");
+
+    assertOutput("You face the enemy (80 hp)");
+  }
+
   private void sendInput(String... lines) {
     List<String> inputLines = new ArrayList<>();
     Collections.addAll(inputLines, lines);
