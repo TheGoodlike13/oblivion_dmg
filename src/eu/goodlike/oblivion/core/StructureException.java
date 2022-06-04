@@ -124,6 +124,7 @@ public final class StructureException extends RuntimeException {
 
   private static final Set<String> VALID_HITS = ImmutableSet.of(
     "SPELL",
+    "POWER",
     "STAFF",
     "MELEE",
     "MELEE + POISON",

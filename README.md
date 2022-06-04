@@ -458,6 +458,10 @@ It does place a lower bound on enemy HP as if you've met them at the nearest app
 This assumes that the enemy data is entered properly or prepared data is used.
 The user is free to create whatever funky enemy they want.
 
+There is no limit on casting greater powers.
+In fact, all powers just go under category "POWER".
+They differ from magic in that they do not get weakened by spell effectiveness.
+
 Calculations are done using double floating point precision.
 The resulting errors are trivial and unlikely to cause issues, but do keep it in mind.
 

@@ -468,14 +468,14 @@ class SpellStackingCalculatorTest implements Supplier<String>, Consumer<String> 
     assertOutput(
       "<MELEE$1> {MAGIC DMG 1 for 1s}",
       "<SPELL$2> {MAGIC DMG 1 for 1s}",
-      "Bad input: Invalid hit: MELEE + SPELL; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, ARROW + BOW, ARROW + POISON + BOW]",
+      "Bad input: Invalid hit: MELEE + SPELL; expected one of [SPELL, POWER, STAFF, MELEE, MELEE + POISON, ARROW + BOW, ARROW + POISON + BOW]",
       "<MELEE$1> {MAGIC DMG 1 for 1s}",
       "<STAFF$3> {MAGIC DMG 1 for 1s}",
-      "Bad input: Invalid hit: MELEE + STAFF; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, ARROW + BOW, ARROW + POISON + BOW]",
+      "Bad input: Invalid hit: MELEE + STAFF; expected one of [SPELL, POWER, STAFF, MELEE, MELEE + POISON, ARROW + BOW, ARROW + POISON + BOW]",
       "<MELEE$1> {MAGIC DMG 1 for 1s}",
       "<POISON$1m> {MAGIC DMG 1 for 1s}",
       "<POISON$1m> {MAGIC DMG 1 for 1s}",
-      "Bad input: Invalid hit: MELEE + POISON + POISON; expected one of [SPELL, STAFF, MELEE, MELEE + POISON, ARROW + BOW, ARROW + POISON + BOW]"
+      "Bad input: Invalid hit: MELEE + POISON + POISON; expected one of [SPELL, POWER, STAFF, MELEE, MELEE + POISON, ARROW + BOW, ARROW + POISON + BOW]"
     );
   }
 
@@ -1563,6 +1563,27 @@ class SpellStackingCalculatorTest implements Supplier<String>, Consumer<String> 
     sendInput("enemy 100 10d 10m0s");
 
     assertOutput("You face the enemy (80 hp)");
+  }
+
+  @Test
+  void unlimitedPower() {
+    sendInput("$nordic", "$nordic", "$nordic");
+
+    assertOutput(
+      "[#1] Next hit: <POWER$nordic_frost> {FROST DMG 50 for 1s}",
+      "[#2] Next hit: <POWER$nordic_frost> {FROST DMG 50 for 1s}",
+      "[#3] Next hit: <POWER$nordic_frost> {FROST DMG 50 for 1s}"
+    );
+  }
+
+  @Test
+  void powerEffectiveness() {
+    sendInput("spell_effect 50", "$nordic");
+
+    assertOutput(
+      "Spell effectiveness has been set to <50>",
+      "[#1] Next hit: <POWER$nordic_frost> {FROST DMG 50 for 1s}"
+    );
   }
 
   private void sendInput(String... lines) {

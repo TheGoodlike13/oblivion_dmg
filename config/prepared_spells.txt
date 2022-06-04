@@ -1,6 +1,12 @@
 # Values taken from the game, youtube or en.uesp.net wiki
 # These were done by hand, so there might be some errors
 
+### Powers ###
+
++pow 50fr   :nordic_frost
++pow  3m20s :serpent_spell
++pow 30f    :dragon_breath
+
 ### Standard ###
 
 +s  5m0s :absorb_health

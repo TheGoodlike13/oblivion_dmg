@@ -1,42 +1,15 @@
 package eu.goodlike.oblivion.core.effector;
 
 import com.google.common.collect.Streams;
-import eu.goodlike.oblivion.core.Armament;
 import eu.goodlike.oblivion.core.Category;
 import eu.goodlike.oblivion.core.EffectText;
 import eu.goodlike.oblivion.core.Effector;
 
 import java.util.Iterator;
 
-import static eu.goodlike.oblivion.Global.Settings.CAST;
 import static eu.goodlike.oblivion.core.Effector.Factory.SPELL;
 
-public final class Spell extends EffectorSkeleton implements Armament {
-
-  @Override
-  public boolean isEquipment() {
-    return false;
-  }
-
-  @Override
-  public boolean isRigid() {
-    return true;
-  }
-
-  @Override
-  public double timeToSwap() {
-    return 0;
-  }
-
-  @Override
-  public double timeToHit(int combo) {
-    return CAST.timeToHit(combo);
-  }
-
-  @Override
-  public double cooldown(int combo) {
-    return CAST.cooldown(combo);
-  }
+public final class Spell extends Power {
 
   @Override
   public Category<?> getCategory() {
@@ -55,11 +28,6 @@ public final class Spell extends EffectorSkeleton implements Armament {
 
   public Spell(String label, Iterable<EffectText> effects) {
     super(label, effects);
-  }
-
-  @Override
-  public String describeAction() {
-    return "cast";
   }
 
 }

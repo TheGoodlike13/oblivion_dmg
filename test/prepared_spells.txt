@@ -2,3 +2,4 @@
 +s 100wm6s 100ws6s 100wp6s :divine_justice_expert
 +s 5f5s 70f :enemies_explode
 +s 1s 1s :not_a_real_spell
++pow 50fr :nordic_frost
