@@ -10,6 +10,7 @@ import static eu.goodlike.oblivion.core.Effector.Factory.ARROW;
 import static eu.goodlike.oblivion.core.Effector.Factory.BOW;
 import static eu.goodlike.oblivion.core.Effector.Factory.MELEE;
 import static eu.goodlike.oblivion.core.Effector.Factory.POISON;
+import static eu.goodlike.oblivion.core.Effector.Factory.POWER;
 import static eu.goodlike.oblivion.core.Effector.Factory.SPELL;
 import static eu.goodlike.oblivion.core.Effector.Factory.STAFF;
 import static eu.goodlike.oblivion.core.Factor.MAGIC;
@@ -36,6 +37,7 @@ class HitTest {
     assertHit(STAFF);
 
     assertHit(SPELL);
+    assertHit(POWER);
   }
 
   @Test
@@ -64,6 +66,7 @@ class HitTest {
     assertThat(hit(MELEE).getWeapon()).contains(MELEE.withNoEffect());
     assertThat(hit(BOW).getWeapon()).contains(BOW.withNoEffect());
     assertThat(hit(SPELL).getWeapon()).isEmpty();
+    assertThat(hit(POWER).getWeapon()).isEmpty();
     assertThat(hit(STAFF).getWeapon()).contains(STAFF.withNoEffect());
 
     // implicits
@@ -102,7 +105,7 @@ class HitTest {
 
   @Test
   void neverRequireCooldownForFirstHit() {
-    for (Category<? extends Armament> category : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
+    for (Category<? extends Armament> category : ImmutableList.of(MELEE, BOW, STAFF, SPELL, POWER)) {
       assertThat(hit(category).requiresCooldownAfter(null)).isFalse();
     }
   }
@@ -129,6 +132,13 @@ class HitTest {
     assertThat(hit(SPELL).requiresCooldownAfter(hit(BOW))).isTrue();
     assertThat(hit(SPELL).requiresCooldownAfter(hit(STAFF))).isTrue();
     assertThat(hit(SPELL).requiresCooldownAfter(hit(SPELL))).isTrue();
+    assertThat(hit(SPELL).requiresCooldownAfter(hit(POWER))).isTrue();
+
+    assertThat(hit(POWER).requiresCooldownAfter(hit(MELEE))).isTrue();
+    assertThat(hit(POWER).requiresCooldownAfter(hit(BOW))).isTrue();
+    assertThat(hit(POWER).requiresCooldownAfter(hit(STAFF))).isTrue();
+    assertThat(hit(POWER).requiresCooldownAfter(hit(SPELL))).isTrue();
+    assertThat(hit(POWER).requiresCooldownAfter(hit(POWER))).isTrue();
   }
 
   @Test
@@ -136,6 +146,10 @@ class HitTest {
     assertThat(hit(MELEE).requiresCooldownAfter(hit(SPELL))).isFalse();
     assertThat(hit(BOW).requiresCooldownAfter(hit(SPELL))).isFalse();
     assertThat(hit(STAFF).requiresCooldownAfter(hit(SPELL))).isFalse();
+
+    assertThat(hit(MELEE).requiresCooldownAfter(hit(POWER))).isFalse();
+    assertThat(hit(BOW).requiresCooldownAfter(hit(POWER))).isFalse();
+    assertThat(hit(STAFF).requiresCooldownAfter(hit(POWER))).isFalse();
   }
 
   @Test
@@ -155,11 +169,13 @@ class HitTest {
 
   @Test
   void isNotCombo() {
-    for (Category<? extends Armament> category : ImmutableList.of(MELEE, BOW, STAFF, SPELL)) {
+    for (Category<? extends Armament> category : ImmutableList.of(MELEE, BOW, STAFF, SPELL, POWER)) {
       assertThat(hit(category).isCombo(null)).isFalse();
       assertThat(hit(category).isCombo(new Hit(category.create()))).isFalse();
       assertThat(hit(category).isCombo(hit(SPELL))).isFalse();
       assertThat(hit(SPELL).isCombo(hit(category))).isFalse();
+      assertThat(hit(category).isCombo(hit(POWER))).isFalse();
+      assertThat(hit(POWER).isCombo(hit(category))).isFalse();
     }
   }
 
@@ -168,6 +184,7 @@ class HitTest {
     assertThat(hit(MELEE).toPerformString()).isEqualTo("swing <MELEE>");
     assertThat(hit(BOW).toPerformString()).isEqualTo("aim <ARROW> + <BOW>");
     assertThat(hit(SPELL).toPerformString()).isEqualTo("cast <SPELL>");
+    assertThat(hit(POWER).toPerformString()).isEqualTo("cast <POWER>");
     assertThat(hit(STAFF).toPerformString()).isEqualTo("invoke <STAFF>");
 
     // implicit
