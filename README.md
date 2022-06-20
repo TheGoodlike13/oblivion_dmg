@@ -488,7 +488,7 @@ a weapon attack immediately after casting a spell).
 
 I tried to time various weapons and spells, their swap durations, attack animations
 and so on using recorded video and sound cues. I've come to the conclusion that
-these must be some factor (likely weight) that influences these durations.
+there must be some factor (likely weight) that influences these durations.
 Furthermore they seemed a little random, although only within a few frames.
 
 In any case, I decided to use one set of timings for melee weapons, one for bows,
