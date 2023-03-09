@@ -74,11 +74,11 @@ public final class EffectText {
    */
   public EffectText scale() {
     if (EFFECTIVENESS == 100) {
-      return unscaled == null ? this : unscaled;
+      return isUnscaled() ? this : unscaled;
     }
 
     int scaledMagnitude = scaledMagnitude();
-    if (unscaled == null) {
+    if (isUnscaled()) {
       return new EffectText(factor, type, scaledMagnitude, duration, this);
     }
 
@@ -116,7 +116,7 @@ public final class EffectText {
   private final EffectText unscaled;
 
   private int scaledMagnitude() {
-    int baseMagnitude = unscaled == null ? magnitude : unscaled.magnitude;
+    int baseMagnitude = isUnscaled() ? magnitude : unscaled.magnitude;
     return baseMagnitude * EFFECTIVENESS / 100;
   }
 
@@ -126,7 +126,11 @@ public final class EffectText {
   }
 
   private String scaleIndicator() {
-    return unscaled == null ? "" : "*";
+    return isUnscaled() ? "" : "*";
+  }
+
+  private boolean isUnscaled() {
+    return unscaled == null;
   }
 
   private String durationIndicator() {
