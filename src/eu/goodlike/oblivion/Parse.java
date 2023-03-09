@@ -23,11 +23,11 @@ import static eu.goodlike.oblivion.core.Factor.SHOCK;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.getCommonPrefix;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.remove;
 import static org.apache.commons.lang3.StringUtils.split;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.substringAfter;
-import static org.gradle.internal.impldep.org.apache.commons.lang.StringUtils.isNotBlank;
 
 /**
  * Parses various inputs into usable objects.
